@@ -168,6 +168,26 @@ def test_read_bytes_requires_exact_complete_lower_or_upper_hex(
         client.read_bytes("snapshot", "0x1000", 1)
 
 
+def test_read_bytes_accepts_literal_line_separators_from_generic_server(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    dump = " ".join(f"{value:02X}" for value in range(16))
+    dump += "\\n10 "
+    payload = json.dumps(
+        {"bytes_read": 17, "hex_dump": dump}
+    ).encode("utf-8")
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: FakeResponse(payload),
+    )
+
+    result = GhidraClient("http://127.0.0.1:8089").read_bytes(
+        "snapshot", "0x1000", 17
+    )
+
+    assert result == bytes(range(17))
+
+
 def test_mutating_convenience_calls_always_name_the_program(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -98,7 +98,10 @@ class GhidraClient:
             raise GhidraError(
                 "inspect_memory_content omitted string hex_dump"
             )
-        compact = "".join(dump.split())
+        # AnalysisService currently emits a literal backslash-n between
+        # 16-byte rows rather than an actual newline. Accept that exact
+        # documented wire shape as well as ordinary JSON whitespace.
+        compact = "".join(dump.replace("\\n", "").split())
         if len(compact) != length * 2 or not _HEX.fullmatch(compact):
             raise GhidraError(
                 "inspect_memory_content returned malformed hex_dump"

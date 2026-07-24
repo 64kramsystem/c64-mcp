@@ -4,3 +4,7 @@ Copyright 2026 Saverio Proto
 This product includes C64-specific interoperability data whose individual
 source attributions are recorded with the bundled profile and codec tables.
 
+The bundled PETSCII and screen-code tables are transcribed from Appendices B
+and C of the Commodore 64 Programmer's Reference Guide, published by
+Commodore Business Machines, Inc. The package data records the source URL and
+printed page references.

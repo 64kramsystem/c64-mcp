@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import asyncio
+import threading
+
+import pytest
+
 from ghidra_mcp_c64.config import Settings
 from ghidra_mcp_c64.server import create_server
 
@@ -15,3 +20,59 @@ def test_server_keeps_explicit_dependencies_for_later_tool_registration() -> Non
     server = create_server(Settings.from_environ({}), ghidra=dependency)
 
     assert server.name == "ghidra-mcp-c64"
+
+
+@pytest.mark.asyncio
+async def test_server_registers_c64_text_tools() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    tools = await server.list_tools()
+
+    assert {
+        "decode_c64_text",
+        "search_c64_text",
+        "define_c64_text",
+    } <= {tool.name for tool in tools}
+    by_name = {tool.name: tool.inputSchema for tool in tools}
+    assert by_name["decode_c64_text"]["properties"]["encoding"]["enum"] == [
+        "petscii_upper",
+        "petscii_lower",
+        "screen_code_upper",
+        "screen_code_lower",
+    ]
+    assert by_name["search_c64_text"]["properties"]["query_mode"]["enum"] == [
+        "text",
+        "bytes",
+    ]
+
+
+@pytest.mark.asyncio
+async def test_blocking_ghidra_read_runs_off_the_event_loop() -> None:
+    class BlockingGhidra:
+        def read_bytes(
+            self, program: str, start: str, length: int
+        ) -> bytes:
+            del program, start
+            assert threading.current_thread() is not threading.main_thread()
+            return b"A" * length
+
+    server = create_server(Settings.from_environ({}), ghidra=BlockingGhidra())
+    loop_progressed = False
+
+    async def tick() -> None:
+        nonlocal loop_progressed
+        await asyncio.sleep(0)
+        loop_progressed = True
+
+    call = server.call_tool(
+        "decode_c64_text",
+        {
+            "program": "p",
+            "start": "1000",
+            "max_length": 1,
+            "length": 1,
+        },
+    )
+    await asyncio.gather(call, tick())
+
+    assert loop_progressed is True

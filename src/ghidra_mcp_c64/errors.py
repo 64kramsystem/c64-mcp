@@ -16,3 +16,18 @@ class GhidraError(C64McpError):
 class ProfileError(C64McpError):
     """Invalid bundled or caller-supplied symbol profile."""
 
+
+class CodecDataError(C64McpError):
+    """Invalid bundled C64 codec data."""
+
+
+class RequestError(C64McpError, ValueError):
+    """Invalid C64 tool or codec request."""
+
+
+class TextLimitError(RequestError):
+    """A bounded text operation exceeded a hard safety limit."""
+
+
+class TokenCycleError(RequestError):
+    """Recursive token expansion contains a cycle."""
