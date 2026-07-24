@@ -9,6 +9,13 @@ from mcp.server.fastmcp import FastMCP
 
 from .config import Settings
 from .ghidra_client import GhidraClient
+from .profile_tools import ProfileGhidraClient
+from .profile_tools import (
+    apply_c64_symbol_profile as apply_profile,
+)
+from .profile_tools import (
+    get_c64_symbol_profile as get_profile,
+)
 from .text.tools import BytesInput, TextGhidraClient
 from .text.tools import decode_c64_text as decode_text
 from .text.tools import define_c64_text as define_text
@@ -23,6 +30,7 @@ EncodingArgument = Literal[
 HighBitArgument = Literal["exact", "strip", "annotate_reverse"]
 ControlArgument = Literal["names", "escaped", "unicode"]
 QueryModeArgument = Literal["text", "bytes"]
+ConflictPolicyArgument = Literal["error", "keep", "replace"]
 
 
 def create_server(
@@ -35,19 +43,44 @@ def create_server(
     prevents hidden bridge imports.
     """
 
-    client = cast(
-        TextGhidraClient,
-        (
-            ghidra
-            if ghidra is not None
-            else GhidraClient(
-                settings.ghidra_mcp_url,
-                settings.ghidra_auth_token,
-                settings.ghidra_timeout,
-            )
-        ),
+    instance = (
+        ghidra
+        if ghidra is not None
+        else GhidraClient(
+            settings.ghidra_mcp_url,
+            settings.ghidra_auth_token,
+            settings.ghidra_timeout,
+        )
     )
+    text_client = cast(TextGhidraClient, instance)
+    profile_client = cast(ProfileGhidraClient, instance)
     server = FastMCP("ghidra-mcp-c64")
+
+    @server.tool()
+    async def get_c64_symbol_profile() -> dict[str, object]:
+        """Return the complete source-cited bundled C64 symbol profile."""
+
+        return await asyncio.to_thread(get_profile)
+
+    @server.tool()
+    async def apply_c64_symbol_profile(
+        program: str,
+        dry_run: bool = True,
+        conflict_policy: ConflictPolicyArgument = "error",
+        replace_user_definitions: bool = False,
+        create_memory_blocks: bool = False,
+    ) -> dict[str, object]:
+        """Idempotently apply the bundled profile to a named program."""
+
+        return await asyncio.to_thread(
+            apply_profile,
+            profile_client,
+            program=program,
+            dry_run=dry_run,
+            conflict_policy=conflict_policy,
+            replace_user_definitions=replace_user_definitions,
+            create_memory_blocks=create_memory_blocks,
+        )
 
     @server.tool()
     async def decode_c64_text(
@@ -70,7 +103,7 @@ def create_server(
 
         return await asyncio.to_thread(
             decode_text,
-            client,
+            text_client,
             bytes=bytes,
             program=program,
             start=start,
@@ -112,7 +145,7 @@ def create_server(
 
         return await asyncio.to_thread(
             search_text,
-            client,
+            text_client,
             program=program,
             start=start,
             end=end,
@@ -157,7 +190,7 @@ def create_server(
 
         return await asyncio.to_thread(
             define_text,
-            client,
+            text_client,
             program=program,
             start=start,
             max_length=max_length,

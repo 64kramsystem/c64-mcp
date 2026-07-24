@@ -8,3 +8,9 @@ The bundled PETSCII and screen-code tables are transcribed from Appendices B
 and C of the Commodore 64 Programmer's Reference Guide, published by
 Commodore Business Machines, Inc. The package data records the source URL and
 printed page references.
+
+The bundled C64 symbol profile is transcribed and normalized from the
+Commodore 64 Programmer's Reference Guide and Service Manual and the
+MOS/Commodore 6581 SID and 6526 CIA data sheets. The generated package data
+records the source title, relevant section or page range, and URL for every
+symbol group.

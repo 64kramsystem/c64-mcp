@@ -47,6 +47,28 @@ async def test_server_registers_c64_text_tools() -> None:
 
 
 @pytest.mark.asyncio
+async def test_server_registers_c64_profile_tools_with_safe_defaults() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    tools = await server.list_tools()
+    by_name = {tool.name: tool.inputSchema for tool in tools}
+
+    assert {
+        "get_c64_symbol_profile",
+        "apply_c64_symbol_profile",
+    } <= set(by_name)
+    properties = by_name["apply_c64_symbol_profile"]["properties"]
+    assert properties["conflict_policy"]["enum"] == [
+        "error",
+        "keep",
+        "replace",
+    ]
+    assert properties["dry_run"]["default"] is True
+    assert properties["replace_user_definitions"]["default"] is False
+    assert properties["create_memory_blocks"]["default"] is False
+
+
+@pytest.mark.asyncio
 async def test_blocking_ghidra_read_runs_off_the_event_loop() -> None:
     class BlockingGhidra:
         def read_bytes(

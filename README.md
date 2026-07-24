@@ -6,6 +6,26 @@ separately installed Ghidra VICE connector.
 The server uses stdio transport by default. It does not open a VICE binary
 monitor socket; the connector remains the sole owner of that connection.
 
+## C64 symbol profile
+
+`get_c64_symbol_profile` returns the bundled, versioned C64 platform profile.
+`apply_c64_symbol_profile` applies that exact profile to an explicitly named
+Ghidra program through the generic `apply_symbol_profile` endpoint. It
+defaults to `dry_run=true`, `conflict_policy=error`, and memory-block creation
+disabled. Re-applying an unchanged profile is idempotent.
+
+The profile covers the 6510 processor port, all VIC-II and SID registers,
+both CIA devices, color RAM, the 39 standard KERNAL jump-table entry points,
+processor vectors, and common KERNAL workspace addresses. Value-only equates
+name documented VIC-II, SID, and CIA control bits. Optional RAM, ROM, I/O,
+and color-RAM block templates are only considered when
+`create_memory_blocks=true`; the generic endpoint preflights the complete
+request before mutation and refuses ordinary-block overlap.
+
+The checked-in profile is generated deterministically by
+`tools/generate_c64_profile.py`. Every symbol group cites its authoritative
+Commodore manual or chip data sheet in the package data.
+
 ## C64 text tools
 
 The server includes immutable 256-entry mappings for upper/graphics and

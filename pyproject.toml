@@ -19,6 +19,7 @@ packages = ["src/ghidra_mcp_c64"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "src/ghidra_mcp_c64/text/tables.json" = "ghidra_mcp_c64/text/tables.json"
+"src/ghidra_mcp_c64/profiles/c64.json" = "ghidra_mcp_c64/profiles/c64.json"
 
 [dependency-groups]
 dev = [
