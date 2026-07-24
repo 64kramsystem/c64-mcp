@@ -17,3 +17,12 @@
   templates.
 - `get_c64_symbol_profile` and dry-run-first
   `apply_c64_symbol_profile` MCP tools.
+- A strict packaged `c64.vice/1` connector contract and race-safe local
+  binding keyed by the Ghidra target token and connector instance ID.
+- Complete `vice_*` tools for connector-owned registers, banks, memory,
+  checkpoints, execution, stop waits, reset, and cached session status.
+- Dry-run-first `copy_vice_memory_to_ghidra`, with one complete VICE read,
+  SHA-256 verification, exactly one generic program write, and no payload
+  echo.
+- Distinct connector, generic TraceRMI, and HTTP timeout reporting with
+  operation-specific uncertainty flags and no automatic retries.

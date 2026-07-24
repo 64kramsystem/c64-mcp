@@ -20,6 +20,7 @@ from .text.tools import BytesInput, TextGhidraClient
 from .text.tools import decode_c64_text as decode_text
 from .text.tools import define_c64_text as define_text
 from .text.tools import search_c64_text as search_text
+from .vice import ViceGhidraClient, ViceSession
 
 EncodingArgument = Literal[
     "petscii_upper",
@@ -31,6 +32,8 @@ HighBitArgument = Literal["exact", "strip", "annotate_reverse"]
 ControlArgument = Literal["names", "escaped", "unicode"]
 QueryModeArgument = Literal["text", "bytes"]
 ConflictPolicyArgument = Literal["error", "keep", "replace"]
+CopyConflictPolicyArgument = Literal["error", "overwrite_bytes"]
+ResetKindArgument = Literal["soft", "hard", "drive8", "drive9"]
 
 
 def create_server(
@@ -54,6 +57,7 @@ def create_server(
     )
     text_client = cast(TextGhidraClient, instance)
     profile_client = cast(ProfileGhidraClient, instance)
+    vice = ViceSession(cast(ViceGhidraClient, instance))
     server = FastMCP("ghidra-mcp-c64")
 
     @server.tool()
@@ -208,6 +212,274 @@ def create_server(
             namespace=namespace,
             comment=comment,
             dry_run=dry_run,
+        )
+
+    @server.tool()
+    async def vice_connect() -> dict[str, object]:
+        """Bind to one compatible active Ghidra VICE connector target."""
+
+        return await asyncio.to_thread(vice.connect)
+
+    @server.tool()
+    async def vice_disconnect() -> dict[str, object]:
+        """Release only the local binding; do not stop connector or VICE."""
+
+        return await asyncio.to_thread(vice.disconnect)
+
+    @server.tool()
+    async def vice_status() -> dict[str, object]:
+        """Return cached binding state without launching or contacting VICE."""
+
+        return await asyncio.to_thread(vice.status)
+
+    @server.tool()
+    async def vice_get_registers(
+        names: list[str] | None = None,
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Read all or selected dynamically discovered VICE registers."""
+
+        return await asyncio.to_thread(
+            vice.get_registers,
+            names=names,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_set_registers(
+        values: dict[str, int],
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Atomically validate and update a non-empty register map."""
+
+        return await asyncio.to_thread(
+            vice.set_registers,
+            values=values,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_list_banks(
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """List the complete connector-discovered VICE memory bank map."""
+
+        return await asyncio.to_thread(
+            vice.list_banks, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_read_memory(
+        bank_id: int,
+        start: int,
+        end: int,
+        side_effects: bool = False,
+        max_bytes: int = 4096,
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Read a bounded inclusive 16-bit range from one VICE bank."""
+
+        return await asyncio.to_thread(
+            vice.read_memory,
+            bank_id=bank_id,
+            start=start,
+            end=end,
+            side_effects=side_effects,
+            max_bytes=max_bytes,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_write_memory(
+        bank_id: int,
+        start: int,
+        bytes: BytesInput,
+        side_effects: bool = False,
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Write bounded non-wrapping bytes through the connector."""
+
+        return await asyncio.to_thread(
+            vice.write_memory,
+            bank_id=bank_id,
+            start=start,
+            bytes=bytes,
+            side_effects=side_effects,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_list_checkpoints(
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """List all VICE checkpoints through the active connector."""
+
+        return await asyncio.to_thread(
+            vice.list_checkpoints, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_set_checkpoint(
+        start: int,
+        end: int,
+        stop_on_hit: bool = True,
+        enabled: bool = True,
+        operations: int = 4,
+        temporary: bool = False,
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Create one inclusive VICE checkpoint."""
+
+        return await asyncio.to_thread(
+            vice.set_checkpoint,
+            start=start,
+            end=end,
+            stop_on_hit=stop_on_hit,
+            enabled=enabled,
+            operations=operations,
+            temporary=temporary,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_delete_checkpoint(
+        number: int,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Delete one VICE checkpoint by number."""
+
+        return await asyncio.to_thread(
+            vice.delete_checkpoint,
+            number=number,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_toggle_checkpoint(
+        number: int,
+        enabled: bool,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Enable or disable one VICE checkpoint."""
+
+        return await asyncio.to_thread(
+            vice.toggle_checkpoint,
+            number=number,
+            enabled=enabled,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_step(
+        count: int = 1,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Step one or more instructions and wait for synchronized stop."""
+
+        return await asyncio.to_thread(
+            vice.step, count=count, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_next(
+        count: int = 1,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Step over one or more calls and wait for synchronized stop."""
+
+        return await asyncio.to_thread(
+            vice.next, count=count, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_finish(
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Run until RTS/RTI completion and synchronized stop."""
+
+        return await asyncio.to_thread(
+            vice.finish, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_resume(
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Resume execution and wait for the synchronized resumed event."""
+
+        return await asyncio.to_thread(
+            vice.resume, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_interrupt(
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Enter the VICE monitor and wait for synchronized stop."""
+
+        return await asyncio.to_thread(
+            vice.interrupt, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_wait_for_stop(
+        after_sequence: int,
+        timeout_ms: int,
+    ) -> dict[str, object]:
+        """Non-consumingly await a stopped event after a public sequence."""
+
+        return await asyncio.to_thread(
+            vice.wait_for_stop,
+            after_sequence=after_sequence,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
+    async def vice_reset(
+        kind: ResetKindArgument = "soft",
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Reset the C64 or drive 8/9 through the active connector."""
+
+        return await asyncio.to_thread(
+            vice.reset, kind=kind, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def copy_vice_memory_to_ghidra(
+        bank_id: int,
+        start: int,
+        end: int,
+        program: str,
+        destination: str,
+        conflict_policy: CopyConflictPolicyArgument = "error",
+        dry_run: bool = True,
+        memspace: int = 0,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Read VICE once, digest it, then preview or commit one Ghidra write."""
+
+        return await asyncio.to_thread(
+            vice.copy_memory_to_ghidra,
+            bank_id=bank_id,
+            start=start,
+            end=end,
+            program=program,
+            destination=destination,
+            conflict_policy=conflict_policy,
+            dry_run=dry_run,
+            memspace=memspace,
+            timeout_ms=timeout_ms,
         )
 
     return server

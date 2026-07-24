@@ -6,6 +6,33 @@ separately installed Ghidra VICE connector.
 The server uses stdio transport by default. It does not open a VICE binary
 monitor socket; the connector remains the sole owner of that connection.
 
+## VICE debugger tools
+
+The `vice_*` tools bind to the active **VICE C64 Debugger** TraceRMI target
+through the generic Ghidra MCP HTTP API. Install and launch the separately
+released `ghidra-vice-connector` first, then call `vice_connect`. The handshake
+checks the complete versioned `c64.vice/1` method schema, capability set,
+machine, limits, and immutable connector instance ID. Compatibility is based
+on that runtime contract rather than an assumed package-version pairing.
+
+The tool set covers cached status, dynamic registers and banks, bank-aware
+memory, checkpoints, execution control, stop-event waits, and reset.
+`vice_disconnect` releases only this MCP process's local binding; it never
+closes the connector socket, trace, or VICE process. `vice_status` is cached
+and performs no discovery or network operation.
+
+`copy_vice_memory_to_ghidra` is the only implicit bridge from live VICE memory
+to a static program. It performs one complete connector read, verifies the
+exact byte count, computes SHA-256, and calls the generic
+`write_memory_bytes` endpoint exactly once. It defaults to `dry_run=true` and
+never returns the complete payload. It does not create memory blocks or
+disassemble.
+
+Connector, generic target-method, and HTTP timeouts remain distinguishable.
+Mutating timeout responses explicitly say which VICE or Ghidra state may have
+changed, and no timed-out operation is retried automatically. The C64 MCP
+contains no VICE monitor host, port, socket, or binary protocol fallback.
+
 ## C64 symbol profile
 
 `get_c64_symbol_profile` returns the bundled, versioned C64 platform profile.
@@ -70,3 +97,7 @@ records the source URL and printed page references.
 - `GHIDRA_MCP_URL` defaults to `http://127.0.0.1:8089`.
 - `GHIDRA_MCP_AUTH_TOKEN` optionally supplies a bearer token.
 - `GHIDRA_MCP_TIMEOUT` defaults to 30 seconds.
+
+VICE method calls accept a caller-visible `timeout_ms` from 1 through 55,000.
+The wrapper reserves an additional five seconds for generic TraceRMI
+invocation and another five seconds for HTTP transport.

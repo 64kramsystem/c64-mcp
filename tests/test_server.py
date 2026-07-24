@@ -69,6 +69,50 @@ async def test_server_registers_c64_profile_tools_with_safe_defaults() -> None:
 
 
 @pytest.mark.asyncio
+async def test_server_registers_complete_vice_surface_with_safe_defaults() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    tools = await server.list_tools()
+    by_name = {tool.name: tool.inputSchema for tool in tools}
+    expected = {
+        "vice_connect",
+        "vice_disconnect",
+        "vice_status",
+        "vice_get_registers",
+        "vice_set_registers",
+        "vice_list_banks",
+        "vice_read_memory",
+        "vice_write_memory",
+        "vice_list_checkpoints",
+        "vice_set_checkpoint",
+        "vice_delete_checkpoint",
+        "vice_toggle_checkpoint",
+        "vice_step",
+        "vice_next",
+        "vice_finish",
+        "vice_resume",
+        "vice_interrupt",
+        "vice_wait_for_stop",
+        "vice_reset",
+        "copy_vice_memory_to_ghidra",
+    }
+
+    assert expected <= set(by_name)
+    copy = by_name["copy_vice_memory_to_ghidra"]["properties"]
+    assert copy["dry_run"]["default"] is True
+    assert copy["conflict_policy"]["enum"] == [
+        "error",
+        "overwrite_bytes",
+    ]
+    assert by_name["vice_reset"]["properties"]["kind"]["enum"] == [
+        "soft",
+        "hard",
+        "drive8",
+        "drive9",
+    ]
+
+
+@pytest.mark.asyncio
 async def test_blocking_ghidra_read_runs_off_the_event_loop() -> None:
     class BlockingGhidra:
         def read_bytes(

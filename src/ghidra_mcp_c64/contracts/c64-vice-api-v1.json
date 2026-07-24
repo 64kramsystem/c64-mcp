@@ -1,0 +1,502 @@
+{
+  "api": {
+    "major": 1,
+    "minor": 0
+  },
+  "capabilities": [
+    "status",
+    "registers.read",
+    "registers.write",
+    "banks.list",
+    "memory.read.bank",
+    "memory.write.bank",
+    "checkpoints.list",
+    "checkpoints.create",
+    "checkpoints.delete",
+    "checkpoints.toggle",
+    "execution.step",
+    "execution.next",
+    "execution.finish",
+    "execution.resume",
+    "execution.interrupt",
+    "execution.wait_for_stop",
+    "machine.reset",
+    "trace.sync"
+  ],
+  "connector": {
+    "name": "ghidra-vice-connector",
+    "version": "1.0.0"
+  },
+  "limits": {
+    "banks": 4096,
+    "checkpoints": 4096,
+    "event_history": 1024,
+    "memory_read_bytes": 65536,
+    "memory_write_bytes": 65536,
+    "response_body_bytes": 16777216
+  },
+  "machine": "c64",
+  "method_namespace": "c64_vice_v1_",
+  "methods": [
+    {
+      "name": "c64_vice_v1_capabilities",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_status",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_get_registers",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "names",
+          "required": true,
+          "type": "STRING_ARR"
+        },
+        {
+          "default": 0,
+          "name": "memspace",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_set_registers",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "names",
+          "required": true,
+          "type": "STRING_ARR"
+        },
+        {
+          "name": "values",
+          "required": true,
+          "type": "LONG_ARR"
+        },
+        {
+          "default": 0,
+          "name": "memspace",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_list_banks",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_read_memory",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "bank_id",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "start",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "end",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": false,
+          "name": "side_effects",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 4096,
+          "name": "max_bytes",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 0,
+          "name": "memspace",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_write_memory",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "bank_id",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "start",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "data",
+          "required": true,
+          "type": "BYTE_ARR"
+        },
+        {
+          "default": false,
+          "name": "side_effects",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 0,
+          "name": "memspace",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_list_checkpoints",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_set_checkpoint",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "start",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "end",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": true,
+          "name": "stop_on_hit",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": true,
+          "name": "enabled",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 4,
+          "name": "operations",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": false,
+          "name": "temporary",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 0,
+          "name": "memspace",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_delete_checkpoint",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "number",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_toggle_checkpoint",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "number",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "enabled",
+          "required": true,
+          "type": "BOOL"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_step",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 1,
+          "name": "count",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_next",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 1,
+          "name": "count",
+          "required": false,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_finish",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_resume",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_interrupt",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_wait_for_stop",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "after_sequence",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "timeout_ms",
+          "required": true,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_reset",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": "soft",
+          "name": "kind",
+          "required": false,
+          "type": "STRING"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    }
+  ],
+  "protocol": "c64.vice",
+  "surface_revision": 1
+}
