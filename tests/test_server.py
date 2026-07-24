@@ -70,7 +70,12 @@ async def test_server_registers_c64_profile_tools_with_safe_defaults() -> None:
 
 @pytest.mark.asyncio
 async def test_server_registers_complete_vice_surface_with_safe_defaults() -> None:
-    server = create_server(Settings.from_environ({}), ghidra=object())
+    server = create_server(
+        Settings.from_environ(
+            {"GHIDRA_MCP_C64_TOOL_PROFILE": "full"}
+        ),
+        ghidra=object(),
+    )
 
     tools = await server.list_tools()
     by_name = {tool.name: tool.inputSchema for tool in tools}
@@ -110,6 +115,42 @@ async def test_server_registers_complete_vice_surface_with_safe_defaults() -> No
         "drive8",
         "drive9",
     ]
+
+
+@pytest.mark.asyncio
+async def test_default_profile_exposes_static_and_management_tools() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    names = {tool.name for tool in await server.list_tools()}
+
+    assert names == {
+        "get_c64_symbol_profile",
+        "apply_c64_symbol_profile",
+        "decode_c64_text",
+        "search_c64_text",
+        "define_c64_text",
+        "list_c64_tool_groups",
+        "load_c64_tool_group",
+        "unload_c64_tool_group",
+        "search_c64_tools",
+    }
+    assert "vice_connect" not in names
+
+
+@pytest.mark.asyncio
+async def test_management_tools_hide_context_from_their_schemas() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    by_name = {
+        tool.name: tool.inputSchema for tool in await server.list_tools()
+    }
+
+    assert set(
+        by_name["load_c64_tool_group"]["properties"]
+    ) == {"group"}
+    assert set(
+        by_name["unload_c64_tool_group"]["properties"]
+    ) == {"group"}
 
 
 @pytest.mark.asyncio
