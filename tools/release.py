@@ -283,7 +283,7 @@ def prepare(repo_root: Path, bump: str, runner: Runner = run) -> str:
     ensure_tag_absent(repo_root, tag, runner)
 
     print(f"{current} -> {version}")
-    committed = False
+    release_commit: str | None = None
     try:
         written = [*write_version(repo_root, version), changelog]
         roll_changelog(changelog, version)
@@ -302,14 +302,14 @@ def prepare(repo_root: Path, bump: str, runner: Runner = run) -> str:
         staged = [str(path.relative_to(repo_root)) for path in written]
         runner(["git", "add", *staged], repo_root)
         runner(["git", "commit", "-m", f"Release {version}"], repo_root)
-        committed = True
+        release_commit = head_sha(repo_root, runner)
         del artifacts
         runner(
             ["git", "tag", "-a", tag, "-m", unreleased_or_version(changelog, version)],
             repo_root,
         )
     except BaseException:
-        _rollback(repo_root, original_head, committed, runner)
+        _rollback(repo_root, original_head, release_commit, runner)
         raise
 
     print(
@@ -333,15 +333,20 @@ def unreleased_or_version(changelog: Path, version: str) -> str:
 def _rollback(
     repo_root: Path,
     original_head: str,
-    committed: bool,
+    release_commit: str | None,
     runner: Runner,
 ) -> None:
     """Restore worktree, index and refs. A failed release must be a no-op."""
-    if committed:
-        # Only move the branch if HEAD is still the commit this run created.
+    if release_commit is not None:
         current = head_sha(repo_root, runner)
-        if current != original_head:
+        if current == release_commit:
             runner(["git", "reset", "--hard", original_head], repo_root)
+        else:
+            # Something else advanced HEAD; resetting would destroy that work.
+            raise ReleaseError(
+                f"HEAD moved to {current[:12]} after the release commit "
+                f"{release_commit[:12]}; not resetting. Undo manually."
+            )
     else:
         # Unstage anything the failed commit left in the index, then restore the
         # tracked files. `reset --hard` is confined to tracked content, so build
