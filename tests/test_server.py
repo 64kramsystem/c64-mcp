@@ -72,7 +72,7 @@ async def test_server_registers_c64_profile_tools_with_safe_defaults() -> None:
 async def test_server_registers_complete_vice_surface_with_safe_defaults() -> None:
     server = create_server(
         Settings.from_environ(
-            {"GHIDRA_MCP_C64_TOOL_PROFILE": "full"}
+            {"C64_MCP_TOOL_PROFILE": "full"}
         ),
         ghidra=object(),
     )

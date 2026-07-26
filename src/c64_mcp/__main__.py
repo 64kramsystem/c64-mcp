@@ -19,13 +19,13 @@ def main(argv: Sequence[str] | None = None) -> None:
         choices=TOOL_PROFILE_NAMES,
         help=(
             "initial tool visibility profile "
-            "(overrides GHIDRA_MCP_C64_TOOL_PROFILE)"
+            "(overrides C64_MCP_TOOL_PROFILE)"
         ),
     )
     args = parser.parse_args(argv)
     environ = dict(os.environ)
     if args.tool_profile is not None:
-        environ["GHIDRA_MCP_C64_TOOL_PROFILE"] = args.tool_profile
+        environ["C64_MCP_TOOL_PROFILE"] = args.tool_profile
     settings = Settings.from_environ(environ)
     create_server(settings).run(transport=settings.transport)
 

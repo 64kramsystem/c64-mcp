@@ -19,9 +19,9 @@ def _client() -> GhidraClient:
 
 
 def test_live_generic_endpoint_accepts_bundled_profile_schema() -> None:
-    if os.environ.get("GHIDRA_MCP_C64_LIVE") != "1":
+    if os.environ.get("C64_MCP_LIVE") != "1":
         pytest.skip(
-            "set GHIDRA_MCP_C64_LIVE=1 to validate the bundled profile "
+            "set C64_MCP_LIVE=1 to validate the bundled profile "
             "against a running generic Ghidra MCP server"
         )
 
@@ -36,14 +36,14 @@ def test_live_generic_endpoint_accepts_bundled_profile_schema() -> None:
 
 
 def test_live_profile_apply_is_idempotent_on_explicit_full_map_fixture() -> None:
-    program = os.environ.get("GHIDRA_MCP_C64_PROFILE_TEST_PROGRAM")
+    program = os.environ.get("C64_MCP_PROFILE_TEST_PROGRAM")
     if (
-        os.environ.get("GHIDRA_MCP_C64_PROFILE_MUTATE") != "1"
+        os.environ.get("C64_MCP_PROFILE_MUTATE") != "1"
         or not program
     ):
         pytest.skip(
-            "set GHIDRA_MCP_C64_PROFILE_MUTATE=1 and "
-            "GHIDRA_MCP_C64_PROFILE_TEST_PROGRAM to a disposable named "
+            "set C64_MCP_PROFILE_MUTATE=1 and "
+            "C64_MCP_PROFILE_TEST_PROGRAM to a disposable named "
             "6502 program with default-space 0000..ffff mapped; the "
             "fixture should contain operands referencing d011 and ffd5"
         )

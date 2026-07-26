@@ -10,9 +10,9 @@ from c64_mcp.vice import ViceSession
 
 
 def live_session() -> ViceSession:
-    if os.environ.get("GHIDRA_MCP_C64_VICE_LIVE") != "1":
+    if os.environ.get("C64_MCP_VICE_LIVE") != "1":
         pytest.skip(
-            "set GHIDRA_MCP_C64_VICE_LIVE=1 with a disposable active "
+            "set C64_MCP_VICE_LIVE=1 with a disposable active "
             "VICE C64 Debugger trace"
         )
     settings = Settings.from_environ(os.environ)
@@ -51,9 +51,9 @@ def test_live_connector_contract_and_read_only_tools() -> None:
 
 
 def test_live_disposable_mutating_surface() -> None:
-    if os.environ.get("GHIDRA_MCP_C64_VICE_MUTATE") != "1":
+    if os.environ.get("C64_MCP_VICE_MUTATE") != "1":
         pytest.skip(
-            "set GHIDRA_MCP_C64_VICE_MUTATE=1 only for a disposable "
+            "set C64_MCP_VICE_MUTATE=1 only for a disposable "
             "VICE process and debugger trace"
         )
     session = live_session()

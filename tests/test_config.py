@@ -48,7 +48,7 @@ def test_default_timeout_is_finite() -> None:
 @pytest.mark.parametrize("profile", ["minimal", "static", "vice", "full"])
 def test_tool_profile_accepts_documented_values(profile: str) -> None:
     settings = Settings.from_environ(
-        {"GHIDRA_MCP_C64_TOOL_PROFILE": profile}
+        {"C64_MCP_TOOL_PROFILE": profile}
     )
 
     assert settings.tool_profile == profile
@@ -56,8 +56,8 @@ def test_tool_profile_accepts_documented_values(profile: str) -> None:
 
 def test_tool_profile_rejects_unknown_value() -> None:
     with pytest.raises(
-        ValueError, match="GHIDRA_MCP_C64_TOOL_PROFILE"
+        ValueError, match="C64_MCP_TOOL_PROFILE"
     ):
         Settings.from_environ(
-            {"GHIDRA_MCP_C64_TOOL_PROFILE": "everything"}
+            {"C64_MCP_TOOL_PROFILE": "everything"}
         )

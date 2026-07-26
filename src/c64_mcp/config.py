@@ -55,12 +55,12 @@ class Settings:
 
         token = environ.get("GHIDRA_MCP_AUTH_TOKEN") or None
         profile = environ.get(
-            "GHIDRA_MCP_C64_TOOL_PROFILE", "static"
+            "C64_MCP_TOOL_PROFILE", "static"
         )
         if profile not in TOOL_PROFILE_NAMES:
             choices = ", ".join(TOOL_PROFILE_NAMES)
             raise ValueError(
-                "GHIDRA_MCP_C64_TOOL_PROFILE must be one of: "
+                "C64_MCP_TOOL_PROFILE must be one of: "
                 f"{choices}"
             )
         return cls(
