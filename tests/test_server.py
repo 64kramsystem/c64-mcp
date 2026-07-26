@@ -4,6 +4,7 @@ import asyncio
 import threading
 
 import pytest
+from mcp.types import CallToolResult
 
 from c64_mcp.config import Settings
 from c64_mcp.server import create_server
@@ -44,6 +45,71 @@ async def test_server_registers_c64_text_tools() -> None:
         "text",
         "bytes",
     ]
+
+
+@pytest.mark.asyncio
+async def test_server_registers_c64_graphics_tools_with_safe_defaults() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    tools = await server.list_tools()
+    by_name = {tool.name: tool.inputSchema for tool in tools}
+
+    assert {
+        "decode_c64_hires_bitmap",
+        "decode_c64_multicolor_bitmap",
+        "decode_c64_charset",
+        "decode_c64_char_screen",
+        "decode_c64_sprites",
+    } <= set(by_name)
+    hires = by_name["decode_c64_hires_bitmap"]
+    assert hires["properties"]["columns"]["default"] == 40
+    assert hires["properties"]["rows"]["default"] == 25
+    assert hires["properties"]["overwrite"]["default"] is False
+    assert (
+        hires["properties"]["allow_non_atomic_vice_reads"]["default"] is False
+    )
+    assert set(hires["required"]) == {"bitmap", "screen"}
+    sprites = by_name["decode_c64_sprites"]
+    assert sprites["properties"]["sprite_stride"]["default"] == 64
+    assert sprites["properties"]["sheet_columns"]["default"] == 8
+    assert set(sprites["required"]) == {
+        "sprites",
+        "sprite_count",
+        "sprite_colors",
+    }
+    charset = by_name["decode_c64_charset"]
+    assert charset["properties"]["glyph_count"]["default"] == 256
+    assert charset["properties"]["sheet_columns"]["default"] == 16
+    char_screen = by_name["decode_c64_char_screen"]
+    assert set(char_screen["required"]) == {"screen", "charset"}
+    # A declared output schema would make FastMCP validate, and the lowlevel
+    # server duplicate, the image content into structured output.
+    assert all(
+        tool.outputSchema is None
+        for tool in tools
+        if tool.name.startswith("decode_c64_")
+        and tool.name != "decode_c64_text"
+    )
+
+
+@pytest.mark.asyncio
+async def test_graphics_tools_return_an_image_and_a_summary() -> None:
+    server = create_server(Settings.from_environ({}), ghidra=object())
+
+    result = await server.call_tool(
+        "decode_c64_hires_bitmap",
+        {
+            "bitmap": {"kind": "inline", "bytes": "80" + "00" * 7},
+            "screen": {"kind": "inline", "bytes": "10"},
+            "columns": 1,
+            "rows": 1,
+        },
+    )
+
+    assert isinstance(result, CallToolResult)
+    assert [block.type for block in result.content] == ["image", "text"]
+    assert result.structuredContent is not None
+    assert result.structuredContent["mode"] == "hires_bitmap"
 
 
 @pytest.mark.asyncio
@@ -99,10 +165,24 @@ async def test_server_registers_complete_vice_surface_with_safe_defaults() -> No
         "vice_interrupt",
         "vice_wait_for_stop",
         "vice_reset",
+        "vice_capture_screen",
         "copy_vice_memory_to_ghidra",
     }
 
     assert expected <= set(by_name)
+    capture = by_name["vice_capture_screen"]["properties"]
+    assert capture["crop"]["default"] is True
+    assert capture["use_vic"]["default"] is True
+    assert capture["timeout_ms"]["default"] == 10_000
+    assert capture["overwrite"]["default"] is False
+    assert by_name["vice_capture_screen"].get("required", []) == []
+    # An output schema would make the lowlevel server duplicate the image
+    # content into structured output.
+    assert all(
+        tool.outputSchema is None
+        for tool in tools
+        if tool.name == "vice_capture_screen"
+    )
     copy = by_name["copy_vice_memory_to_ghidra"]["properties"]
     assert copy["dry_run"]["default"] is True
     assert copy["conflict_policy"]["enum"] == [
@@ -118,6 +198,17 @@ async def test_server_registers_complete_vice_surface_with_safe_defaults() -> No
 
 
 @pytest.mark.asyncio
+async def test_capture_without_a_binding_asks_for_vice_connect() -> None:
+    server = create_server(
+        Settings.from_environ({"C64_MCP_TOOL_PROFILE": "full"}),
+        ghidra=object(),
+    )
+
+    with pytest.raises(Exception, match="vice_connect"):
+        await server.call_tool("vice_capture_screen", {})
+
+
+@pytest.mark.asyncio
 async def test_default_profile_exposes_static_and_management_tools() -> None:
     server = create_server(Settings.from_environ({}), ghidra=object())
 
@@ -126,6 +217,11 @@ async def test_default_profile_exposes_static_and_management_tools() -> None:
     assert names == {
         "get_c64_symbol_profile",
         "apply_c64_symbol_profile",
+        "decode_c64_hires_bitmap",
+        "decode_c64_multicolor_bitmap",
+        "decode_c64_charset",
+        "decode_c64_char_screen",
+        "decode_c64_sprites",
         "decode_c64_text",
         "search_c64_text",
         "define_c64_text",
@@ -135,6 +231,8 @@ async def test_default_profile_exposes_static_and_management_tools() -> None:
         "search_c64_tools",
     }
     assert "vice_connect" not in names
+    # Capture is a live-debugger tool, so the static profile must not carry it.
+    assert "vice_capture_screen" not in names
 
 
 @pytest.mark.asyncio

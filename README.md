@@ -8,8 +8,8 @@ monitor socket; the connector remains the sole owner of that connection.
 
 ## Tool visibility
 
-The default `static` profile exposes the symbol and text groups plus four
-small catalog-management tools. This keeps live-debugger schemas out of the
+The default `static` profile exposes the symbol, text, and graphics groups
+plus four small catalog-management tools. This keeps live-debugger schemas out of the
 agent context until they are needed. `minimal` starts with management tools
 only, `vice` starts with the live-debugger group, and `full` exposes every
 tool.
@@ -30,11 +30,35 @@ checks the complete versioned `c64.vice/1` method schema, capability set,
 machine, limits, and immutable connector instance ID. Compatibility is based
 on that runtime contract rather than an assumed package-version pairing.
 
+The handshake also requires connector **surface revision 2**, which adds the
+`display.capture` capability; an older connector is refused there, naming the
+revision it needs, rather than failing later on a missing method.
+
 The tool set covers cached status, dynamic registers and banks, bank-aware
-memory, checkpoints, execution control, stop-event waits, and reset.
-`vice_disconnect` releases only this MCP process's local binding; it never
-closes the connector socket, trace, or VICE process. `vice_status` is cached
-and performs no discovery or network operation.
+memory, checkpoints, execution control, stop-event waits, reset, and screen
+capture. `vice_disconnect` releases only this MCP process's local binding; it
+never closes the connector socket, trace, or VICE process. `vice_status` is
+cached and performs no discovery or network operation.
+
+`vice_capture_screen` returns the composited frame as an indexed PNG. It lives
+in the `vice` group rather than `graphics`, because it needs the live debugger.
+The connector returns the debug frame — border and blanking included — as one
+palette index per byte, together with the palette VICE is using; the capture is
+mapped through that palette rather than the static Pepto default, and the
+default `crop=true` keeps only the inner screen rectangle the connector
+reports, while `crop=false` returns the whole debug buffer. The summary carries
+`width`, `height`, `cropped`, `inner`, `palette_size`, `used_indices`,
+`distinct_index_count`, and `output_path`, which is written atomically and
+refuses an existing file unless `overwrite=true`. The envelope is validated
+before anything renders, and a mismatch is one `vice_connector_incompatible`
+error naming the field.
+
+Capture requires a stopped emulator, because any binary-monitor command traps
+VICE into the monitor: call `vice_interrupt`, capture, then `vice_resume`, so
+the stop stays visible instead of hiding inside a read-only-looking call. It
+also requires a VICE at r46020 or later; earlier builds, including the 3.10
+release, overrun their allocation while answering `display get`, and the
+connector refuses them by design.
 
 `copy_vice_memory_to_ghidra` is the only implicit bridge from live VICE memory
 to a static program. It performs one complete connector read, verifies the
@@ -106,6 +130,56 @@ be complete; partial or unmapped reads are errors.
 The normative mapping source is Appendices B and C of the official
 *Commodore 64 Programmer's Reference Guide*. The generated package data
 records the source URL and printed page references.
+
+## C64 graphics tools
+
+Five per-mode decoders turn C64 graphics memory into an indexed PNG:
+
+- `decode_c64_hires_bitmap` takes `bitmap` and `screen`; a set bit uses the
+  screen byte's high nybble and a clear bit its low nybble.
+- `decode_c64_multicolor_bitmap` adds `color`; the bit pairs select
+  `background`, the screen high nybble, the screen low nybble, and the
+  colour-RAM low nybble.
+- `decode_c64_charset` renders a character set as a sheet `sheet_columns`
+  glyphs wide, optionally in multicolor.
+- `decode_c64_char_screen` renders text mode from `screen` and `charset`. With
+  `multicolor=true`, `color` is required because colour-RAM bit 3 selects each
+  cell's mode; only glyphs up to the highest screen code present must be
+  supplied.
+- `decode_c64_sprites` renders 24x21 hires or 12x21 multicolor definitions onto
+  a sheet. `sprite_stride` defaults to 64, the padded definition-block size;
+  63 is accepted for packed records. Transparent pixels composite onto
+  `background`.
+
+Every byte input takes one discriminated source:
+
+```json
+{"kind": "inline", "bytes": "00ff"}
+{"kind": "ghidra", "program": "name", "start": "ram:2000"}
+{"kind": "vice", "bank_id": 1, "start": 8192}
+```
+
+`bank_id` is mandatory for a VICE source: the same address holds different
+bytes in different banks. A VICE read that would run past `$FFFF` is refused
+rather than wrapped. Naming more than one VICE source while the emulator is
+running is refused unless `allow_non_atomic_vice_reads=true`, which then
+reports a `non_atomic_vice_reads` warning.
+
+A source shorter than the geometry requires is an error before any rendering
+and before any remote read; extra inline bytes are ignored and counted in the
+summary. Colours are Pepto PAL unless a `palette` of `#rrggbb` strings or
+`[r, g, b]` triples is supplied; indices past a short palette extend `PLTE`
+with black and are reported as `unmapped_indices`. `output_path` writes the
+PNG atomically and refuses an existing file unless `overwrite=true`.
+
+Cell geometry is capped at 64 columns, 64 rows, and 2,048 cells; glyph and
+sprite counts at 256; sheet width at 64. These tools are read-only: nothing is
+written into a program or into VICE.
+
+These decoders render bytes, wherever they came from; `vice_capture_screen`,
+in the VICE group above, renders what the emulator is actually showing. Use the
+decoders for an off-screen buffer or a program's data, and capture for the
+composited result.
 
 ## Configuration
 

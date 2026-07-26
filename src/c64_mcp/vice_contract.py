@@ -14,6 +14,12 @@ from .errors import ViceError
 _CONTRACT_PACKAGE = "c64_mcp.contracts"
 _CONTRACT_NAME = "c64-vice-api-v1.json"
 
+# Revision 2 introduced the display.capture capability and the
+# c64_vice_v1_capture_display method that vice_capture_screen calls. Refusing
+# an older connector here, in the handshake, reports one clear cause instead of
+# a missing-method failure at the first capture.
+REQUIRED_SURFACE_REVISION = 2
+
 
 @dataclass(frozen=True)
 class CapabilityInfo:
@@ -80,8 +86,13 @@ def validate_capabilities(
     if result.get("method_namespace") != contract.get("method_namespace"):
         raise _incompatible("connector method namespace is incompatible")
     surface = _integer(result.get("surface_revision"), "surface_revision")
-    if surface != 1:
-        raise _incompatible("connector surface revision must be 1")
+    if surface < REQUIRED_SURFACE_REVISION:
+        raise _incompatible(
+            f"connector surface revision {surface} is too old; this C64 MCP "
+            f"requires surface revision {REQUIRED_SURFACE_REVISION}, which "
+            "adds c64_vice_v1_capture_display. Upgrade the Ghidra VICE "
+            "connector."
+        )
     if _integer(result.get("binary_monitor_api"), "binary_monitor_api") != 2:
         raise _incompatible("connector binary-monitor API must be 2")
 

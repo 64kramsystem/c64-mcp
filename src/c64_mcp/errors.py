@@ -99,5 +99,9 @@ class TextLimitError(RequestError):
     """A bounded text operation exceeded a hard safety limit."""
 
 
+class GraphicsLimitError(RequestError):
+    """A bounded graphics operation exceeded a hard safety limit."""
+
+
 class TokenCycleError(RequestError):
     """Recursive token expansion contains a cycle."""

@@ -55,7 +55,9 @@ def invocation(value: dict[str, object]) -> dict[str, object]:
     return {"ok": True, "result": json.dumps(value)}
 
 
-def capabilities(instance: str = INSTANCE) -> dict[str, object]:
+def capabilities(
+    instance: str = INSTANCE, *, surface_revision: int = 2
+) -> dict[str, object]:
     contract = load_contract()
     return envelope(
         {
@@ -70,7 +72,7 @@ def capabilities(instance: str = INSTANCE) -> dict[str, object]:
             "binary_monitor_api": 2,
             "capabilities": contract["capabilities"],
             "method_namespace": "c64_vice_v1_",
-            "surface_revision": 1,
+            "surface_revision": surface_revision,
             "limits": contract["limits"],
         },
         instance=instance,
@@ -99,6 +101,7 @@ class FakeGhidra:
     def __init__(self) -> None:
         self.token = "target-1"
         self.instance = INSTANCE
+        self.surface_revision = 2
         self.calls: list[tuple[str, dict[str, object], int]] = []
         self.writes: list[dict[str, object]] = []
         self.replies: dict[str, dict[str, object]] = {}
@@ -119,7 +122,11 @@ class FakeGhidra:
             (method, dict(arguments), connector_timeout_ms)
         )
         if method == "c64_vice_v1_capabilities":
-            return invocation(capabilities(self.instance))
+            return invocation(
+                capabilities(
+                    self.instance, surface_revision=self.surface_revision
+                )
+            )
         if method == "c64_vice_v1_status":
             return invocation(status(instance=self.instance))
         value = self.replies.get(method, envelope({}, sequence=1))
@@ -420,6 +427,10 @@ def test_old_generation_response_cannot_update_reconnected_binding() -> None:
             "c64_vice_v1_wait_for_stop",
         ),
         (lambda value: value.reset(), "c64_vice_v1_reset"),
+        (
+            lambda value: value.capture_display(),
+            "c64_vice_v1_capture_display",
+        ),
     ],
 )
 def test_public_tools_map_to_exactly_one_versioned_connector_method(
@@ -433,6 +444,61 @@ def test_public_tools_map_to_exactly_one_versioned_connector_method(
     assert [item[0] for item in fake.calls] == [method]
     assert fake.calls[0][1]["process"] == {"object_path": "C64"}
     assert fake.calls[0][1]["timeout_ms"] == fake.calls[0][2]
+
+
+def test_capture_display_sends_only_the_declared_arguments() -> None:
+    fake, session = connected()
+
+    assert session.capture_display(use_vic=False, timeout_ms=2_500)["ok"] is True
+
+    method, arguments, connector_timeout = fake.calls[0]
+    assert method == "c64_vice_v1_capture_display"
+    assert arguments == {
+        "process": {"object_path": "C64"},
+        "use_vic": False,
+        "timeout_ms": 2_500,
+    }
+    assert connector_timeout == 2_500
+
+
+def test_capture_display_rejects_a_non_boolean_use_vic() -> None:
+    fake, session = connected()
+
+    result = session.capture_display(use_vic="yes")  # type: ignore[arg-type]
+
+    assert result["error"]["code"] == "vice_invalid_argument"  # type: ignore[index]
+    assert fake.calls == []
+
+
+def test_a_revision_one_connector_is_rejected_during_the_handshake() -> None:
+    fake = FakeGhidra()
+    fake.surface_revision = 1
+
+    result = ViceSession(fake).connect()
+
+    error = result["error"]
+    assert error["code"] == "vice_connector_incompatible"  # type: ignore[index]
+    message = error["message"]  # type: ignore[index]
+    assert "surface revision" in message
+    assert "2" in message
+
+
+def test_a_connector_without_the_capture_method_names_it() -> None:
+    class OldFake(FakeGhidra):
+        def target_methods(self) -> dict[str, object]:
+            found = discovery(self.token)
+            found["methods"] = [
+                method
+                for method in found["methods"]  # type: ignore[union-attr]
+                if method["name"] != "c64_vice_v1_capture_display"
+            ]
+            return found
+
+    result = ViceSession(OldFake()).connect()
+
+    error = result["error"]
+    assert error["code"] == "vice_connector_incompatible"  # type: ignore[index]
+    assert "c64_vice_v1_capture_display" in error["message"]  # type: ignore[index]
 
 
 def test_register_read_always_sends_required_names_array() -> None:

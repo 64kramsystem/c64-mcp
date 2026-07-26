@@ -469,6 +469,28 @@ class ViceSession:
             mutation_flag="vice_state_may_have_changed",
         )
 
+    def capture_display(
+        self,
+        *,
+        use_vic: bool = True,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        """Capture one composited frame and its palette from the connector.
+
+        The connector requires a stopped target and returns the raw indexed
+        buffer; nothing here decodes or renders it.
+        """
+
+        try:
+            return self._operation_result(
+                "c64_vice_v1_capture_display",
+                {"use_vic": _boolean(use_vic, "use_vic")},
+                timeout_ms=timeout_ms,
+                mutation_flag=None,
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def copy_memory_to_ghidra(
         self,
         *,

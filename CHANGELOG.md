@@ -2,8 +2,59 @@
 
 ## Unreleased
 
+### Added
+
+- `vice_capture_screen`, in the **`vice`** group rather than `graphics`, because
+  the default `static` profile deliberately keeps live-debugger schemas out of
+  context. It asks the connector for one composited frame plus the palette VICE
+  returned with it, crops to the inner screen rectangle by default (`crop=false`
+  returns the whole debug buffer, border included), and encodes an indexed PNG
+  through the same writer the static decoders use — mapped through the
+  emulator's own palette, not the static Pepto default. The summary carries
+  `mode`, `width`, `height`, `cropped`, `inner`, `palette_size`,
+  `used_indices`, `distinct_index_count`, and `output_path`; `output_path` is
+  written atomically and refuses an existing file unless `overwrite=true`.
+  Capture needs a stopped emulator, which the connector enforces:
+  `vice_interrupt`, capture, then `vice_resume`.
+- The connector envelope is validated completely before anything renders —
+  `bits_per_pixel == 8`, `buffer_length == width * height`, the decoded base64
+  length, the inner rectangle fitting inside the debug buffer, and a palette
+  covering every index present. A violation is one
+  `vice_connector_incompatible` error naming the offending field rather than a
+  half-invented image. Unmapped indices cannot occur on this path, because the
+  connector refuses a buffer whose highest index its palette does not cover, so
+  capture reports no `unmapped_indices`.
+
+- A `graphics` tool group, in the `static` and `full` profiles, decoding C64
+  graphics memory to an indexed PNG: `decode_c64_hires_bitmap`,
+  `decode_c64_multicolor_bitmap`, `decode_c64_charset`,
+  `decode_c64_char_screen`, and `decode_c64_sprites`. Each encodes conventions
+  that are otherwise re-derived from memory every time — bitmap cell
+  interleaving, the multicolor bit-pair to colour-source mapping, per-cell
+  hires/multicolor selection through colour-RAM bit 3, the 64-byte sprite
+  stride, sprite transparency — and returns one image plus a JSON summary of
+  what was read and what was drawn. Colours are Pepto PAL by default; a
+  `palette` argument overrides it, and indices beyond a short palette extend
+  `PLTE` with black and are reported rather than silently dropped.
+- Every graphics byte input takes one discriminated source: `{"kind":
+  "inline", "bytes": "…"}`, `{"kind": "ghidra", "program": …, "start": …}`, or
+  `{"kind": "vice", "bank_id": …, "start": …}`. `bank_id` is mandatory, because
+  the same address holds different bytes in different banks, and a VICE read is
+  refused rather than wrapped past `$FFFF`. A source shorter than the geometry
+  requires is an error before anything is read or rendered, rather than an
+  image with invented pixels. Naming more than one VICE source while the
+  emulator runs fails unless `allow_non_atomic_vice_reads=true`, which then
+  reports a `non_atomic_vice_reads` warning in both summaries. `output_path`
+  writes the PNG atomically and refuses an existing file unless
+  `overwrite=true`.
+
 ### Changed
 
+- The packaged `c64-vice-api-v1.json` is now the connector's **surface revision
+  2** contract, adding the `display.capture` capability and the
+  `c64_vice_v1_capture_display` method. `vice_connect` refuses an older
+  connector during the handshake, naming the revision it requires, instead of
+  failing later on a missing method.
 - `tools/release` now publishes to PyPI as its final step, the package being
   `c64-mcp` there. It refuses up front when `UV_PUBLISH_TOKEN` is unset, before
   touching git: the push and the tag come earlier and cannot be retracted, so

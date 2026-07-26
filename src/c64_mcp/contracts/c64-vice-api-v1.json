@@ -21,6 +21,7 @@
     "execution.interrupt",
     "execution.wait_for_stop",
     "machine.reset",
+    "display.capture",
     "trace.sync"
   ],
   "connector": {
@@ -494,8 +495,31 @@
         }
       ],
       "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_capture_display",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "default": true,
+          "name": "use_vic",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
     }
   ],
   "protocol": "c64.vice",
-  "surface_revision": 1
+  "surface_revision": 2
 }
