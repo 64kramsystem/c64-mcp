@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+
+- Added `tools/release prepare`, which writes the version to `pyproject.toml`,
+  regenerates `uv.lock`, rolls the changelog, runs the gates through
+  `uv run --locked` against that candidate, builds, then commits and tags. There
+  is deliberately no `publish`: nothing consumes a c64 release, and its
+  compatibility with the connector rests on the `c64.vice/1` runtime handshake
+  rather than on matching versions. A failed run restores the working tree, the
+  index and the branch ref.
+
 ### Changed
 
 - Version moves to `0.99.0`. `__version__` is now derived from installed package
