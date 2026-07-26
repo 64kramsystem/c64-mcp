@@ -8,9 +8,9 @@ from unittest.mock import AsyncMock
 import pytest
 from mcp.server.fastmcp import Context, FastMCP
 
-from ghidra_mcp_c64.config import Settings
-from ghidra_mcp_c64.server import create_server
-from ghidra_mcp_c64.tool_profiles import ToolProfileRegistry
+from c64_mcp.config import Settings
+from c64_mcp.server import create_server
+from c64_mcp.tool_profiles import ToolProfileRegistry
 
 
 async def _call(

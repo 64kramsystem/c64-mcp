@@ -263,7 +263,7 @@ wheels = [
 ]
 
 [[package]]
-name = "ghidra-mcp-c64"
+name = "c64-mcp"
 version = "0.99.0"
 source = { editable = "." }
 dependencies = [

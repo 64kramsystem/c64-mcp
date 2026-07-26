@@ -1,4 +1,4 @@
-"""Scripted releases for ghidra-mcp-c64.
+"""Scripted releases for c64-mcp.
 
 One command:
 
@@ -31,7 +31,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-PRODUCT = "ghidra-mcp-c64"
+PRODUCT = "c64-mcp"
 DEFAULT_BRANCH = "main"
 
 _SEMVER_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
@@ -263,8 +263,8 @@ BUILD: tuple[tuple[str, ...], ...] = (
 
 def expected_artifacts(repo_root: Path, version: str) -> list[Path]:
     return [
-        repo_root / "dist" / f"ghidra_mcp_c64-{version}-py3-none-any.whl",
-        repo_root / "dist" / f"ghidra_mcp_c64-{version}.tar.gz",
+        repo_root / "dist" / f"c64_mcp-{version}-py3-none-any.whl",
+        repo_root / "dist" / f"c64_mcp-{version}.tar.gz",
     ]
 
 

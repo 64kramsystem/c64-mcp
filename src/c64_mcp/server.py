@@ -59,7 +59,7 @@ def create_server(
     text_client = cast(TextGhidraClient, instance)
     profile_client = cast(ProfileGhidraClient, instance)
     vice = ViceSession(cast(ViceGhidraClient, instance))
-    server = FastMCP("ghidra-mcp-c64")
+    server = FastMCP("c64-mcp")
     registry = ToolProfileRegistry(server, settings.tool_profile)
 
     @registry.tool("symbols")

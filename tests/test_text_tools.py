@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from ghidra_mcp_c64.errors import RequestError, TextLimitError
-from ghidra_mcp_c64.text.tools import (
+from c64_mcp.errors import RequestError, TextLimitError
+from c64_mcp.text.tools import (
     decode_c64_text,
     define_c64_text,
     search_c64_text,
@@ -341,7 +341,7 @@ def test_text_search_enforces_aggregate_rendering_cap(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
-        "ghidra_mcp_c64.text.tools.MAX_RENDERED_CHARS", 10
+        "c64_mcp.text.tools.MAX_RENDERED_CHARS", 10
     )
 
     with pytest.raises(TextLimitError, match="rendered output"):

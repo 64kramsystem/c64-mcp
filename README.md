@@ -1,4 +1,4 @@
-# ghidra-mcp-c64
+# c64-mcp
 
 C64-specific MCP tools layered over the public `ghidra-mcp` HTTP API and the
 separately installed Ghidra VICE connector.

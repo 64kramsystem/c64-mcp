@@ -8,8 +8,8 @@ from typing import Any
 
 import pytest
 
-from ghidra_mcp_c64.errors import GhidraError, GhidraTransportError
-from ghidra_mcp_c64.ghidra_client import GhidraClient
+from c64_mcp.errors import GhidraError, GhidraTransportError
+from c64_mcp.ghidra_client import GhidraClient
 
 
 class FakeResponse:
@@ -134,7 +134,7 @@ def test_response_body_is_bounded(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
-        "ghidra_mcp_c64.ghidra_client.MAX_RESPONSE_BYTES", 8
+        "c64_mcp.ghidra_client.MAX_RESPONSE_BYTES", 8
     )
     monkeypatch.setattr(
         "urllib.request.urlopen",

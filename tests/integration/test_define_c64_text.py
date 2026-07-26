@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from ghidra_mcp_c64.ghidra_client import GhidraClient
-from ghidra_mcp_c64.text.tools import define_c64_text
+from c64_mcp.ghidra_client import GhidraClient
+from c64_mcp.text.tools import define_c64_text
 
 
 def test_live_definition_dry_run_uses_public_ghidra_api() -> None:

@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from ghidra_mcp_c64 import __main__ as entrypoint
+from c64_mcp import __main__ as entrypoint
 
 
 def test_cli_profile_overrides_environment(

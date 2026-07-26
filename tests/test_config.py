@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from ghidra_mcp_c64.config import Settings
+from c64_mcp.config import Settings
 
 
 def test_defaults_are_loopback_and_stdio() -> None:

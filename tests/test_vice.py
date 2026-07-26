@@ -9,9 +9,9 @@ from typing import Any
 
 import pytest
 
-from ghidra_mcp_c64.errors import GhidraError, GhidraTransportError
-from ghidra_mcp_c64.vice import ViceSession
-from ghidra_mcp_c64.vice_contract import load_contract
+from c64_mcp.errors import GhidraError, GhidraTransportError
+from c64_mcp.vice import ViceSession
+from c64_mcp.vice_contract import load_contract
 
 INSTANCE = "12345678-1234-1234-1234-123456789abc"
 

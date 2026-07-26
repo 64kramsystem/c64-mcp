@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+### Changed
+
+- Renamed the project from `ghidra-mcp-c64` to `c64-mcp`, and the Python package
+  from `ghidra_mcp_c64` to `c64_mcp`. The old name implied a sibling of
+  `ghidra-mcp-next`; this is not a Ghidra extension and contains no Java. It is an
+  MCP server that reaches Ghidra over HTTP and VICE through the connector's
+  TraceRMI contract, and roughly half of it — the PETSCII and screen-code tables,
+  the C64 symbol profile, the tool-visibility profiles — needs neither.
+  **The console script is now `c64-mcp`**: update the `command` in any `.mcp.json`
+  and re-sync the virtualenv, which otherwise keeps the old script.
+
 ### Added
 
 - Added `tools/release <major|minor|patch>`, a single command that refuses unless

@@ -4,12 +4,12 @@ from dataclasses import replace
 
 import pytest
 
-from ghidra_mcp_c64.errors import (
+from c64_mcp.errors import (
     RequestError,
     TextLimitError,
     TokenCycleError,
 )
-from ghidra_mcp_c64.text.codec import (
+from c64_mcp.text.codec import (
     ControlMode,
     DecodeOptions,
     HighBitMode,
@@ -17,7 +17,7 @@ from ghidra_mcp_c64.text.codec import (
     TokenOptions,
     decode_c64_bytes,
 )
-from ghidra_mcp_c64.text.tables import Encoding
+from c64_mcp.text.tables import Encoding
 
 
 def options(**changes: object) -> DecodeOptions:
@@ -276,7 +276,7 @@ def test_aggregate_cap_is_checked_before_joining_all_fragments(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
-        "ghidra_mcp_c64.text.codec.MAX_RENDERED_CHARS", 20
+        "c64_mcp.text.codec.MAX_RENDERED_CHARS", 20
     )
 
     with pytest.raises(TextLimitError, match="rendered output"):

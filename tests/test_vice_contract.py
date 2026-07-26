@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from ghidra_mcp_c64.errors import ViceError
-from ghidra_mcp_c64.vice_contract import (
+from c64_mcp.errors import ViceError
+from c64_mcp.vice_contract import (
     load_contract,
     parse_connector_envelope,
     parse_handshake_envelope,
@@ -285,6 +285,6 @@ def test_packaged_contract_matches_explicit_connector_fixture(
     source = Path(connector) / "contracts/c64-vice-api-v1.json"
     packaged = (
         Path(c64)
-        / "src/ghidra_mcp_c64/contracts/c64-vice-api-v1.json"
+        / "src/c64_mcp/contracts/c64-vice-api-v1.json"
     )
     assert json.loads(source.read_text()) == json.loads(packaged.read_text())
