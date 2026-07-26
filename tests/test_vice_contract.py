@@ -64,6 +64,7 @@ def capability_envelope(
     *,
     minor: int = 0,
     capabilities: list[str] | None = None,
+    surface_revision: int = 2,
 ) -> dict[str, object]:
     contract = load_contract()
     result = {
@@ -82,7 +83,7 @@ def capability_envelope(
             else capabilities
         ),
         "method_namespace": "c64_vice_v1_",
-        "surface_revision": 1,
+        "surface_revision": surface_revision,
         "limits": contract["limits"],
     }
     return connector_envelope(result)
@@ -175,6 +176,26 @@ def test_capabilities_validate_identity_versions_limits_and_exact_v1_set() -> No
     assert info.connector_version == "1.0.0"
     assert info.vice_version == "3.10.0"
     assert info.limits["memory_read_bytes"] == 65_536
+
+
+def test_capture_requires_surface_revision_two() -> None:
+    contract = load_contract()
+
+    assert "display.capture" in contract["capabilities"]  # type: ignore[operator]
+    assert "c64_vice_v1_capture_display" in {
+        method["name"]  # type: ignore[index]
+        for method in contract["methods"]  # type: ignore[union-attr]
+    }
+    assert contract["surface_revision"] == 2
+
+    with pytest.raises(ViceError) as captured:
+        validate_capabilities(capability_envelope(surface_revision=1))
+
+    assert captured.value.code == "vice_connector_incompatible"
+    message = str(captured.value)
+    assert "surface revision" in message
+    assert "2" in message
+    assert "upgrade" in message.lower()
 
 
 def test_newer_minor_allows_only_capability_superset() -> None:

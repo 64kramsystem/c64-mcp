@@ -26,9 +26,9 @@ async def _call(
     ("profile", "expected_count", "representative"),
     [
         ("minimal", 4, "list_c64_tool_groups"),
-        ("static", 9, "decode_c64_text"),
-        ("vice", 24, "vice_connect"),
-        ("full", 29, "vice_connect"),
+        ("static", 14, "decode_c64_text"),
+        ("vice", 25, "vice_capture_screen"),
+        ("full", 35, "vice_connect"),
     ],
 )
 async def test_profiles_expose_exact_initial_surfaces(
@@ -45,6 +45,56 @@ async def test_profiles_expose_exact_initial_surfaces(
     assert representative in names
     if profile == "vice":
         assert "decode_c64_text" not in names
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("profile", ["static", "full"])
+async def test_graphics_is_a_baseline_group_of_static_and_full(
+    profile: str,
+) -> None:
+    settings = Settings.from_environ({"C64_MCP_TOOL_PROFILE": profile})
+    server = create_server(settings, ghidra=object())
+
+    listing = await _call(server, "list_c64_tool_groups", {})
+
+    graphics = next(
+        group
+        for group in listing["groups"]
+        if group["group"] == "graphics"
+    )
+    assert graphics["baseline"] is True
+    assert graphics["loaded"] is True
+    assert graphics["tool_count"] == 5
+    assert graphics["tools"] == [
+        "decode_c64_char_screen",
+        "decode_c64_charset",
+        "decode_c64_hires_bitmap",
+        "decode_c64_multicolor_bitmap",
+        "decode_c64_sprites",
+    ]
+
+
+@pytest.mark.asyncio
+async def test_screen_capture_belongs_to_vice_not_graphics() -> None:
+    settings = Settings.from_environ({"C64_MCP_TOOL_PROFILE": "full"})
+    server = create_server(settings, ghidra=object())
+
+    listing = await _call(server, "list_c64_tool_groups", {})
+    groups = {group["group"]: group for group in listing["groups"]}
+
+    assert "vice_capture_screen" in groups["vice"]["tools"]
+    assert "vice_capture_screen" not in groups["graphics"]["tools"]
+    assert groups["vice"]["tool_count"] == 21
+
+
+@pytest.mark.asyncio
+async def test_graphics_is_hidden_from_the_vice_profile() -> None:
+    settings = Settings.from_environ({"C64_MCP_TOOL_PROFILE": "vice"})
+    server = create_server(settings, ghidra=object())
+
+    names = {tool.name for tool in await server.list_tools()}
+
+    assert "decode_c64_hires_bitmap" not in names
 
 
 @pytest.mark.asyncio
@@ -65,10 +115,10 @@ async def test_group_load_and_unload_are_idempotent() -> None:
     )
 
     assert loaded["changed"] is True
-    assert loaded["new_tools"] == 20
+    assert loaded["new_tools"] == 21
     assert loaded_again["changed"] is False
     assert unloaded["changed"] is True
-    assert unloaded["removed_tools"] == 20
+    assert unloaded["removed_tools"] == 21
     assert unloaded_again["changed"] is False
     names = {tool.name for tool in await server.list_tools()}
     assert "vice_connect" not in names
@@ -88,7 +138,12 @@ async def test_load_all_keeps_only_profile_baseline_protected() -> None:
         server, "unload_c64_tool_group", {"group": "vice"}
     )
 
-    assert loaded["loaded_groups"] == ["symbols", "text", "vice"]
+    assert loaded["loaded_groups"] == [
+        "graphics",
+        "symbols",
+        "text",
+        "vice",
+    ]
     assert protected["error"]["code"] == "protected_group"
     assert unloaded["changed"] is True
 
@@ -258,4 +313,4 @@ async def test_concurrent_group_loads_publish_once() -> None:
     )
 
     assert sorted([first["changed"], second["changed"]]) == [False, True]
-    assert len(await server.list_tools()) == 29
+    assert len(await server.list_tools()) == 35

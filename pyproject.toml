@@ -25,6 +25,7 @@ packages = ["src/c64_mcp"]
 [dependency-groups]
 dev = [
   "mypy>=1.17,<2",
+  "pillow>=11,<12",
   "pytest>=8.4,<9",
   "pytest-asyncio>=1.1,<2",
   "ruff>=0.12,<1",

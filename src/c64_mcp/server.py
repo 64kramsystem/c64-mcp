@@ -6,9 +6,20 @@ import asyncio
 from typing import Any, Literal, cast
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import CallToolResult
 
 from .config import Settings
 from .ghidra_client import GhidraClient
+from .graphics.capture import CaptureViceSession
+from .graphics.capture import vice_capture_screen as capture_screen
+from .graphics.sources import GraphicsGhidraClient, GraphicsViceSession
+from .graphics.tools import decode_c64_char_screen as decode_char_screen
+from .graphics.tools import decode_c64_charset as decode_charset
+from .graphics.tools import decode_c64_hires_bitmap as decode_hires_bitmap
+from .graphics.tools import (
+    decode_c64_multicolor_bitmap as decode_multicolor_bitmap,
+)
+from .graphics.tools import decode_c64_sprites as decode_sprites
 from .profile_tools import ProfileGhidraClient
 from .profile_tools import (
     apply_c64_symbol_profile as apply_profile,
@@ -58,7 +69,10 @@ def create_server(
     )
     text_client = cast(TextGhidraClient, instance)
     profile_client = cast(ProfileGhidraClient, instance)
+    graphics_client = cast(GraphicsGhidraClient, instance)
     vice = ViceSession(cast(ViceGhidraClient, instance))
+    graphics_vice = cast(GraphicsViceSession, vice)
+    capture_vice = cast(CaptureViceSession, vice)
     server = FastMCP("c64-mcp")
     registry = ToolProfileRegistry(server, settings.tool_profile)
 
@@ -214,6 +228,175 @@ def create_server(
             namespace=namespace,
             comment=comment,
             dry_run=dry_run,
+        )
+
+    @registry.tool("graphics")
+    async def decode_c64_hires_bitmap(
+        bitmap: dict[str, Any],
+        screen: dict[str, Any],
+        columns: int = 40,
+        rows: int = 25,
+        palette: list[Any] | None = None,
+        output_path: str | None = None,
+        overwrite: bool = False,
+        allow_non_atomic_vice_reads: bool = False,
+    ) -> CallToolResult:
+        """Decode C64 hires bitmap bytes into an indexed PNG."""
+
+        return await asyncio.to_thread(
+            decode_hires_bitmap,
+            graphics_client,
+            graphics_vice,
+            bitmap=bitmap,
+            screen=screen,
+            columns=columns,
+            rows=rows,
+            palette=palette,
+            output_path=output_path,
+            overwrite=overwrite,
+            allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
+        )
+
+    @registry.tool("graphics")
+    async def decode_c64_multicolor_bitmap(
+        bitmap: dict[str, Any],
+        screen: dict[str, Any],
+        color: dict[str, Any],
+        columns: int = 40,
+        rows: int = 25,
+        background: int = 0,
+        palette: list[Any] | None = None,
+        output_path: str | None = None,
+        overwrite: bool = False,
+        allow_non_atomic_vice_reads: bool = False,
+    ) -> CallToolResult:
+        """Decode C64 multicolor bitmap bytes into an indexed PNG."""
+
+        return await asyncio.to_thread(
+            decode_multicolor_bitmap,
+            graphics_client,
+            graphics_vice,
+            bitmap=bitmap,
+            screen=screen,
+            color=color,
+            columns=columns,
+            rows=rows,
+            background=background,
+            palette=palette,
+            output_path=output_path,
+            overwrite=overwrite,
+            allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
+        )
+
+    @registry.tool("graphics")
+    async def decode_c64_charset(
+        charset: dict[str, Any],
+        glyph_count: int = 256,
+        sheet_columns: int = 16,
+        foreground: int = 1,
+        background: int = 0,
+        multicolor: bool = False,
+        background_1: int | None = None,
+        background_2: int | None = None,
+        palette: list[Any] | None = None,
+        output_path: str | None = None,
+        overwrite: bool = False,
+        allow_non_atomic_vice_reads: bool = False,
+    ) -> CallToolResult:
+        """Decode a C64 character set into an indexed PNG glyph sheet."""
+
+        return await asyncio.to_thread(
+            decode_charset,
+            graphics_client,
+            graphics_vice,
+            charset=charset,
+            glyph_count=glyph_count,
+            sheet_columns=sheet_columns,
+            foreground=foreground,
+            background=background,
+            multicolor=multicolor,
+            background_1=background_1,
+            background_2=background_2,
+            palette=palette,
+            output_path=output_path,
+            overwrite=overwrite,
+            allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
+        )
+
+    @registry.tool("graphics")
+    async def decode_c64_char_screen(
+        screen: dict[str, Any],
+        charset: dict[str, Any],
+        color: dict[str, Any] | None = None,
+        columns: int = 40,
+        rows: int = 25,
+        background: int = 0,
+        foreground: int = 1,
+        multicolor: bool = False,
+        background_1: int | None = None,
+        background_2: int | None = None,
+        palette: list[Any] | None = None,
+        output_path: str | None = None,
+        overwrite: bool = False,
+        allow_non_atomic_vice_reads: bool = False,
+    ) -> CallToolResult:
+        """Decode C64 text-mode screen codes into an indexed PNG."""
+
+        return await asyncio.to_thread(
+            decode_char_screen,
+            graphics_client,
+            graphics_vice,
+            screen=screen,
+            charset=charset,
+            color=color,
+            columns=columns,
+            rows=rows,
+            background=background,
+            foreground=foreground,
+            multicolor=multicolor,
+            background_1=background_1,
+            background_2=background_2,
+            palette=palette,
+            output_path=output_path,
+            overwrite=overwrite,
+            allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
+        )
+
+    @registry.tool("graphics")
+    async def decode_c64_sprites(
+        sprites: dict[str, Any],
+        sprite_count: int,
+        sprite_colors: list[int],
+        sprite_stride: int = 64,
+        sheet_columns: int = 8,
+        multicolor: bool = False,
+        multicolor_0: int | None = None,
+        multicolor_1: int | None = None,
+        background: int = 0,
+        palette: list[Any] | None = None,
+        output_path: str | None = None,
+        overwrite: bool = False,
+        allow_non_atomic_vice_reads: bool = False,
+    ) -> CallToolResult:
+        """Decode C64 sprite definitions into an indexed PNG sheet."""
+
+        return await asyncio.to_thread(
+            decode_sprites,
+            graphics_client,
+            graphics_vice,
+            sprites=sprites,
+            sprite_count=sprite_count,
+            sprite_colors=sprite_colors,
+            sprite_stride=sprite_stride,
+            sheet_columns=sheet_columns,
+            multicolor=multicolor,
+            multicolor_0=multicolor_0,
+            multicolor_1=multicolor_1,
+            background=background,
+            palette=palette,
+            output_path=output_path,
+            overwrite=overwrite,
+            allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
         )
 
     @registry.tool("vice")
@@ -455,6 +638,26 @@ def create_server(
 
         return await asyncio.to_thread(
             vice.reset, kind=kind, timeout_ms=timeout_ms
+        )
+
+    @registry.tool("vice")
+    async def vice_capture_screen(
+        crop: bool = True,
+        use_vic: bool = True,
+        timeout_ms: int = 10_000,
+        output_path: str | None = None,
+        overwrite: bool = False,
+    ) -> CallToolResult:
+        """Capture the live VICE screen as an indexed PNG."""
+
+        return await asyncio.to_thread(
+            capture_screen,
+            capture_vice,
+            crop=crop,
+            use_vic=use_vic,
+            timeout_ms=timeout_ms,
+            output_path=output_path,
+            overwrite=overwrite,
         )
 
     @registry.tool("vice")
