@@ -4,6 +4,17 @@
 
 ### Changed
 
+- `tools/release` now publishes to PyPI as its final step, the package being
+  `c64-mcp` there. It refuses up front when `UV_PUBLISH_TOKEN` is unset, before
+  touching git: the push and the tag come earlier and cannot be retracted, so
+  discovering a missing token afterwards would leave a released tag with nothing
+  published. Only the two artifacts built for that version are uploaded, not
+  whatever `dist/` happens to hold.
+- Renamed the `GHIDRA_MCP_C64_*` environment variables to `C64_MCP_*`, including
+  the runtime `C64_MCP_TOOL_PROFILE`. `GHIDRA_MCP_URL` and
+  `GHIDRA_VICE_CONNECTOR_REPO` keep their names, naming things that are still
+  called that.
+
 - Renamed the project from `ghidra-mcp-c64` to `c64-mcp`, and the Python package
   from `ghidra_mcp_c64` to `c64_mcp`. The old name implied a sibling of
   `ghidra-mcp-next`; this is not a Ghidra extension and contains no Java. It is an
