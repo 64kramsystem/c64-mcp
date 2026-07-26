@@ -296,3 +296,45 @@ def test_there_is_no_publish_command():
     """Nothing consumes a c64 release; compatibility is a runtime handshake."""
     assert not hasattr(release, "publish")
     assert not hasattr(release, "write_manifest")
+
+
+# ------------------------------------------------ blockers found in review
+
+
+def test_a_concurrent_commit_is_not_destroyed(repo: Path):
+    """Rollback must reset only the commit this run created."""
+
+    def runner(command, cwd):
+        parts = [str(part) for part in command]
+        if parts[:3] == ["git", "tag", "-a"]:
+            (repo / "other.txt").write_text("concurrent", encoding="utf-8")
+            git(repo, "add", "other.txt")
+            git(repo, "commit", "-qm", "concurrent work")
+            raise release.ReleaseError("injected failure: git tag -a")
+        return recording_runner(repo)(command, cwd)
+
+    with pytest.raises(release.ReleaseError, match="not resetting"):
+        release.prepare(repo, "minor", runner)
+
+    assert git(repo, "log", "-1", "--format=%s").strip() == "concurrent work"
+
+
+def test_an_injected_commit_failure_leaves_no_trace(repo: Path):
+    before_head = release.head_sha(repo)
+
+    with pytest.raises(release.ReleaseError, match="injected failure"):
+        release.prepare(repo, "minor", recording_runner(repo, fail="git commit"))
+
+    assert release.head_sha(repo) == before_head
+    assert git(repo, "status", "--porcelain").strip() == ""
+    assert git(repo, "tag", "--list").strip() == ""
+
+
+def test_the_full_gate_set_is_present():
+    """Looping over whatever remains would pass if a gate were deleted."""
+    assert release.GATES == (
+        ("uv", "run", "--locked", "pytest"),
+        ("uv", "run", "--locked", "ruff", "check"),
+        ("uv", "run", "--locked", "mypy"),
+        ("uv", "lock", "--check"),
+    )
