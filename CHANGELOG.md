@@ -4,13 +4,15 @@
 
 ### Added
 
-- Added `tools/release prepare`, which writes the version to `pyproject.toml`,
-  regenerates `uv.lock`, rolls the changelog, runs the gates through
-  `uv run --locked` against that candidate, builds, then commits and tags. There
-  is deliberately no `publish`: nothing consumes a c64 release, and its
-  compatibility with the connector rests on the `c64.vice/1` runtime handshake
-  rather than on matching versions. A failed run restores the working tree, the
-  index and the branch ref.
+- Added `tools/release <major|minor|patch>`, a single command that refuses unless
+  the checkout is on the default branch, clean and exactly in sync with origin,
+  then writes the version to `pyproject.toml`, regenerates `uv.lock`, rolls the
+  changelog, runs the gates through `uv run --locked` against that candidate,
+  builds, commits, tags and pushes. There is deliberately no publishing step:
+  nothing consumes a c64 release, and its compatibility with the connector rests
+  on the `c64.vice/1` runtime handshake rather than on matching versions.
+  Everything that can fail runs before the push, since the push cannot be undone;
+  until then a failure restores the working tree, the index and the branch ref.
 
 ### Changed
 
