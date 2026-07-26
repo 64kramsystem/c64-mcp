@@ -1,17 +1,23 @@
-"""Version preparation for ghidra-mcp-c64.
+"""Scripted releases for ghidra-mcp-c64.
 
-`prepare` only: there is no `publish`. Nothing consumes a c64 release -- it runs
-from a local venv path, and its compatibility with the connector rests on the
-`c64.vice/1` runtime handshake rather than on matching versions. If a PyPI channel
-ever appears, publishing can follow.
+One command:
 
-    tools/release prepare --minor    # gates, build, commit and tag
-    git push origin HEAD && git push origin v<version>
+    tools/release minor        # or major / patch
 
-The version is written before the gates run, so they see the mutation they exist
-to catch. On failure the working tree, the index and the branch ref are restored,
-so a failed run is a no-op.
+It refuses unless the checkout is on the default branch, clean, and exactly in
+sync with origin. Then it writes the version, regenerates the lock, rolls the
+changelog, runs the gates against that release candidate, builds, commits, tags,
+and pushes the branch and the tag.
+
+There is no publishing step: nothing consumes a c64 release, it runs from a local
+venv path, and its compatibility with the connector rests on the `c64.vice/1`
+runtime handshake rather than on matching versions.
+
+Everything fallible happens *before* the push, because the push is a one-way
+door. Until then a failure restores the working tree, the index and the branch
+ref, so a failed release is a no-op.
 """
+
 
 from __future__ import annotations
 
@@ -187,6 +193,28 @@ def head_sha(repo_root: Path, runner: Runner = run) -> str:
     return runner(["git", "rev-parse", "HEAD"], repo_root).strip()
 
 
+def ensure_in_sync_with_origin(repo_root: Path, runner: Runner = run) -> None:
+    """Refuse unless the branch matches origin exactly.
+
+    Releasing something the remote does not have, or missing something it does,
+    produces a tag whose contents nobody else can reproduce.
+    """
+    runner(["git", "fetch", "--quiet", "origin", DEFAULT_BRANCH], repo_root)
+    ahead_behind = runner(
+        ["git", "rev-list", "--left-right", "--count",
+         f"origin/{DEFAULT_BRANCH}...HEAD"],
+        repo_root,
+    ).split()
+    if len(ahead_behind) != 2:
+        raise ReleaseError("cannot compare HEAD with origin")
+    behind, ahead = (int(value) for value in ahead_behind)
+    if behind or ahead:
+        raise ReleaseError(
+            f"HEAD is {ahead} ahead and {behind} behind origin/{DEFAULT_BRANCH}; "
+            "push or pull first"
+        )
+
+
 def ensure_tag_absent(repo_root: Path, tag: str, runner: Runner = run) -> None:
     local = runner(["git", "tag", "--list", tag], repo_root).strip()
     if local:
@@ -269,10 +297,25 @@ def verify_artifact_contents(repo_root: Path, version: str) -> list[Artifact]:
 # ------------------------------------------------------------------------ prepare
 
 
+def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
+    """Cut a release in one command: gate, build, commit, tag, push."""
+    ensure_default_branch(repo_root, runner)
+    ensure_clean(repo_root, runner)
+    ensure_in_sync_with_origin(repo_root, runner)
+
+    version = prepare(repo_root, bump, runner)
+    tag = f"v{version}"
+
+    # The one-way door. Everything that can fail has already run.
+    print(f"push: origin HEAD and {tag}")
+    runner(["git", "push", "origin", "HEAD"], repo_root)
+    runner(["git", "push", "origin", tag], repo_root)
+    print(f"released {tag}")
+    return version
+
+
 def prepare(repo_root: Path, bump: str, runner: Runner = run) -> str:
     changelog = repo_root / "CHANGELOG.md"
-    ensure_clean(repo_root, runner)
-    ensure_default_branch(repo_root, runner)
     if not unreleased_section(changelog):
         raise ReleaseError("## Unreleased is empty; nothing to release")
 
@@ -312,10 +355,6 @@ def prepare(repo_root: Path, bump: str, runner: Runner = run) -> str:
         _rollback(repo_root, original_head, release_commit, runner)
         raise
 
-    print(
-        f"\nprepared {tag}. Now:\n  git push origin HEAD\n  git push origin {tag}\n"
-        "\nThere is no publish step: nothing consumes a c64 release."
-    )
     return version
 
 
@@ -359,20 +398,18 @@ def _rollback(
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=f"{PRODUCT} release")
-    sub = parser.add_subparsers(dest="command", required=True)
-
-    prepare_parser = sub.add_parser(
-        "prepare", help="gate, build, commit and tag a release"
+    parser = argparse.ArgumentParser(
+        description=f"Cut a {PRODUCT} release",
+        epilog="Runs the gates, builds, commits, tags and pushes.",
     )
-    group = prepare_parser.add_mutually_exclusive_group(required=True)
-    for bump in ("major", "minor", "patch"):
-        group.add_argument(f"--{bump}", action="store_const", const=bump, dest="bump")
+    parser.add_argument(
+        "bump", choices=("major", "minor", "patch"), help="which component to raise"
+    )
 
     args = parser.parse_args(argv)
     repo_root = Path(__file__).resolve().parents[1]
     try:
-        prepare(repo_root, args.bump)
+        release(repo_root, args.bump)
     except ReleaseError as error:
         print(f"release refused: {error}", file=sys.stderr)
         return 2

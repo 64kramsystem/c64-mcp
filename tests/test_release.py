@@ -55,8 +55,11 @@ def repo(tmp_path: Path) -> Path:
     (root / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
     git(root, "add", "-A")
     git(root, "commit", "-qm", "initial")
-    remote = tmp_path / "remote.git"
-    git(tmp_path, "init", "-q", "--bare", str(remote))
+    remote = tmp_path / "expected" / "owner-repo.git"
+    remote.parent.mkdir(parents=True, exist_ok=True)
+    # -b: a bare repo's HEAD otherwise follows init.defaultBranch, and a clone
+    # of it then lands on an empty branch of the wrong name.
+    git(tmp_path, "init", "-q", "--bare", "-b", release.DEFAULT_BRANCH, str(remote))
     git(root, "remote", "add", "origin", str(remote))
     git(root, "push", "-q", "origin", release.DEFAULT_BRANCH)
     return root
@@ -170,14 +173,14 @@ def test_refuses_a_dirty_tree(repo: Path):
     (repo / "CHANGELOG.md").write_text(CHANGELOG + "\n", encoding="utf-8")
 
     with pytest.raises(release.ReleaseError, match="not clean"):
-        release.prepare(repo, "minor", recording_runner(repo))
+        release.release(repo, "minor", recording_runner(repo))
 
 
 def test_refuses_a_non_default_branch(repo: Path):
     git(repo, "checkout", "-qb", "feature")
 
     with pytest.raises(release.ReleaseError, match="releases run on"):
-        release.prepare(repo, "minor", recording_runner(repo))
+        release.release(repo, "minor", recording_runner(repo))
 
 
 def test_refuses_an_empty_unreleased_section(repo: Path):
@@ -338,3 +341,58 @@ def test_the_full_gate_set_is_present():
         ("uv", "run", "--locked", "mypy"),
         ("uv", "lock", "--check"),
     )
+
+
+# ------------------------------------------- single-command release() shape
+
+
+def test_release_cuts_tags_and_pushes_in_one_command(repo: Path):
+    version = release.release(repo, "minor", recording_runner(repo))
+
+    assert version == "0.100.0"
+    assert git(repo, "log", "-1", "--format=%s").strip() == "Release 0.100.0"
+    assert git(repo, "tag", "--points-at", "HEAD").strip() == "v0.100.0"
+    assert "v0.100.0" in git(repo, "ls-remote", "--tags", "origin")
+    assert git(repo, "rev-parse", "HEAD").strip() == git(
+        repo, "rev-parse", f"origin/{release.DEFAULT_BRANCH}"
+    ).strip()
+
+
+def test_release_refuses_when_ahead_of_origin(repo: Path):
+    (repo / "local-only.txt").write_text("unpushed", encoding="utf-8")
+    git(repo, "add", "-A")
+    git(repo, "commit", "-qm", "local work not pushed")
+
+    with pytest.raises(release.ReleaseError, match="ahead"):
+        release.release(repo, "minor", recording_runner(repo))
+
+    assert git(repo, "tag", "--list").strip() == ""
+
+
+def test_release_refuses_when_behind_origin(repo: Path, tmp_path: Path):
+    other = tmp_path / "clone"
+    bare = tmp_path / "expected" / "owner-repo.git"
+    git(tmp_path, "clone", "-q", str(bare), str(other))
+    git(other, "config", "user.email", "other@example.com")
+    git(other, "config", "user.name", "Other")
+    (other / "elsewhere.txt").write_text("landed first", encoding="utf-8")
+    git(other, "add", "-A")
+    git(other, "commit", "-qm", "someone else's commit")
+    git(other, "push", "-q", "origin", release.DEFAULT_BRANCH)
+
+    with pytest.raises(release.ReleaseError, match="behind origin"):
+        release.release(repo, "minor", recording_runner(repo))
+
+    assert git(repo, "tag", "--list").strip() == ""
+
+
+def test_a_failure_before_the_push_leaves_nothing_behind(repo: Path):
+    before_head = release.head_sha(repo)
+
+    with pytest.raises(release.ReleaseError, match="injected failure"):
+        release.release(repo, "minor", recording_runner(repo, fail="ruff"))
+
+    assert release.head_sha(repo) == before_head
+    assert git(repo, "status", "--porcelain").strip() == ""
+    assert git(repo, "tag", "--list").strip() == ""
+    assert "v0.100.0" not in git(repo, "ls-remote", "--tags", "origin")
