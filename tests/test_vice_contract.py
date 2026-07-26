@@ -274,13 +274,13 @@ def test_handshake_parser_reports_target_replacement() -> None:
 
 
 @pytest.mark.skipif(
-    "GHIDRA_MCP_C64_CONTRACT_REPO_CHECK" not in __import__("os").environ,
+    "C64_MCP_CONTRACT_REPO_CHECK" not in __import__("os").environ,
     reason="cross-repository contract check is opt-in",
 )
 def test_packaged_contract_matches_explicit_connector_fixture(
 ) -> None:
     connector = os.environ.get("GHIDRA_VICE_CONNECTOR_REPO")
-    c64 = os.environ.get("GHIDRA_MCP_C64_REPO")
+    c64 = os.environ.get("C64_MCP_REPO")
     assert connector and c64
     source = Path(connector) / "contracts/c64-vice-api-v1.json"
     packaged = (

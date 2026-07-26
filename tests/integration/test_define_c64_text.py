@@ -9,12 +9,12 @@ from c64_mcp.text.tools import define_c64_text
 
 
 def test_live_definition_dry_run_uses_public_ghidra_api() -> None:
-    program = os.environ.get("GHIDRA_MCP_C64_TEST_PROGRAM")
-    start = os.environ.get("GHIDRA_MCP_C64_TEST_START")
+    program = os.environ.get("C64_MCP_TEST_PROGRAM")
+    start = os.environ.get("C64_MCP_TEST_START")
     if not program or not start:
         pytest.skip(
-            "set GHIDRA_MCP_C64_TEST_PROGRAM and "
-            "GHIDRA_MCP_C64_TEST_START to enable the live dry-run gate"
+            "set C64_MCP_TEST_PROGRAM and "
+            "C64_MCP_TEST_START to enable the live dry-run gate"
         )
     client = GhidraClient(
         os.environ.get("GHIDRA_MCP_URL", "http://127.0.0.1:8089"),

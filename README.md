@@ -112,7 +112,7 @@ records the source URL and printed page references.
 - `GHIDRA_MCP_URL` defaults to `http://127.0.0.1:8089`.
 - `GHIDRA_MCP_AUTH_TOKEN` optionally supplies a bearer token.
 - `GHIDRA_MCP_TIMEOUT` defaults to 30 seconds.
-- `GHIDRA_MCP_C64_TOOL_PROFILE` accepts `minimal`, `static`, `vice`, or
+- `C64_MCP_TOOL_PROFILE` accepts `minimal`, `static`, `vice`, or
   `full`; the default is `static`.
 
 The `--tool-profile` command-line option overrides the environment setting.

@@ -21,7 +21,7 @@ def test_cli_profile_overrides_environment(
         return Server()
 
     monkeypatch.setenv(
-        "GHIDRA_MCP_C64_TOOL_PROFILE", "invalid-environment-value"
+        "C64_MCP_TOOL_PROFILE", "invalid-environment-value"
     )
     monkeypatch.setattr(entrypoint, "create_server", create_server)
 

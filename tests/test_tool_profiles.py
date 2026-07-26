@@ -35,7 +35,7 @@ async def test_profiles_expose_exact_initial_surfaces(
     profile: str, expected_count: int, representative: str
 ) -> None:
     settings = Settings.from_environ(
-        {"GHIDRA_MCP_C64_TOOL_PROFILE": profile}
+        {"C64_MCP_TOOL_PROFILE": profile}
     )
     server = create_server(settings, ghidra=object())
 
@@ -96,7 +96,7 @@ async def test_load_all_keeps_only_profile_baseline_protected() -> None:
 @pytest.mark.asyncio
 async def test_full_profile_refuses_partial_unload() -> None:
     settings = Settings.from_environ(
-        {"GHIDRA_MCP_C64_TOOL_PROFILE": "full"}
+        {"C64_MCP_TOOL_PROFILE": "full"}
     )
     server = create_server(settings, ghidra=object())
 
