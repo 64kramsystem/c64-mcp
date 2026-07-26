@@ -108,7 +108,7 @@ without a stopped event")`.
 **Two independent ways to reach that today**, neither needing a new feature:
 
 1. **A non-stopping checkpoint that fires twice.** `vice_set_checkpoint` exposes
-   `stop_on_hit: bool = True` (`src/ghidra_mcp_c64/server.py`), so a caller can
+   `stop_on_hit: bool = True` (`src/c64_mcp/server.py`), so a caller can
    create one now. It produces no stop, so the second hit breaks the invariant.
 2. **Two overlapping *stopping* checkpoints.** Confirmed in the VICE 3.10 source:
    `mon_breakpoint.c` iterates every matching enabled checkpoint at the address
@@ -442,7 +442,7 @@ The cap is 55000 ms, which forces chunking on anything slower.
 
 **Checked: the cap is deliberate, not arbitrary — but it is not a transport
 limit.** `vice.py` sets `MAX_TIMEOUT_MS = 55_000`, and
-`GhidraClient.invoke_target_method` (`src/ghidra_mcp_c64/ghidra_client.py`)
+`GhidraClient.invoke_target_method` (`src/c64_mcp/ghidra_client.py`)
 derives `generic_timeout_ms = connector_timeout_ms + 5_000` and then
 `http_timeout = (generic_timeout_ms + 5_000) / 1000`.
 

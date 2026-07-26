@@ -4,9 +4,9 @@ import os
 
 import pytest
 
-from ghidra_mcp_c64.config import Settings
-from ghidra_mcp_c64.ghidra_client import GhidraClient
-from ghidra_mcp_c64.vice import ViceSession
+from c64_mcp.config import Settings
+from c64_mcp.ghidra_client import GhidraClient
+from c64_mcp.vice import ViceSession
 
 
 def live_session() -> ViceSession:

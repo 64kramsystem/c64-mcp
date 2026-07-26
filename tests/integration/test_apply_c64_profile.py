@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from ghidra_mcp_c64.ghidra_client import GhidraClient
-from ghidra_mcp_c64.profile_tools import (
+from c64_mcp.ghidra_client import GhidraClient
+from c64_mcp.profile_tools import (
     apply_c64_symbol_profile,
     load_c64_profile,
 )

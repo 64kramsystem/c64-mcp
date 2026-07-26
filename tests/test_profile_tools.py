@@ -5,8 +5,8 @@ from dataclasses import dataclass, field
 
 import pytest
 
-from ghidra_mcp_c64.errors import RequestError
-from ghidra_mcp_c64.profile_tools import (
+from c64_mcp.errors import RequestError
+from c64_mcp.profile_tools import (
     apply_c64_symbol_profile,
     get_c64_symbol_profile,
 )

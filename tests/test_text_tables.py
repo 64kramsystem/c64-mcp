@@ -5,8 +5,8 @@ from importlib import resources
 
 import pytest
 
-from ghidra_mcp_c64.errors import CodecDataError
-from ghidra_mcp_c64.text.tables import Encoding, table_for
+from c64_mcp.errors import CodecDataError
+from c64_mcp.text.tables import Encoding, table_for
 
 
 @pytest.mark.parametrize("encoding", list(Encoding))
@@ -65,7 +65,7 @@ def test_normative_mode_specific_aliases() -> None:
 
 def test_bundled_data_records_official_appendix_source() -> None:
     raw = (
-        resources.files("ghidra_mcp_c64.text")
+        resources.files("c64_mcp.text")
         .joinpath("tables.json")
         .read_text("utf-8")
     )

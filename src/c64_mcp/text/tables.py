@@ -51,7 +51,7 @@ def table_for(encoding: Encoding) -> tuple[Codepoint, ...]:
 def _all_tables() -> MappingProxyType[Encoding, tuple[Codepoint, ...]]:
     try:
         raw = (
-            resources.files("ghidra_mcp_c64.text")
+            resources.files("c64_mcp.text")
             .joinpath("tables.json")
             .read_text("utf-8")
         )

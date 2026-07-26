@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from ghidra_mcp_c64.profile_tools import load_c64_profile
+from c64_mcp.profile_tools import load_c64_profile
 
 
 def _symbols() -> list[dict[str, object]]:

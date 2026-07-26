@@ -11,7 +11,7 @@ from typing import cast
 
 from .errors import ViceError
 
-_CONTRACT_PACKAGE = "ghidra_mcp_c64.contracts"
+_CONTRACT_PACKAGE = "c64_mcp.contracts"
 _CONTRACT_NAME = "c64-vice-api-v1.json"
 
 

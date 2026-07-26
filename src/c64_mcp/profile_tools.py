@@ -34,7 +34,7 @@ def load_c64_profile() -> dict[str, object]:
 
     try:
         raw = (
-            resources.files("ghidra_mcp_c64.profiles")
+            resources.files("c64_mcp.profiles")
             .joinpath("c64.json")
             .read_text("utf-8")
         )

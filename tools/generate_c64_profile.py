@@ -573,7 +573,7 @@ def main() -> None:
     target = (
         Path(__file__).resolve().parents[1]
         / "src"
-        / "ghidra_mcp_c64"
+        / "c64_mcp"
         / "profiles"
         / "c64.json"
     )
