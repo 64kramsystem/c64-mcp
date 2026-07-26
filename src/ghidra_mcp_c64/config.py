@@ -5,8 +5,11 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, cast
 from urllib.parse import urlsplit
+
+ToolProfile = Literal["minimal", "static", "vice", "full"]
+TOOL_PROFILE_NAMES = ("minimal", "static", "vice", "full")
 
 
 @dataclass(frozen=True)
@@ -21,6 +24,7 @@ class Settings:
     ghidra_auth_token: str | None = field(repr=False)
     ghidra_timeout: float
     transport: Literal["stdio"] = "stdio"
+    tool_profile: ToolProfile = "static"
 
     @classmethod
     def from_environ(cls, environ: Mapping[str, str]) -> Settings:
@@ -50,8 +54,18 @@ class Settings:
             )
 
         token = environ.get("GHIDRA_MCP_AUTH_TOKEN") or None
+        profile = environ.get(
+            "GHIDRA_MCP_C64_TOOL_PROFILE", "static"
+        )
+        if profile not in TOOL_PROFILE_NAMES:
+            choices = ", ".join(TOOL_PROFILE_NAMES)
+            raise ValueError(
+                "GHIDRA_MCP_C64_TOOL_PROFILE must be one of: "
+                f"{choices}"
+            )
         return cls(
             ghidra_mcp_url=url,
             ghidra_auth_token=token,
             ghidra_timeout=timeout,
+            tool_profile=cast(ToolProfile, profile),
         )

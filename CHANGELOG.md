@@ -15,6 +15,8 @@
 
 ### Added
 
+- `minimal`, `static`, `vice`, and `full` tool-visibility profiles with
+  runtime group listing, search, load, and unload tools.
 - Initial standalone package scaffold.
 - Immutable, source-cited 256-entry PETSCII and C64 screen-code tables for
   both C64 character-set modes.

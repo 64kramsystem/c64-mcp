@@ -6,6 +6,21 @@ separately installed Ghidra VICE connector.
 The server uses stdio transport by default. It does not open a VICE binary
 monitor socket; the connector remains the sole owner of that connection.
 
+## Tool visibility
+
+The default `static` profile exposes the symbol and text groups plus four
+small catalog-management tools. This keeps live-debugger schemas out of the
+agent context until they are needed. `minimal` starts with management tools
+only, `vice` starts with the live-debugger group, and `full` exposes every
+tool.
+
+Use `list_c64_tool_groups`, `search_c64_tools`, and
+`load_c64_tool_group` to discover and expose hidden tools at runtime.
+`unload_c64_tool_group` removes only groups loaded after startup; profile
+baseline groups remain visible. Thus `static` followed by loading `all`
+still permits unloading the transient VICE group, while the `full` profile
+does not permit partial unloading.
+
 ## VICE debugger tools
 
 The `vice_*` tools bind to the active **VICE C64 Debugger** TraceRMI target
@@ -97,6 +112,10 @@ records the source URL and printed page references.
 - `GHIDRA_MCP_URL` defaults to `http://127.0.0.1:8089`.
 - `GHIDRA_MCP_AUTH_TOKEN` optionally supplies a bearer token.
 - `GHIDRA_MCP_TIMEOUT` defaults to 30 seconds.
+- `GHIDRA_MCP_C64_TOOL_PROFILE` accepts `minimal`, `static`, `vice`, or
+  `full`; the default is `static`.
+
+The `--tool-profile` command-line option overrides the environment setting.
 
 VICE method calls accept a caller-visible `timeout_ms` from 1 through 55,000.
 The wrapper reserves an additional five seconds for generic TraceRMI

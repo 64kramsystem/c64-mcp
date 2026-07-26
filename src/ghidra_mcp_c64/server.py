@@ -20,6 +20,7 @@ from .text.tools import BytesInput, TextGhidraClient
 from .text.tools import decode_c64_text as decode_text
 from .text.tools import define_c64_text as define_text
 from .text.tools import search_c64_text as search_text
+from .tool_profiles import ToolProfileRegistry
 from .vice import ViceGhidraClient, ViceSession
 
 EncodingArgument = Literal[
@@ -59,14 +60,15 @@ def create_server(
     profile_client = cast(ProfileGhidraClient, instance)
     vice = ViceSession(cast(ViceGhidraClient, instance))
     server = FastMCP("ghidra-mcp-c64")
+    registry = ToolProfileRegistry(server, settings.tool_profile)
 
-    @server.tool()
+    @registry.tool("symbols")
     async def get_c64_symbol_profile() -> dict[str, object]:
         """Return the complete source-cited bundled C64 symbol profile."""
 
         return await asyncio.to_thread(get_profile)
 
-    @server.tool()
+    @registry.tool("symbols")
     async def apply_c64_symbol_profile(
         program: str,
         dry_run: bool = True,
@@ -86,7 +88,7 @@ def create_server(
             create_memory_blocks=create_memory_blocks,
         )
 
-    @server.tool()
+    @registry.tool("text")
     async def decode_c64_text(
         bytes: BytesInput | None = None,
         program: str | None = None,
@@ -124,7 +126,7 @@ def create_server(
             token_recursion_limit=token_recursion_limit,
         )
 
-    @server.tool()
+    @registry.tool("text")
     async def search_c64_text(
         program: str,
         start: str,
@@ -170,7 +172,7 @@ def create_server(
             max_results=max_results,
         )
 
-    @server.tool()
+    @registry.tool("text")
     async def define_c64_text(
         program: str,
         start: str,
@@ -214,25 +216,25 @@ def create_server(
             dry_run=dry_run,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_connect() -> dict[str, object]:
         """Bind to one compatible active Ghidra VICE connector target."""
 
         return await asyncio.to_thread(vice.connect)
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_disconnect() -> dict[str, object]:
         """Release only the local binding; do not stop connector or VICE."""
 
         return await asyncio.to_thread(vice.disconnect)
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_status() -> dict[str, object]:
         """Return cached binding state without launching or contacting VICE."""
 
         return await asyncio.to_thread(vice.status)
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_get_registers(
         names: list[str] | None = None,
         memspace: int = 0,
@@ -247,7 +249,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_set_registers(
         values: dict[str, int],
         memspace: int = 0,
@@ -262,7 +264,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_list_banks(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -272,7 +274,7 @@ def create_server(
             vice.list_banks, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_read_memory(
         bank_id: int,
         start: int,
@@ -295,7 +297,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_write_memory(
         bank_id: int,
         start: int,
@@ -316,7 +318,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_list_checkpoints(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -326,7 +328,7 @@ def create_server(
             vice.list_checkpoints, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_set_checkpoint(
         start: int,
         end: int,
@@ -351,7 +353,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_delete_checkpoint(
         number: int,
         timeout_ms: int = 10_000,
@@ -364,7 +366,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_toggle_checkpoint(
         number: int,
         enabled: bool,
@@ -379,7 +381,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_step(
         count: int = 1,
         timeout_ms: int = 10_000,
@@ -390,7 +392,7 @@ def create_server(
             vice.step, count=count, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_next(
         count: int = 1,
         timeout_ms: int = 10_000,
@@ -401,7 +403,7 @@ def create_server(
             vice.next, count=count, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_finish(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -411,7 +413,7 @@ def create_server(
             vice.finish, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_resume(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -421,7 +423,7 @@ def create_server(
             vice.resume, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_interrupt(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -431,7 +433,7 @@ def create_server(
             vice.interrupt, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_wait_for_stop(
         after_sequence: int,
         timeout_ms: int,
@@ -444,7 +446,7 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def vice_reset(
         kind: ResetKindArgument = "soft",
         timeout_ms: int = 10_000,
@@ -455,7 +457,7 @@ def create_server(
             vice.reset, kind=kind, timeout_ms=timeout_ms
         )
 
-    @server.tool()
+    @registry.tool("vice")
     async def copy_vice_memory_to_ghidra(
         bank_id: int,
         start: int,
@@ -482,4 +484,5 @@ def create_server(
             timeout_ms=timeout_ms,
         )
 
+    registry.install_management_tools()
     return server

@@ -14,6 +14,7 @@ def test_defaults_are_loopback_and_stdio() -> None:
     assert settings.ghidra_auth_token is None
     assert settings.ghidra_timeout == 30.0
     assert settings.transport == "stdio"
+    assert settings.tool_profile == "static"
 
 
 def test_environment_values_are_normalized_without_exposing_token() -> None:
@@ -43,3 +44,20 @@ def test_timeout_must_be_finite_and_positive(value: str) -> None:
 def test_default_timeout_is_finite() -> None:
     assert math.isfinite(Settings.from_environ({}).ghidra_timeout)
 
+
+@pytest.mark.parametrize("profile", ["minimal", "static", "vice", "full"])
+def test_tool_profile_accepts_documented_values(profile: str) -> None:
+    settings = Settings.from_environ(
+        {"GHIDRA_MCP_C64_TOOL_PROFILE": profile}
+    )
+
+    assert settings.tool_profile == profile
+
+
+def test_tool_profile_rejects_unknown_value() -> None:
+    with pytest.raises(
+        ValueError, match="GHIDRA_MCP_C64_TOOL_PROFILE"
+    ):
+        Settings.from_environ(
+            {"GHIDRA_MCP_C64_TOOL_PROFILE": "everything"}
+        )
