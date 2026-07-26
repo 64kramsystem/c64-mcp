@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+### Changed
+
+- Version moves to `0.99.0`. `__version__` is now derived from installed package
+  metadata rather than duplicated as a literal, so it cannot drift from
+  `pyproject.toml`.
+- Dropped `connector.version` from the packaged `c64-vice-api-v1.json`, matching
+  the connector: it is release metadata rather than part of the `c64.vice/1`
+  compatibility surface, and keeping it required a coordinated commit here on
+  every connector release. The runtime `connector_version` from `status` is
+  unaffected.
+
 ### Added
 
 - Initial standalone package scaffold.

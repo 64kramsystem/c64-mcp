@@ -24,8 +24,7 @@
     "trace.sync"
   ],
   "connector": {
-    "name": "ghidra-vice-connector",
-    "version": "1.0.0"
+    "name": "ghidra-vice-connector"
   },
   "limits": {
     "banks": 4096,
