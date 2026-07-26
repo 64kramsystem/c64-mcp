@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import re
 import subprocess
 import sys
@@ -33,6 +34,10 @@ from pathlib import Path
 
 PRODUCT = "c64-mcp"
 DEFAULT_BRANCH = "main"
+PUBLISH_TOKEN_ENV = "UV_PUBLISH_TOKEN"
+# Skips files already on the index, so re-running after a partial upload
+# does not fail on duplicates.
+PUBLISH_CHECK_URL = "https://pypi.org/simple/c64-mcp/"
 
 _SEMVER_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 _PYPROJECT_VERSION_RE = re.compile(r'(?m)^(version = ")(\d+\.\d+\.\d+)(")$')
@@ -297,8 +302,23 @@ def verify_artifact_contents(repo_root: Path, version: str) -> list[Artifact]:
 # ------------------------------------------------------------------------ prepare
 
 
+def ensure_publish_token() -> None:
+    """Refuse before anything else if the PyPI token is absent.
+
+    Checked first, not at publish time: the push and the tag come earlier and
+    cannot be retracted, so discovering a missing token afterwards would leave a
+    released tag with nothing on PyPI.
+    """
+    if not os.environ.get(PUBLISH_TOKEN_ENV):
+        raise ReleaseError(
+            f"{PUBLISH_TOKEN_ENV} is not set; a release publishes to PyPI. "
+            f"Export a token scoped to {PRODUCT} and re-run."
+        )
+
+
 def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
-    """Cut a release in one command: gate, build, commit, tag, push."""
+    """Cut a release in one command: gate, build, commit, tag, push, publish."""
+    ensure_publish_token()
     ensure_default_branch(repo_root, runner)
     ensure_clean(repo_root, runner)
     ensure_in_sync_with_origin(repo_root, runner)
@@ -306,11 +326,18 @@ def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
     version = prepare(repo_root, bump, runner)
     tag = f"v{version}"
 
-    # The one-way door. Everything that can fail has already run.
+    # The one-way door. Everything that can fail locally has already run.
     print(f"push: origin HEAD and {tag}")
     runner(["git", "push", "origin", "HEAD"], repo_root)
     runner(["git", "push", "origin", tag], repo_root)
-    print(f"released {tag}")
+
+    # Explicit paths, not the whole of dist/: `uv publish` would otherwise upload
+    # stale artifacts left there by earlier builds.
+    artifacts = [str(path) for path in expected_artifacts(repo_root, version)]
+    print(f"publish: {PRODUCT} {version} to PyPI")
+    runner(["uv", "publish", "--check-url", PUBLISH_CHECK_URL, *artifacts], repo_root)
+
+    print(f"released {tag} and published {PRODUCT} {version}")
     return version
 
 
