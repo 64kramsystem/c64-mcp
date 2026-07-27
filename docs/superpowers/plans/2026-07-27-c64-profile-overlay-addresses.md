@@ -179,11 +179,11 @@ platform overlays or C64 profile annotations.
 Build a frozen 1.0.0-equivalent profile in the test by deep-copying the
 bundled profile, setting its version to `1.0.0`, and stripping `RAM:` from
 symbol addresses. Apply it through `GhidraClient.apply_profile` with
-`create_memory_blocks=true`, establishing legacy definitions plus overlays.
-Then apply bundled 1.1.0 with the default conflict policy and no block
-creation. Require every existing definition to be idempotent,
-`kept_conflicts` to be empty, and all response symbol addresses to identify
-default RAM.
+`create_memory_blocks=false`, then apply bundled 1.1.0 with the default
+conflict policy and no block creation. Require every existing definition to
+be idempotent, `kept_conflicts` to be empty, and all response symbol addresses
+to identify default RAM. Overlay behavior is covered independently so this
+fixture isolates address equivalence across the version transition.
 
 ### Step 4: Run non-live integration collection
 
@@ -206,10 +206,13 @@ is idempotent; all returned symbol addresses name the default RAM space.
 
 ### Step 6: Exercise onboarding and upgrade on a disposable program
 
-Create a disposable fresh `6502:LE:16:default` full-RAM program and run the
-upgrade fixture test. This simultaneously verifies the documented
-`create_memory_blocks=true` path and the transition from unqualified 1.0.0
-definitions to qualified 1.1.0 definitions.
+Run the upgrade fixture against a disposable imported full-RAM program.
+Separately prepare a disposable `6502:LE:16:default` program whose only block
+exactly matches the zero-filled `RAM` template, including its comment and
+permissions. Verify that `create_memory_blocks=true` treats RAM as idempotent,
+creates the four overlay templates, and is fully idempotent on a second
+application. An arbitrary imported block is not a valid template fixture:
+template identity deliberately includes contents and metadata.
 
 ### Step 7: Commit the integration regression
 

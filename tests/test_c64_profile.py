@@ -8,7 +8,6 @@ from pathlib import Path
 
 from c64_mcp.profile_tools import load_c64_profile
 
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 

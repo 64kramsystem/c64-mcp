@@ -120,14 +120,16 @@ the generator change and regeneration:
   second must report the definitions idempotent without ambiguity. On both
   responses, assert case-insensitively that every reported symbol address is
   in the program's default `RAM` space and none names an overlay space.
-- Verify the upgrade path on a disposable full-RAM fixture: apply a frozen
-  1.0.0-equivalent profile with unqualified addresses before overlays exist,
-  establish the overlays, then apply 1.1.0 with the default
-  `conflict_policy="error"`. Every existing definition must be idempotent and
-  `kept_conflicts` must be empty.
+- Verify the upgrade path on a disposable full-RAM fixture without overlays:
+  apply a frozen 1.0.0-equivalent profile with unqualified addresses, then
+  apply 1.1.0 with the default `conflict_policy="error"`. Every existing
+  definition must be idempotent and `kept_conflicts` must be empty. The
+  independent overlay fixture covers post-overlay address resolution.
 - Exercise that integration test against the live Alter Ego overlay program.
-- Separately verify `create_memory_blocks=true` on a disposable fresh program,
-  because the optional templates are the documented onboarding path.
+- Separately verify `create_memory_blocks=true` on a disposable program whose
+  only block exactly matches the bundled zero-filled `RAM` template. RAM must
+  be idempotent, the four overlays must be created, and the second application
+  must be fully idempotent.
 
 ## Release and deployment
 
