@@ -77,7 +77,7 @@ def symbol(
     kind: str = "label",
 ) -> Symbol:
     return {
-        "address": f"{address:04x}",
+        "address": f"RAM:{address:04x}",
         "name": name,
         "namespace": namespace,
         "kind": kind,
@@ -553,7 +553,7 @@ def profile() -> dict[str, object]:
     return {
         "schema_version": 1,
         "id": "c64",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "description": (
             "Commodore 64 platform symbols, value-only control equates, "
             "and opt-in memory templates. Sources: Commodore 64 "

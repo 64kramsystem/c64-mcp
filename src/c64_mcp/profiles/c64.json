@@ -712,7 +712,7 @@
   "schema_version": 1,
   "symbols": [
     {
-      "address": "0000",
+      "address": "RAM:0000",
       "kind": "label",
       "name": "PROCESSOR_PORT_DIRECTION",
       "namespace": "C64::CPU",
@@ -720,7 +720,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, 6510 processor port and memory map; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0001",
+      "address": "RAM:0001",
       "kind": "label",
       "name": "PROCESSOR_PORT",
       "namespace": "C64::CPU",
@@ -728,7 +728,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, 6510 processor port and memory map; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d000",
+      "address": "RAM:d000",
       "kind": "label",
       "name": "SPRITE0_X",
       "namespace": "C64::VIC",
@@ -736,7 +736,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d001",
+      "address": "RAM:d001",
       "kind": "label",
       "name": "SPRITE0_Y",
       "namespace": "C64::VIC",
@@ -744,7 +744,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d002",
+      "address": "RAM:d002",
       "kind": "label",
       "name": "SPRITE1_X",
       "namespace": "C64::VIC",
@@ -752,7 +752,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d003",
+      "address": "RAM:d003",
       "kind": "label",
       "name": "SPRITE1_Y",
       "namespace": "C64::VIC",
@@ -760,7 +760,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d004",
+      "address": "RAM:d004",
       "kind": "label",
       "name": "SPRITE2_X",
       "namespace": "C64::VIC",
@@ -768,7 +768,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d005",
+      "address": "RAM:d005",
       "kind": "label",
       "name": "SPRITE2_Y",
       "namespace": "C64::VIC",
@@ -776,7 +776,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d006",
+      "address": "RAM:d006",
       "kind": "label",
       "name": "SPRITE3_X",
       "namespace": "C64::VIC",
@@ -784,7 +784,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d007",
+      "address": "RAM:d007",
       "kind": "label",
       "name": "SPRITE3_Y",
       "namespace": "C64::VIC",
@@ -792,7 +792,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d008",
+      "address": "RAM:d008",
       "kind": "label",
       "name": "SPRITE4_X",
       "namespace": "C64::VIC",
@@ -800,7 +800,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d009",
+      "address": "RAM:d009",
       "kind": "label",
       "name": "SPRITE4_Y",
       "namespace": "C64::VIC",
@@ -808,7 +808,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00a",
+      "address": "RAM:d00a",
       "kind": "label",
       "name": "SPRITE5_X",
       "namespace": "C64::VIC",
@@ -816,7 +816,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00b",
+      "address": "RAM:d00b",
       "kind": "label",
       "name": "SPRITE5_Y",
       "namespace": "C64::VIC",
@@ -824,7 +824,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00c",
+      "address": "RAM:d00c",
       "kind": "label",
       "name": "SPRITE6_X",
       "namespace": "C64::VIC",
@@ -832,7 +832,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00d",
+      "address": "RAM:d00d",
       "kind": "label",
       "name": "SPRITE6_Y",
       "namespace": "C64::VIC",
@@ -840,7 +840,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00e",
+      "address": "RAM:d00e",
       "kind": "label",
       "name": "SPRITE7_X",
       "namespace": "C64::VIC",
@@ -848,7 +848,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d00f",
+      "address": "RAM:d00f",
       "kind": "label",
       "name": "SPRITE7_Y",
       "namespace": "C64::VIC",
@@ -856,7 +856,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d010",
+      "address": "RAM:d010",
       "kind": "label",
       "name": "SPRITE_X_MSB",
       "namespace": "C64::VIC",
@@ -864,7 +864,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d011",
+      "address": "RAM:d011",
       "kind": "label",
       "name": "CONTROL_1",
       "namespace": "C64::VIC",
@@ -872,7 +872,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d012",
+      "address": "RAM:d012",
       "kind": "label",
       "name": "RASTER",
       "namespace": "C64::VIC",
@@ -880,7 +880,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d013",
+      "address": "RAM:d013",
       "kind": "label",
       "name": "LIGHT_PEN_X",
       "namespace": "C64::VIC",
@@ -888,7 +888,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d014",
+      "address": "RAM:d014",
       "kind": "label",
       "name": "LIGHT_PEN_Y",
       "namespace": "C64::VIC",
@@ -896,7 +896,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d015",
+      "address": "RAM:d015",
       "kind": "label",
       "name": "SPRITE_ENABLE",
       "namespace": "C64::VIC",
@@ -904,7 +904,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d016",
+      "address": "RAM:d016",
       "kind": "label",
       "name": "CONTROL_2",
       "namespace": "C64::VIC",
@@ -912,7 +912,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d017",
+      "address": "RAM:d017",
       "kind": "label",
       "name": "SPRITE_Y_EXPAND",
       "namespace": "C64::VIC",
@@ -920,7 +920,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d018",
+      "address": "RAM:d018",
       "kind": "label",
       "name": "MEMORY_POINTERS",
       "namespace": "C64::VIC",
@@ -928,7 +928,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d019",
+      "address": "RAM:d019",
       "kind": "label",
       "name": "INTERRUPT_STATUS",
       "namespace": "C64::VIC",
@@ -936,7 +936,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01a",
+      "address": "RAM:d01a",
       "kind": "label",
       "name": "INTERRUPT_ENABLE",
       "namespace": "C64::VIC",
@@ -944,7 +944,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01b",
+      "address": "RAM:d01b",
       "kind": "label",
       "name": "SPRITE_PRIORITY",
       "namespace": "C64::VIC",
@@ -952,7 +952,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01c",
+      "address": "RAM:d01c",
       "kind": "label",
       "name": "SPRITE_MULTICOLOR",
       "namespace": "C64::VIC",
@@ -960,7 +960,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01d",
+      "address": "RAM:d01d",
       "kind": "label",
       "name": "SPRITE_X_EXPAND",
       "namespace": "C64::VIC",
@@ -968,7 +968,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01e",
+      "address": "RAM:d01e",
       "kind": "label",
       "name": "SPRITE_SPRITE_COLLISION",
       "namespace": "C64::VIC",
@@ -976,7 +976,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d01f",
+      "address": "RAM:d01f",
       "kind": "label",
       "name": "SPRITE_BACKGROUND_COLLISION",
       "namespace": "C64::VIC",
@@ -984,7 +984,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d020",
+      "address": "RAM:d020",
       "kind": "label",
       "name": "BORDER_COLOR",
       "namespace": "C64::VIC",
@@ -992,7 +992,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d021",
+      "address": "RAM:d021",
       "kind": "label",
       "name": "BACKGROUND_COLOR_0",
       "namespace": "C64::VIC",
@@ -1000,7 +1000,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d022",
+      "address": "RAM:d022",
       "kind": "label",
       "name": "BACKGROUND_COLOR_1",
       "namespace": "C64::VIC",
@@ -1008,7 +1008,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d023",
+      "address": "RAM:d023",
       "kind": "label",
       "name": "BACKGROUND_COLOR_2",
       "namespace": "C64::VIC",
@@ -1016,7 +1016,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d024",
+      "address": "RAM:d024",
       "kind": "label",
       "name": "BACKGROUND_COLOR_3",
       "namespace": "C64::VIC",
@@ -1024,7 +1024,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d025",
+      "address": "RAM:d025",
       "kind": "label",
       "name": "SPRITE_MULTICOLOR_0",
       "namespace": "C64::VIC",
@@ -1032,7 +1032,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d026",
+      "address": "RAM:d026",
       "kind": "label",
       "name": "SPRITE_MULTICOLOR_1",
       "namespace": "C64::VIC",
@@ -1040,7 +1040,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d027",
+      "address": "RAM:d027",
       "kind": "label",
       "name": "SPRITE0_COLOR",
       "namespace": "C64::VIC",
@@ -1048,7 +1048,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d028",
+      "address": "RAM:d028",
       "kind": "label",
       "name": "SPRITE1_COLOR",
       "namespace": "C64::VIC",
@@ -1056,7 +1056,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d029",
+      "address": "RAM:d029",
       "kind": "label",
       "name": "SPRITE2_COLOR",
       "namespace": "C64::VIC",
@@ -1064,7 +1064,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d02a",
+      "address": "RAM:d02a",
       "kind": "label",
       "name": "SPRITE3_COLOR",
       "namespace": "C64::VIC",
@@ -1072,7 +1072,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d02b",
+      "address": "RAM:d02b",
       "kind": "label",
       "name": "SPRITE4_COLOR",
       "namespace": "C64::VIC",
@@ -1080,7 +1080,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d02c",
+      "address": "RAM:d02c",
       "kind": "label",
       "name": "SPRITE5_COLOR",
       "namespace": "C64::VIC",
@@ -1088,7 +1088,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d02d",
+      "address": "RAM:d02d",
       "kind": "label",
       "name": "SPRITE6_COLOR",
       "namespace": "C64::VIC",
@@ -1096,7 +1096,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d02e",
+      "address": "RAM:d02e",
       "kind": "label",
       "name": "SPRITE7_COLOR",
       "namespace": "C64::VIC",
@@ -1104,7 +1104,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d800",
+      "address": "RAM:d800",
       "kind": "label",
       "name": "COLOR_RAM",
       "namespace": "C64::VIC",
@@ -1112,7 +1112,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 3, VIC-II register descriptions; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "d400",
+      "address": "RAM:d400",
       "kind": "label",
       "name": "VOICE1_FREQ_LO",
       "namespace": "C64::SID",
@@ -1120,7 +1120,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d401",
+      "address": "RAM:d401",
       "kind": "label",
       "name": "VOICE1_FREQ_HI",
       "namespace": "C64::SID",
@@ -1128,7 +1128,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d402",
+      "address": "RAM:d402",
       "kind": "label",
       "name": "VOICE1_PULSE_LO",
       "namespace": "C64::SID",
@@ -1136,7 +1136,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d403",
+      "address": "RAM:d403",
       "kind": "label",
       "name": "VOICE1_PULSE_HI",
       "namespace": "C64::SID",
@@ -1144,7 +1144,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d404",
+      "address": "RAM:d404",
       "kind": "label",
       "name": "VOICE1_CONTROL",
       "namespace": "C64::SID",
@@ -1152,7 +1152,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d405",
+      "address": "RAM:d405",
       "kind": "label",
       "name": "VOICE1_ATTACK_DECAY",
       "namespace": "C64::SID",
@@ -1160,7 +1160,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d406",
+      "address": "RAM:d406",
       "kind": "label",
       "name": "VOICE1_SUSTAIN_RELEASE",
       "namespace": "C64::SID",
@@ -1168,7 +1168,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d407",
+      "address": "RAM:d407",
       "kind": "label",
       "name": "VOICE2_FREQ_LO",
       "namespace": "C64::SID",
@@ -1176,7 +1176,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d408",
+      "address": "RAM:d408",
       "kind": "label",
       "name": "VOICE2_FREQ_HI",
       "namespace": "C64::SID",
@@ -1184,7 +1184,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d409",
+      "address": "RAM:d409",
       "kind": "label",
       "name": "VOICE2_PULSE_LO",
       "namespace": "C64::SID",
@@ -1192,7 +1192,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40a",
+      "address": "RAM:d40a",
       "kind": "label",
       "name": "VOICE2_PULSE_HI",
       "namespace": "C64::SID",
@@ -1200,7 +1200,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40b",
+      "address": "RAM:d40b",
       "kind": "label",
       "name": "VOICE2_CONTROL",
       "namespace": "C64::SID",
@@ -1208,7 +1208,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40c",
+      "address": "RAM:d40c",
       "kind": "label",
       "name": "VOICE2_ATTACK_DECAY",
       "namespace": "C64::SID",
@@ -1216,7 +1216,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40d",
+      "address": "RAM:d40d",
       "kind": "label",
       "name": "VOICE2_SUSTAIN_RELEASE",
       "namespace": "C64::SID",
@@ -1224,7 +1224,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40e",
+      "address": "RAM:d40e",
       "kind": "label",
       "name": "VOICE3_FREQ_LO",
       "namespace": "C64::SID",
@@ -1232,7 +1232,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d40f",
+      "address": "RAM:d40f",
       "kind": "label",
       "name": "VOICE3_FREQ_HI",
       "namespace": "C64::SID",
@@ -1240,7 +1240,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d410",
+      "address": "RAM:d410",
       "kind": "label",
       "name": "VOICE3_PULSE_LO",
       "namespace": "C64::SID",
@@ -1248,7 +1248,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d411",
+      "address": "RAM:d411",
       "kind": "label",
       "name": "VOICE3_PULSE_HI",
       "namespace": "C64::SID",
@@ -1256,7 +1256,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d412",
+      "address": "RAM:d412",
       "kind": "label",
       "name": "VOICE3_CONTROL",
       "namespace": "C64::SID",
@@ -1264,7 +1264,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d413",
+      "address": "RAM:d413",
       "kind": "label",
       "name": "VOICE3_ATTACK_DECAY",
       "namespace": "C64::SID",
@@ -1272,7 +1272,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d414",
+      "address": "RAM:d414",
       "kind": "label",
       "name": "VOICE3_SUSTAIN_RELEASE",
       "namespace": "C64::SID",
@@ -1280,7 +1280,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d415",
+      "address": "RAM:d415",
       "kind": "label",
       "name": "FILTER_CUTOFF_LO",
       "namespace": "C64::SID",
@@ -1288,7 +1288,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d416",
+      "address": "RAM:d416",
       "kind": "label",
       "name": "FILTER_CUTOFF_HI",
       "namespace": "C64::SID",
@@ -1296,7 +1296,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d417",
+      "address": "RAM:d417",
       "kind": "label",
       "name": "FILTER_RESONANCE_ROUTING",
       "namespace": "C64::SID",
@@ -1304,7 +1304,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d418",
+      "address": "RAM:d418",
       "kind": "label",
       "name": "FILTER_MODE_VOLUME",
       "namespace": "C64::SID",
@@ -1312,7 +1312,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d419",
+      "address": "RAM:d419",
       "kind": "label",
       "name": "PADDLE_X",
       "namespace": "C64::SID",
@@ -1320,7 +1320,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d41a",
+      "address": "RAM:d41a",
       "kind": "label",
       "name": "PADDLE_Y",
       "namespace": "C64::SID",
@@ -1328,7 +1328,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d41b",
+      "address": "RAM:d41b",
       "kind": "label",
       "name": "OSCILLATOR3_RANDOM",
       "namespace": "C64::SID",
@@ -1336,7 +1336,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "d41c",
+      "address": "RAM:d41c",
       "kind": "label",
       "name": "ENVELOPE3",
       "namespace": "C64::SID",
@@ -1344,7 +1344,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6581 SID data sheet, Table 1 and register descriptions, pp. 2-6; https://www.cpcwiki.eu/imgs/9/9d/Mos_6581_sid.pdf"
     },
     {
-      "address": "dc00",
+      "address": "RAM:dc00",
       "kind": "label",
       "name": "DATA_PORT_A",
       "namespace": "C64::CIA1",
@@ -1352,7 +1352,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc01",
+      "address": "RAM:dc01",
       "kind": "label",
       "name": "DATA_PORT_B",
       "namespace": "C64::CIA1",
@@ -1360,7 +1360,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc02",
+      "address": "RAM:dc02",
       "kind": "label",
       "name": "DATA_DIRECTION_A",
       "namespace": "C64::CIA1",
@@ -1368,7 +1368,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc03",
+      "address": "RAM:dc03",
       "kind": "label",
       "name": "DATA_DIRECTION_B",
       "namespace": "C64::CIA1",
@@ -1376,7 +1376,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc04",
+      "address": "RAM:dc04",
       "kind": "label",
       "name": "TIMER_A_LO",
       "namespace": "C64::CIA1",
@@ -1384,7 +1384,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc05",
+      "address": "RAM:dc05",
       "kind": "label",
       "name": "TIMER_A_HI",
       "namespace": "C64::CIA1",
@@ -1392,7 +1392,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc06",
+      "address": "RAM:dc06",
       "kind": "label",
       "name": "TIMER_B_LO",
       "namespace": "C64::CIA1",
@@ -1400,7 +1400,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc07",
+      "address": "RAM:dc07",
       "kind": "label",
       "name": "TIMER_B_HI",
       "namespace": "C64::CIA1",
@@ -1408,7 +1408,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc08",
+      "address": "RAM:dc08",
       "kind": "label",
       "name": "TOD_TENTHS",
       "namespace": "C64::CIA1",
@@ -1416,7 +1416,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc09",
+      "address": "RAM:dc09",
       "kind": "label",
       "name": "TOD_SECONDS",
       "namespace": "C64::CIA1",
@@ -1424,7 +1424,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0a",
+      "address": "RAM:dc0a",
       "kind": "label",
       "name": "TOD_MINUTES",
       "namespace": "C64::CIA1",
@@ -1432,7 +1432,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0b",
+      "address": "RAM:dc0b",
       "kind": "label",
       "name": "TOD_HOURS",
       "namespace": "C64::CIA1",
@@ -1440,7 +1440,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0c",
+      "address": "RAM:dc0c",
       "kind": "label",
       "name": "SERIAL_DATA",
       "namespace": "C64::CIA1",
@@ -1448,7 +1448,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0d",
+      "address": "RAM:dc0d",
       "kind": "label",
       "name": "INTERRUPT_CONTROL",
       "namespace": "C64::CIA1",
@@ -1456,7 +1456,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0e",
+      "address": "RAM:dc0e",
       "kind": "label",
       "name": "CONTROL_A",
       "namespace": "C64::CIA1",
@@ -1464,7 +1464,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dc0f",
+      "address": "RAM:dc0f",
       "kind": "label",
       "name": "CONTROL_B",
       "namespace": "C64::CIA1",
@@ -1472,7 +1472,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd00",
+      "address": "RAM:dd00",
       "kind": "label",
       "name": "DATA_PORT_A",
       "namespace": "C64::CIA2",
@@ -1480,7 +1480,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd01",
+      "address": "RAM:dd01",
       "kind": "label",
       "name": "DATA_PORT_B",
       "namespace": "C64::CIA2",
@@ -1488,7 +1488,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd02",
+      "address": "RAM:dd02",
       "kind": "label",
       "name": "DATA_DIRECTION_A",
       "namespace": "C64::CIA2",
@@ -1496,7 +1496,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd03",
+      "address": "RAM:dd03",
       "kind": "label",
       "name": "DATA_DIRECTION_B",
       "namespace": "C64::CIA2",
@@ -1504,7 +1504,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd04",
+      "address": "RAM:dd04",
       "kind": "label",
       "name": "TIMER_A_LO",
       "namespace": "C64::CIA2",
@@ -1512,7 +1512,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd05",
+      "address": "RAM:dd05",
       "kind": "label",
       "name": "TIMER_A_HI",
       "namespace": "C64::CIA2",
@@ -1520,7 +1520,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd06",
+      "address": "RAM:dd06",
       "kind": "label",
       "name": "TIMER_B_LO",
       "namespace": "C64::CIA2",
@@ -1528,7 +1528,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd07",
+      "address": "RAM:dd07",
       "kind": "label",
       "name": "TIMER_B_HI",
       "namespace": "C64::CIA2",
@@ -1536,7 +1536,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd08",
+      "address": "RAM:dd08",
       "kind": "label",
       "name": "TOD_TENTHS",
       "namespace": "C64::CIA2",
@@ -1544,7 +1544,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd09",
+      "address": "RAM:dd09",
       "kind": "label",
       "name": "TOD_SECONDS",
       "namespace": "C64::CIA2",
@@ -1552,7 +1552,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0a",
+      "address": "RAM:dd0a",
       "kind": "label",
       "name": "TOD_MINUTES",
       "namespace": "C64::CIA2",
@@ -1560,7 +1560,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0b",
+      "address": "RAM:dd0b",
       "kind": "label",
       "name": "TOD_HOURS",
       "namespace": "C64::CIA2",
@@ -1568,7 +1568,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0c",
+      "address": "RAM:dd0c",
       "kind": "label",
       "name": "SERIAL_DATA",
       "namespace": "C64::CIA2",
@@ -1576,7 +1576,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0d",
+      "address": "RAM:dd0d",
       "kind": "label",
       "name": "INTERRUPT_CONTROL",
       "namespace": "C64::CIA2",
@@ -1584,7 +1584,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0e",
+      "address": "RAM:dd0e",
       "kind": "label",
       "name": "CONTROL_A",
       "namespace": "C64::CIA2",
@@ -1592,7 +1592,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "dd0f",
+      "address": "RAM:dd0f",
       "kind": "label",
       "name": "CONTROL_B",
       "namespace": "C64::CIA2",
@@ -1600,7 +1600,7 @@
       "source_note": "Commodore Semiconductor Group MOS 6526 CIA data sheet, register map and descriptions; http://www.6502.org/documents/datasheets/mos/mos_6526_cia.pdf"
     },
     {
-      "address": "ff81",
+      "address": "RAM:ff81",
       "kind": "entry_point",
       "name": "CINT",
       "namespace": "C64::KERNAL",
@@ -1608,7 +1608,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff84",
+      "address": "RAM:ff84",
       "kind": "entry_point",
       "name": "IOINIT",
       "namespace": "C64::KERNAL",
@@ -1616,7 +1616,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff87",
+      "address": "RAM:ff87",
       "kind": "entry_point",
       "name": "RAMTAS",
       "namespace": "C64::KERNAL",
@@ -1624,7 +1624,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff8a",
+      "address": "RAM:ff8a",
       "kind": "entry_point",
       "name": "RESTOR",
       "namespace": "C64::KERNAL",
@@ -1632,7 +1632,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff8d",
+      "address": "RAM:ff8d",
       "kind": "entry_point",
       "name": "VECTOR",
       "namespace": "C64::KERNAL",
@@ -1640,7 +1640,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff90",
+      "address": "RAM:ff90",
       "kind": "entry_point",
       "name": "SETMSG",
       "namespace": "C64::KERNAL",
@@ -1648,7 +1648,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff93",
+      "address": "RAM:ff93",
       "kind": "entry_point",
       "name": "SECOND",
       "namespace": "C64::KERNAL",
@@ -1656,7 +1656,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff96",
+      "address": "RAM:ff96",
       "kind": "entry_point",
       "name": "TKSA",
       "namespace": "C64::KERNAL",
@@ -1664,7 +1664,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff99",
+      "address": "RAM:ff99",
       "kind": "entry_point",
       "name": "MEMTOP",
       "namespace": "C64::KERNAL",
@@ -1672,7 +1672,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff9c",
+      "address": "RAM:ff9c",
       "kind": "entry_point",
       "name": "MEMBOT",
       "namespace": "C64::KERNAL",
@@ -1680,7 +1680,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ff9f",
+      "address": "RAM:ff9f",
       "kind": "entry_point",
       "name": "SCNKEY",
       "namespace": "C64::KERNAL",
@@ -1688,7 +1688,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffa2",
+      "address": "RAM:ffa2",
       "kind": "entry_point",
       "name": "SETTMO",
       "namespace": "C64::KERNAL",
@@ -1696,7 +1696,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffa5",
+      "address": "RAM:ffa5",
       "kind": "entry_point",
       "name": "ACPTR",
       "namespace": "C64::KERNAL",
@@ -1704,7 +1704,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffa8",
+      "address": "RAM:ffa8",
       "kind": "entry_point",
       "name": "CIOUT",
       "namespace": "C64::KERNAL",
@@ -1712,7 +1712,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffab",
+      "address": "RAM:ffab",
       "kind": "entry_point",
       "name": "UNTLK",
       "namespace": "C64::KERNAL",
@@ -1720,7 +1720,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffae",
+      "address": "RAM:ffae",
       "kind": "entry_point",
       "name": "UNLSN",
       "namespace": "C64::KERNAL",
@@ -1728,7 +1728,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffb1",
+      "address": "RAM:ffb1",
       "kind": "entry_point",
       "name": "LISTEN",
       "namespace": "C64::KERNAL",
@@ -1736,7 +1736,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffb4",
+      "address": "RAM:ffb4",
       "kind": "entry_point",
       "name": "TALK",
       "namespace": "C64::KERNAL",
@@ -1744,7 +1744,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffb7",
+      "address": "RAM:ffb7",
       "kind": "entry_point",
       "name": "READST",
       "namespace": "C64::KERNAL",
@@ -1752,7 +1752,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffba",
+      "address": "RAM:ffba",
       "kind": "entry_point",
       "name": "SETLFS",
       "namespace": "C64::KERNAL",
@@ -1760,7 +1760,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffbd",
+      "address": "RAM:ffbd",
       "kind": "entry_point",
       "name": "SETNAM",
       "namespace": "C64::KERNAL",
@@ -1768,7 +1768,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffc0",
+      "address": "RAM:ffc0",
       "kind": "entry_point",
       "name": "OPEN",
       "namespace": "C64::KERNAL",
@@ -1776,7 +1776,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffc3",
+      "address": "RAM:ffc3",
       "kind": "entry_point",
       "name": "CLOSE",
       "namespace": "C64::KERNAL",
@@ -1784,7 +1784,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffc6",
+      "address": "RAM:ffc6",
       "kind": "entry_point",
       "name": "CHKIN",
       "namespace": "C64::KERNAL",
@@ -1792,7 +1792,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffc9",
+      "address": "RAM:ffc9",
       "kind": "entry_point",
       "name": "CHKOUT",
       "namespace": "C64::KERNAL",
@@ -1800,7 +1800,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffcc",
+      "address": "RAM:ffcc",
       "kind": "entry_point",
       "name": "CLRCHN",
       "namespace": "C64::KERNAL",
@@ -1808,7 +1808,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffcf",
+      "address": "RAM:ffcf",
       "kind": "entry_point",
       "name": "CHRIN",
       "namespace": "C64::KERNAL",
@@ -1816,7 +1816,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffd2",
+      "address": "RAM:ffd2",
       "kind": "entry_point",
       "name": "CHROUT",
       "namespace": "C64::KERNAL",
@@ -1824,7 +1824,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffd5",
+      "address": "RAM:ffd5",
       "kind": "entry_point",
       "name": "LOAD",
       "namespace": "C64::KERNAL",
@@ -1832,7 +1832,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffd8",
+      "address": "RAM:ffd8",
       "kind": "entry_point",
       "name": "SAVE",
       "namespace": "C64::KERNAL",
@@ -1840,7 +1840,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffdb",
+      "address": "RAM:ffdb",
       "kind": "entry_point",
       "name": "SETTIM",
       "namespace": "C64::KERNAL",
@@ -1848,7 +1848,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffde",
+      "address": "RAM:ffde",
       "kind": "entry_point",
       "name": "RDTIM",
       "namespace": "C64::KERNAL",
@@ -1856,7 +1856,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffe1",
+      "address": "RAM:ffe1",
       "kind": "entry_point",
       "name": "STOP",
       "namespace": "C64::KERNAL",
@@ -1864,7 +1864,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffe4",
+      "address": "RAM:ffe4",
       "kind": "entry_point",
       "name": "GETIN",
       "namespace": "C64::KERNAL",
@@ -1872,7 +1872,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffe7",
+      "address": "RAM:ffe7",
       "kind": "entry_point",
       "name": "CLALL",
       "namespace": "C64::KERNAL",
@@ -1880,7 +1880,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffea",
+      "address": "RAM:ffea",
       "kind": "entry_point",
       "name": "UDTIM",
       "namespace": "C64::KERNAL",
@@ -1888,7 +1888,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "ffed",
+      "address": "RAM:ffed",
       "kind": "entry_point",
       "name": "SCREEN",
       "namespace": "C64::KERNAL",
@@ -1896,7 +1896,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "fff0",
+      "address": "RAM:fff0",
       "kind": "entry_point",
       "name": "PLOT",
       "namespace": "C64::KERNAL",
@@ -1904,7 +1904,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "fff3",
+      "address": "RAM:fff3",
       "kind": "entry_point",
       "name": "IOBASE",
       "namespace": "C64::KERNAL",
@@ -1912,7 +1912,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "fffa",
+      "address": "RAM:fffa",
       "kind": "label",
       "name": "NMI_VECTOR",
       "namespace": "C64::KERNAL",
@@ -1920,7 +1920,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "fffc",
+      "address": "RAM:fffc",
       "kind": "label",
       "name": "RESET_VECTOR",
       "namespace": "C64::KERNAL",
@@ -1928,7 +1928,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "fffe",
+      "address": "RAM:fffe",
       "kind": "label",
       "name": "IRQ_VECTOR",
       "namespace": "C64::KERNAL",
@@ -1936,7 +1936,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, KERNAL jump table and memory map, printed pp. 268-293; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0090",
+      "address": "RAM:0090",
       "kind": "label",
       "name": "IO_STATUS",
       "namespace": "C64::WORKSPACE",
@@ -1944,7 +1944,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0091",
+      "address": "RAM:0091",
       "kind": "label",
       "name": "STOP_KEY_FLAG",
       "namespace": "C64::WORKSPACE",
@@ -1952,7 +1952,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0099",
+      "address": "RAM:0099",
       "kind": "label",
       "name": "DEFAULT_INPUT_DEVICE",
       "namespace": "C64::WORKSPACE",
@@ -1960,7 +1960,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "009a",
+      "address": "RAM:009a",
       "kind": "label",
       "name": "DEFAULT_OUTPUT_DEVICE",
       "namespace": "C64::WORKSPACE",
@@ -1968,7 +1968,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "00c6",
+      "address": "RAM:00c6",
       "kind": "label",
       "name": "KEYBOARD_BUFFER_LENGTH",
       "namespace": "C64::WORKSPACE",
@@ -1976,7 +1976,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "00d3",
+      "address": "RAM:00d3",
       "kind": "label",
       "name": "CURSOR_COLUMN",
       "namespace": "C64::WORKSPACE",
@@ -1984,7 +1984,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "00d6",
+      "address": "RAM:00d6",
       "kind": "label",
       "name": "CURSOR_ROW",
       "namespace": "C64::WORKSPACE",
@@ -1992,7 +1992,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0286",
+      "address": "RAM:0286",
       "kind": "label",
       "name": "TEXT_COLOR",
       "namespace": "C64::WORKSPACE",
@@ -2000,7 +2000,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0288",
+      "address": "RAM:0288",
       "kind": "label",
       "name": "SCREEN_MEMORY_PAGE",
       "namespace": "C64::WORKSPACE",
@@ -2008,7 +2008,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0314",
+      "address": "RAM:0314",
       "kind": "label",
       "name": "IRQ_RAM_VECTOR",
       "namespace": "C64::WORKSPACE",
@@ -2016,7 +2016,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0316",
+      "address": "RAM:0316",
       "kind": "label",
       "name": "BRK_RAM_VECTOR",
       "namespace": "C64::WORKSPACE",
@@ -2024,7 +2024,7 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     },
     {
-      "address": "0318",
+      "address": "RAM:0318",
       "kind": "label",
       "name": "NMI_RAM_VECTOR",
       "namespace": "C64::WORKSPACE",
@@ -2032,5 +2032,5 @@
       "source_note": "Commodore 64 Programmer's Reference Guide, Chapter 5, C64 memory map and KERNAL workspace; https://www.commodore.ca/manuals/c64_programmers_reference/c64-programmers_reference.htm"
     }
   ],
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
