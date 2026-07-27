@@ -50,6 +50,10 @@
 
 ### Changed
 
+- The bundled C64 symbol profile is now version 1.1.0 and qualifies all
+  platform-symbol addresses with the default `RAM` space. Applying the profile
+  remains deterministic and idempotent after ROM and I/O overlays exist,
+  instead of failing on an ambiguous unqualified address.
 - The packaged `c64-vice-api-v1.json` is now the connector's **surface revision
   2** contract, adding the `display.capture` capability and the
   `c64_vice_v1_capture_display` method. `vice_connect` refuses an older
