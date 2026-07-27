@@ -88,6 +88,12 @@ and color-RAM block templates are only considered when
 `create_memory_blocks=true`; the generic endpoint preflights the complete
 request before mutation and refuses ordinary-block overlap.
 
+Every platform-symbol address explicitly targets the default `RAM` address
+space. This keeps CPU-visible register and ROM references unambiguous after
+ROM, I/O, or color-RAM overlays have been added. The bundled profile supports
+`6502:LE:16:default` programs whose default CPU space is named `RAM`; an
+overlay must not reuse that name.
+
 The checked-in profile is generated deterministically by
 `tools/generate_c64_profile.py`. Every symbol group cites its authoritative
 Commodore manual or chip data sheet in the package data.
