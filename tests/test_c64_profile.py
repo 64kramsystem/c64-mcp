@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import re
 import runpy
 from collections import Counter
@@ -43,7 +42,6 @@ def test_all_symbol_addresses_explicitly_target_default_ram() -> None:
     for item in symbols:
         address = str(item["address"])
         assert re.fullmatch(r"RAM:[0-9a-f]{4}", address)
-        assert 0 <= int(address.removeprefix("RAM:"), 16) <= 0xFFFF
 
 
 def test_profile_has_exact_required_group_cardinalities() -> None:
@@ -160,16 +158,7 @@ def test_each_load_returns_an_independent_json_object() -> None:
 def test_checked_in_profile_is_byte_identical_to_generator_output() -> None:
     generator_path = REPOSITORY_ROOT / "tools" / "generate_c64_profile.py"
     generator = runpy.run_path(str(generator_path))
-    generated = generator["profile"]()
-    generated_text = (
-        json.dumps(
-            generated,
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n"
-    )
+    generated_text = generator["render_profile"]()
     checked_in = (
         REPOSITORY_ROOT
         / "src"

@@ -46,20 +46,25 @@ cardinality assertion still proves exact `$D000-$D02E` coverage.
 
 ### Step 2: Add deterministic generator parity coverage
 
-Load `tools/generate_c64_profile.py` through `runpy.run_path`, call
-`profile()`, serialize it with:
+Extract a deterministic `render_profile()` helper used by the generator's
+`main()`. Load `tools/generate_c64_profile.py` through `runpy.run_path`, call
+`render_profile()`, and compare its result byte-for-byte with the checked-in
+JSON. The helper must use:
 
 ```python
-json.dumps(
-    generated,
-    ensure_ascii=False,
-    indent=2,
-    sort_keys=True,
-) + "\n"
+return (
+    json.dumps(
+        profile(),
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=True,
+    )
+    + "\n"
+)
 ```
 
-Compare that text byte-for-byte with
-`src/c64_mcp/profiles/c64.json`.
+This keeps the test off the hard-coded output path while testing the exact
+serializer used to write `src/c64_mcp/profiles/c64.json`.
 
 ### Step 3: Run the focused tests and prove they fail for the intended reason
 
@@ -161,6 +166,8 @@ named `RAM`.
 Apply the bundled profile twice with `conflict_policy="error"` and
 `create_memory_blocks=false`. Require:
 
+- a dry run of the frozen unqualified 1.0.0-equivalent profile to fail with an
+  ambiguous-address error, proving the fixture really has relevant overlays;
 - both calls commit;
 - the second reports definitions idempotent;
 - neither reports kept conflicts;
@@ -211,8 +218,9 @@ Separately prepare a disposable `6502:LE:16:default` program whose only block
 exactly matches the zero-filled `RAM` template, including its comment and
 permissions. Verify that `create_memory_blocks=true` treats RAM as idempotent,
 creates the four overlay templates, and is fully idempotent on a second
-application. An arbitrary imported block is not a valid template fixture:
-template identity deliberately includes contents and metadata.
+application, with all returned symbol addresses still in default RAM. An
+arbitrary imported block is not a valid template fixture: template identity
+deliberately includes contents and metadata.
 
 ### Step 7: Commit the integration regression
 

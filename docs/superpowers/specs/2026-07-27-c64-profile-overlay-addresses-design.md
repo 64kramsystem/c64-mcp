@@ -99,13 +99,12 @@ Update `tests/test_c64_profile.py` before changing the profile:
    address and must still cover `$D000-$D02E` exactly.
 4. Preserve the existing exact assertions that memory-block template starts
    remain unqualified.
-5. Add a byte-exact generator-parity test. Load
-   `tools/generate_c64_profile.py` with `runpy.run_path`, call `profile()`,
-   serialize it with the generator's exact
-   `json.dumps(..., ensure_ascii=False, indent=2, sort_keys=True) + "\n"`
-   settings, and compare that text with the checked-in JSON. This avoids
-   changing import paths or the generator's hard-coded output target while
-   making hand edits and stale generated output fail the suite.
+5. Add a byte-exact generator-parity test. Extract a deterministic
+   `render_profile()` helper used by `main()`, load the generator with
+   `runpy.run_path`, call that helper, and compare its text with the checked-in
+   JSON. This avoids changing import paths or invoking the generator's
+   hard-coded output target while making hand edits, stale generated output,
+   and serializer drift fail the suite.
 
 The first test run must fail because the existing profile is unqualified. After
 the generator change and regeneration:
@@ -116,10 +115,12 @@ the generator change and regeneration:
 - Add an opt-in overlay integration test whose fixture contract requires a
   named `6502:LE:16:default` program with full default RAM and at least one
   overlay covering a platform-symbol offset. No overlay may itself be named
-  `RAM`. It must apply the profile twice; the first result must commit and the
-  second must report the definitions idempotent without ambiguity. On both
-  responses, assert case-insensitively that every reported symbol address is
-  in the program's default `RAM` space and none names an overlay space.
+  `RAM`. First dry-run a frozen unqualified 1.0.0-equivalent profile and
+  require an ambiguity error, proving the fixture's overlays matter. Then
+  apply 1.1.0 twice; the first result must commit and the second must report
+  the definitions idempotent without ambiguity. On both responses, assert
+  case-insensitively that every reported symbol address is in the program's
+  default `RAM` space.
 - Verify the upgrade path on a disposable full-RAM fixture without overlays:
   apply a frozen 1.0.0-equivalent profile with unqualified addresses, then
   apply 1.1.0 with the default `conflict_policy="error"`. Every existing
@@ -129,7 +130,7 @@ the generator change and regeneration:
 - Separately verify `create_memory_blocks=true` on a disposable program whose
   only block exactly matches the bundled zero-filled `RAM` template. RAM must
   be idempotent, the four overlays must be created, and the second application
-  must be fully idempotent.
+  must be fully idempotent with every symbol still resolving to default RAM.
 
 ## Release and deployment
 
