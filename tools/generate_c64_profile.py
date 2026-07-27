@@ -569,6 +569,18 @@ def profile() -> dict[str, object]:
     }
 
 
+def render_profile() -> str:
+    return (
+        json.dumps(
+            profile(),
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
+
+
 def main() -> None:
     target = (
         Path(__file__).resolve().parents[1]
@@ -577,16 +589,7 @@ def main() -> None:
         / "profiles"
         / "c64.json"
     )
-    target.write_text(
-        json.dumps(
-            profile(),
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
+    target.write_text(render_profile(), encoding="utf-8")
 
 
 if __name__ == "__main__":

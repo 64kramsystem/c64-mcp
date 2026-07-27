@@ -5,6 +5,7 @@ from copy import deepcopy
 
 import pytest
 
+from c64_mcp.errors import GhidraError
 from c64_mcp.ghidra_client import GhidraClient
 from c64_mcp.profile_tools import (
     apply_c64_symbol_profile,
@@ -23,13 +24,11 @@ def _assert_symbols_resolve_to_default_space(
     result: dict[str, object],
     *,
     default_space: str,
-    overlay_spaces: set[str],
 ) -> None:
     symbols = result.get("symbols")
     assert isinstance(symbols, list)
     assert len(symbols) == 165
     expected = default_space.casefold()
-    forbidden = {name.casefold() for name in overlay_spaces}
 
     for item in symbols:
         assert isinstance(item, dict)
@@ -38,8 +37,20 @@ def _assert_symbols_resolve_to_default_space(
         space, separator, offset = address.partition(":")
         assert separator == ":"
         assert space.casefold() == expected
-        assert space.casefold() not in forbidden
         assert len(offset) == 4
+
+
+def _legacy_c64_profile() -> dict[str, object]:
+    legacy = deepcopy(load_c64_profile())
+    legacy["version"] = "1.0.0"
+    symbols = legacy["symbols"]
+    assert isinstance(symbols, list)
+    for item in symbols:
+        assert isinstance(item, dict)
+        address = item["address"]
+        assert isinstance(address, str)
+        item["address"] = address.removeprefix("RAM:")
+    return legacy
 
 
 def test_live_generic_endpoint_accepts_bundled_profile_schema() -> None:
@@ -115,7 +126,15 @@ def test_live_profile_apply_is_idempotent_with_existing_overlays() -> None:
             "named RAM"
         )
     client = _client()
-    overlays = {"BASIC_ROM", "CHAR_ROM", "KERNAL_ROM", "IO", "COLOR_RAM"}
+
+    with pytest.raises(GhidraError, match="Ambiguous unqualified address"):
+        client.apply_profile(
+            program,
+            _legacy_c64_profile(),
+            dry_run=True,
+            conflict_policy="error",
+            create_memory_blocks=False,
+        )
 
     first = apply_c64_symbol_profile(
         client,
@@ -137,7 +156,6 @@ def test_live_profile_apply_is_idempotent_with_existing_overlays() -> None:
     _assert_symbols_resolve_to_default_space(
         first,
         default_space="RAM",
-        overlay_spaces=overlays,
     )
     assert second["committed"] is True
     assert second["kept_conflicts"] == []
@@ -145,7 +163,6 @@ def test_live_profile_apply_is_idempotent_with_existing_overlays() -> None:
     _assert_symbols_resolve_to_default_space(
         second,
         default_space="RAM",
-        overlay_spaces=overlays,
     )
 
 
@@ -162,15 +179,7 @@ def test_live_profile_upgrade_from_unqualified_1_0_0_is_idempotent() -> None:
             "overlays, and no C64 profile annotations"
         )
     client = _client()
-    legacy = deepcopy(load_c64_profile())
-    legacy["version"] = "1.0.0"
-    symbols = legacy["symbols"]
-    assert isinstance(symbols, list)
-    for item in symbols:
-        assert isinstance(item, dict)
-        address = item["address"]
-        assert isinstance(address, str)
-        item["address"] = address.removeprefix("RAM:")
+    legacy = _legacy_c64_profile()
 
     legacy_result = client.apply_profile(
         program,
@@ -198,7 +207,6 @@ def test_live_profile_upgrade_from_unqualified_1_0_0_is_idempotent() -> None:
     _assert_symbols_resolve_to_default_space(
         upgraded,
         default_space="RAM",
-        overlay_spaces=set(),
     )
 
 
@@ -251,3 +259,7 @@ def test_live_profile_creates_optional_overlays_from_matching_ram() -> None:
     assert second["committed"] is True
     assert second["kept_conflicts"] == []
     assert set(second_blocks.values()) == {"idempotent"}
+    _assert_symbols_resolve_to_default_space(
+        second,
+        default_space="RAM",
+    )
