@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+### Changed
+
+- `tools/release` now refuses when HEAD is already tagged `v<version>`, instead of reporting nothing to release and exiting 0.
 
 ## 0.100.0
 ### Added

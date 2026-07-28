@@ -5,7 +5,7 @@ One command, with either a relative bump or an exact version:
     tools/release minor        # or major / patch / 1.2.3
 
 A release tags its own commit `v<version>`, so a HEAD already carrying such a tag
-has nothing to release: the run says so and exits 0 without touching anything.
+has nothing to release: the run refuses without touching anything.
 Only `v<semver>` counts; a tag in any other scheme is not a release.
 
 Otherwise it refuses unless the checkout is on the default branch, clean, and
@@ -332,10 +332,9 @@ def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
 
     released = head_release_tag(repo_root, runner)
     if released is not None:
-        print(f"HEAD is already tagged v{released}; nothing to release")
-        return released
+        raise ReleaseError(f"HEAD is already tagged v{released}; nothing to release")
 
-    # After the skip: a run with nothing to release needs no PyPI token. Still
+    # After the refusal: a run with nothing to release needs no PyPI token. Still
     # before everything irreversible, which is what the check is for.
     ensure_publish_token()
     ensure_in_sync_with_origin(repo_root, runner)
