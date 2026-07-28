@@ -21,17 +21,12 @@
   or results directly; add no legacy response, shim, flag, or versioned duplicate.
   Record the change in `CHANGELOG.md`; breaking changes use `tools/release minor`.
 
-## Tests and releases
+## Tests
 
-- Tests must execute production code and assert observable behavior.
-- No repository-policy or declarative-content tests: do not assert repository layout,
-  paths, existence, source/docs/instruction text, branding, counts, inventories,
-  symlinks, retired artifacts, or static contents of configuration, metadata,
-  workflows, manifests, catalogs, schemas, allowlists, or snapshots.
-- Declarative fixtures are allowed only through the real parser, loader, build,
-  deployment, or runtime; assert behavior, not text or location.
-- Delete obstructive policy tests; never alter docs, instructions, layout,
-  configuration, or metadata to satisfy them.
-- Retain no tests, fixtures, mutation checks, or CI assertions for release tooling.
-  Verify release-tool changes with temporary non-publishing runs, remove the artifacts,
-  and report the result; the first real release must not be the test.
+- Retain tests only for shipped runtime behavior: execute production runtime code and
+  assert observable results.
+- Retain no tests, fixtures, snapshots, mutation checks, or CI assertions for
+  non-runtime infrastructure: repository content, documentation, metadata, generated
+  artifacts, build/CI, installation/setup, configuration patching, deployment,
+  packaging, release, migrations, or maintenance scripts.
+- Verify infrastructure work only with temporary manual checks; remove their artifacts.
