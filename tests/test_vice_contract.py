@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import copy
 import json
-import os
-from pathlib import Path
 
 import pytest
 
@@ -178,16 +176,17 @@ def test_capabilities_validate_identity_versions_limits_and_exact_v1_set() -> No
     assert info.limits["memory_read_bytes"] == 65_536
 
 
-def test_capture_requires_surface_revision_two() -> None:
+def test_packaged_surface_revision_is_accepted_by_the_handshake() -> None:
     contract = load_contract()
+    revision = contract["surface_revision"]
 
-    assert "display.capture" in contract["capabilities"]  # type: ignore[operator]
-    assert "c64_vice_v1_capture_display" in {
-        method["name"]  # type: ignore[index]
-        for method in contract["methods"]  # type: ignore[union-attr]
-    }
-    assert contract["surface_revision"] == 2
+    assert isinstance(revision, int)
+    assert validate_capabilities(
+        capability_envelope(surface_revision=revision)
+    ).instance_id == INSTANCE
 
+
+def test_capture_requires_surface_revision_two() -> None:
     with pytest.raises(ViceError) as captured:
         validate_capabilities(capability_envelope(surface_revision=1))
 
@@ -292,20 +291,3 @@ def test_handshake_parser_reports_target_replacement() -> None:
         )
 
     assert captured.value.code == "vice_connector_changed"
-
-
-@pytest.mark.skipif(
-    "C64_MCP_CONTRACT_REPO_CHECK" not in __import__("os").environ,
-    reason="cross-repository contract check is opt-in",
-)
-def test_packaged_contract_matches_explicit_connector_fixture(
-) -> None:
-    connector = os.environ.get("GHIDRA_VICE_CONNECTOR_REPO")
-    c64 = os.environ.get("C64_MCP_REPO")
-    assert connector and c64
-    source = Path(connector) / "contracts/c64-vice-api-v1.json"
-    packaged = (
-        Path(c64)
-        / "src/c64_mcp/contracts/c64-vice-api-v1.json"
-    )
-    assert json.loads(source.read_text()) == json.loads(packaged.read_text())

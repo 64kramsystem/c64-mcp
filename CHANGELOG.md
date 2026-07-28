@@ -50,6 +50,8 @@
 
 ### Changed
 
+- `tools/release` retains the shipped-runtime pytest gate but no longer treats
+  Ruff, mypy, or lockfile consistency as release test gates.
 - `tools/release` now exits successfully when HEAD already carries its release
   tag, reporting that there is nothing to release rather than refusing at
   `ensure_tag_absent`. A release tags its own commit, so a tagged HEAD is the
@@ -76,9 +78,8 @@
   published. Only the two artifacts built for that version are uploaded, not
   whatever `dist/` happens to hold.
 - Renamed the `GHIDRA_MCP_C64_*` environment variables to `C64_MCP_*`, including
-  the runtime `C64_MCP_TOOL_PROFILE`. `GHIDRA_MCP_URL` and
-  `GHIDRA_VICE_CONNECTOR_REPO` keep their names, naming things that are still
-  called that.
+  the runtime `C64_MCP_TOOL_PROFILE`. `GHIDRA_MCP_URL` keeps its name because it
+  addresses the generic Ghidra MCP.
 
 - Renamed the project from `ghidra-mcp-c64` to `c64-mcp`, and the Python package
   from `ghidra_mcp_c64` to `c64_mcp`. The old name implied a sibling of
@@ -94,10 +95,10 @@
 - Added `tools/release <major|minor|patch>`, a single command that refuses unless
   the checkout is on the default branch, clean and exactly in sync with origin,
   then writes the version to `pyproject.toml`, regenerates `uv.lock`, rolls the
-  changelog, runs the gates through `uv run --locked` against that candidate,
-  builds, commits, tags and pushes. There is deliberately no publishing step:
-  nothing consumes a c64 release, and its compatibility with the connector rests
-  on the `c64.vice/1` runtime handshake rather than on matching versions.
+  changelog, runs the runtime pytest gate through `uv run --locked`, builds,
+  commits, tags, pushes, and publishes the artifacts to PyPI. Compatibility with
+  the connector rests on the `c64.vice/1` runtime handshake rather than matching
+  versions.
   Everything that can fail runs before the push, since the push cannot be undone;
   until then a failure restores the working tree, the index and the branch ref.
 

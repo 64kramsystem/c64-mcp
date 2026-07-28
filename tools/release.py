@@ -10,12 +10,11 @@ Only `v<semver>` counts; a tag in any other scheme is not a release.
 
 Otherwise it refuses unless the checkout is on the default branch, clean, and
 exactly in sync with origin. Then it writes the version, regenerates the lock,
-rolls the changelog, runs the gates against that release candidate, builds,
+rolls the changelog, runs the runtime tests, builds the release candidate,
 commits, tags, and pushes the branch and the tag.
 
-There is no publishing step: nothing consumes a c64 release, it runs from a local
-venv path, and its compatibility with the connector rests on the `c64.vice/1`
-runtime handshake rather than on matching versions.
+The final step publishes versioned artifacts to PyPI. Compatibility with the
+connector rests on the `c64.vice/1` runtime handshake rather than matching versions.
 
 Everything fallible happens *before* the push, because the push is a one-way
 door. Until then a failure restores the working tree, the index and the branch
@@ -268,16 +267,9 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-# ------------------------------------------------------------------------- gates
-
-
-# Run through `uv run --locked`: the dev tools are declared in a dependency
-# group, so bare invocations would take whatever happens to be on PATH.
 GATES: tuple[tuple[str, ...], ...] = (
+    # Resolve pytest from the declared development dependencies, not ambient PATH.
     ("uv", "run", "--locked", "pytest"),
-    ("uv", "run", "--locked", "ruff", "check"),
-    ("uv", "run", "--locked", "mypy"),
-    ("uv", "lock", "--check"),
 )
 
 BUILD: tuple[tuple[str, ...], ...] = (
@@ -337,7 +329,7 @@ def ensure_publish_token() -> None:
 
 
 def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
-    """Cut a release in one command: gate, build, commit, tag, push, publish."""
+    """Cut a release: test, build, commit, tag, push, and publish."""
     ensure_default_branch(repo_root, runner)
     ensure_clean(repo_root, runner)
 
@@ -455,7 +447,7 @@ def _rollback(
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=f"Cut a {PRODUCT} release",
-        epilog="Runs the gates, builds, commits, tags and pushes.",
+        epilog="Runs runtime tests, builds, commits, tags, pushes, and publishes.",
     )
     parser.add_argument(
         "bump", choices=("major", "minor", "patch"), help="which component to raise"

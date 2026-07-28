@@ -27,7 +27,10 @@ def _assert_symbols_resolve_to_default_space(
 ) -> None:
     symbols = result.get("symbols")
     assert isinstance(symbols, list)
-    assert len(symbols) == 165
+    bundled_symbols = load_c64_profile()["symbols"]
+    assert isinstance(bundled_symbols, list)
+    assert bundled_symbols
+    assert len(symbols) == len(bundled_symbols)
     expected = default_space.casefold()
 
     for item in symbols:
@@ -249,13 +252,21 @@ def test_live_profile_creates_optional_overlays_from_matching_ram() -> None:
 
     assert first["committed"] is True
     assert first["kept_conflicts"] == []
-    assert first_blocks == {
-        "RAM": "idempotent",
-        "BASIC_ROM": "create",
-        "KERNAL_ROM": "create",
-        "IO": "create",
-        "COLOR_RAM": "create",
+    assert first_blocks["RAM"] == "idempotent"
+    bundled_blocks = load_c64_profile()["memory_blocks"]
+    assert isinstance(bundled_blocks, list)
+    expected_overlays = {
+        item["name"]
+        for item in bundled_blocks
+        if item["name"] != "RAM"
     }
+    assert expected_overlays
+    assert set(first_blocks) - {"RAM"} == expected_overlays
+    assert all(
+        action == "create"
+        for name, action in first_blocks.items()
+        if name != "RAM"
+    )
     assert second["committed"] is True
     assert second["kept_conflicts"] == []
     assert set(second_blocks.values()) == {"idempotent"}

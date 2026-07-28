@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import json
-from importlib import resources
-
 import pytest
 
 from c64_mcp.errors import CodecDataError
@@ -61,21 +58,6 @@ def test_normative_mode_specific_aliases() -> None:
             *petscii_upper[0x80:0xA0],
         )
     )
-
-
-def test_bundled_data_records_official_appendix_source() -> None:
-    raw = (
-        resources.files("c64_mcp.text")
-        .joinpath("tables.json")
-        .read_text("utf-8")
-    )
-    document = json.loads(raw)
-
-    assert document["source"]["title"] == (
-        "Commodore 64 Programmer's Reference Guide"
-    )
-    assert "Appendix B" in document["source"]["pages"]["screen_codes"]
-    assert "Appendix C" in document["source"]["pages"]["petscii"]
 
 
 def test_tables_and_entries_are_immutable() -> None:

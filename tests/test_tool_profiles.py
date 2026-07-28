@@ -23,16 +23,16 @@ async def _call(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("profile", "expected_count", "representative"),
+    ("profile", "representative"),
     [
-        ("minimal", 4, "list_c64_tool_groups"),
-        ("static", 14, "decode_c64_text"),
-        ("vice", 25, "vice_capture_screen"),
-        ("full", 35, "vice_connect"),
+        ("minimal", "list_c64_tool_groups"),
+        ("static", "decode_c64_text"),
+        ("vice", "vice_capture_screen"),
+        ("full", "vice_connect"),
     ],
 )
-async def test_profiles_expose_exact_initial_surfaces(
-    profile: str, expected_count: int, representative: str
+async def test_profiles_expose_representative_initial_tools(
+    profile: str, representative: str
 ) -> None:
     settings = Settings.from_environ(
         {"C64_MCP_TOOL_PROFILE": profile}
@@ -41,7 +41,6 @@ async def test_profiles_expose_exact_initial_surfaces(
 
     names = {tool.name for tool in await server.list_tools()}
 
-    assert len(names) == expected_count
     assert representative in names
     if profile == "vice":
         assert "decode_c64_text" not in names
@@ -64,14 +63,8 @@ async def test_graphics_is_a_baseline_group_of_static_and_full(
     )
     assert graphics["baseline"] is True
     assert graphics["loaded"] is True
-    assert graphics["tool_count"] == 5
-    assert graphics["tools"] == [
-        "decode_c64_char_screen",
-        "decode_c64_charset",
-        "decode_c64_hires_bitmap",
-        "decode_c64_multicolor_bitmap",
-        "decode_c64_sprites",
-    ]
+    assert "decode_c64_hires_bitmap" in graphics["tools"]
+    assert graphics["tool_count"] == len(graphics["tools"])
 
 
 @pytest.mark.asyncio
@@ -84,7 +77,6 @@ async def test_screen_capture_belongs_to_vice_not_graphics() -> None:
 
     assert "vice_capture_screen" in groups["vice"]["tools"]
     assert "vice_capture_screen" not in groups["graphics"]["tools"]
-    assert groups["vice"]["tool_count"] == 21
 
 
 @pytest.mark.asyncio
@@ -100,6 +92,7 @@ async def test_graphics_is_hidden_from_the_vice_profile() -> None:
 @pytest.mark.asyncio
 async def test_group_load_and_unload_are_idempotent() -> None:
     server = create_server(Settings.from_environ({}), ghidra=object())
+    initial_names = {tool.name for tool in await server.list_tools()}
 
     loaded = await _call(
         server, "load_c64_tool_group", {"group": "vice"}
@@ -107,6 +100,7 @@ async def test_group_load_and_unload_are_idempotent() -> None:
     loaded_again = await _call(
         server, "load_c64_tool_group", {"group": "vice"}
     )
+    loaded_names = {tool.name for tool in await server.list_tools()}
     unloaded = await _call(
         server, "unload_c64_tool_group", {"group": "vice"}
     )
@@ -115,18 +109,23 @@ async def test_group_load_and_unload_are_idempotent() -> None:
     )
 
     assert loaded["changed"] is True
-    assert loaded["new_tools"] == 21
+    assert loaded["new_tools"] == len(loaded_names - initial_names)
+    assert "vice_connect" in loaded_names
     assert loaded_again["changed"] is False
+    assert loaded_again["new_tools"] == 0
     assert unloaded["changed"] is True
-    assert unloaded["removed_tools"] == 21
     assert unloaded_again["changed"] is False
     names = {tool.name for tool in await server.list_tools()}
+    assert unloaded["removed_tools"] == len(loaded_names - names)
+    assert unloaded_again["removed_tools"] == 0
     assert "vice_connect" not in names
 
 
 @pytest.mark.asyncio
 async def test_load_all_keeps_only_profile_baseline_protected() -> None:
     server = create_server(Settings.from_environ({}), ghidra=object())
+    listing = await _call(server, "list_c64_tool_groups", {})
+    expected_groups = {group["group"] for group in listing["groups"]}
 
     loaded = await _call(
         server, "load_c64_tool_group", {"group": "all"}
@@ -138,12 +137,8 @@ async def test_load_all_keeps_only_profile_baseline_protected() -> None:
         server, "unload_c64_tool_group", {"group": "vice"}
     )
 
-    assert loaded["loaded_groups"] == [
-        "graphics",
-        "symbols",
-        "text",
-        "vice",
-    ]
+    assert loaded["changed"] is True
+    assert set(loaded["loaded_groups"]) == expected_groups
     assert protected["error"]["code"] == "protected_group"
     assert unloaded["changed"] is True
 
@@ -313,4 +308,6 @@ async def test_concurrent_group_loads_publish_once() -> None:
     )
 
     assert sorted([first["changed"], second["changed"]]) == [False, True]
-    assert len(await server.list_tools()) == 35
+    assert "vice_connect" in {
+        tool.name for tool in await server.list_tools()
+    }

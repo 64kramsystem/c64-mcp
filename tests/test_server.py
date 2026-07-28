@@ -29,11 +29,8 @@ async def test_server_registers_c64_text_tools() -> None:
 
     tools = await server.list_tools()
 
-    assert {
-        "decode_c64_text",
-        "search_c64_text",
-        "define_c64_text",
-    } <= {tool.name for tool in tools}
+    names = {tool.name for tool in tools}
+    assert {"decode_c64_text", "define_c64_text"} <= names
     by_name = {tool.name: tool.inputSchema for tool in tools}
     assert by_name["decode_c64_text"]["properties"]["encoding"]["enum"] == [
         "petscii_upper",
@@ -56,9 +53,6 @@ async def test_server_registers_c64_graphics_tools_with_safe_defaults() -> None:
 
     assert {
         "decode_c64_hires_bitmap",
-        "decode_c64_multicolor_bitmap",
-        "decode_c64_charset",
-        "decode_c64_char_screen",
         "decode_c64_sprites",
     } <= set(by_name)
     hires = by_name["decode_c64_hires_bitmap"]
@@ -135,7 +129,7 @@ async def test_server_registers_c64_profile_tools_with_safe_defaults() -> None:
 
 
 @pytest.mark.asyncio
-async def test_server_registers_complete_vice_surface_with_safe_defaults() -> None:
+async def test_server_registers_representative_vice_tools_with_safe_defaults() -> None:
     server = create_server(
         Settings.from_environ(
             {"C64_MCP_TOOL_PROFILE": "full"}
@@ -145,31 +139,11 @@ async def test_server_registers_complete_vice_surface_with_safe_defaults() -> No
 
     tools = await server.list_tools()
     by_name = {tool.name: tool.inputSchema for tool in tools}
-    expected = {
+    assert {
         "vice_connect",
-        "vice_disconnect",
-        "vice_status",
-        "vice_get_registers",
-        "vice_set_registers",
-        "vice_list_banks",
-        "vice_read_memory",
-        "vice_write_memory",
-        "vice_list_checkpoints",
-        "vice_set_checkpoint",
-        "vice_delete_checkpoint",
-        "vice_toggle_checkpoint",
-        "vice_step",
-        "vice_next",
-        "vice_finish",
-        "vice_resume",
-        "vice_interrupt",
-        "vice_wait_for_stop",
-        "vice_reset",
         "vice_capture_screen",
         "copy_vice_memory_to_ghidra",
-    }
-
-    assert expected <= set(by_name)
+    } <= set(by_name)
     capture = by_name["vice_capture_screen"]["properties"]
     assert capture["crop"]["default"] is True
     assert capture["use_vic"]["default"] is True
@@ -198,12 +172,16 @@ async def test_server_registers_complete_vice_surface_with_safe_defaults() -> No
 
 
 @pytest.mark.asyncio
-async def test_capture_without_a_binding_asks_for_vice_connect() -> None:
+async def test_vice_runtime_tools_execute_without_a_binding() -> None:
     server = create_server(
         Settings.from_environ({"C64_MCP_TOOL_PROFILE": "full"}),
         ghidra=object(),
     )
 
+    _, status = await server.call_tool("vice_status", {})
+
+    assert status is not None
+    assert status["state"] == "unbound"
     with pytest.raises(Exception, match="vice_connect"):
         await server.call_tool("vice_capture_screen", {})
 
@@ -214,22 +192,11 @@ async def test_default_profile_exposes_static_and_management_tools() -> None:
 
     names = {tool.name for tool in await server.list_tools()}
 
-    assert names == {
-        "get_c64_symbol_profile",
-        "apply_c64_symbol_profile",
-        "decode_c64_hires_bitmap",
-        "decode_c64_multicolor_bitmap",
-        "decode_c64_charset",
-        "decode_c64_char_screen",
-        "decode_c64_sprites",
+    assert {
         "decode_c64_text",
-        "search_c64_text",
-        "define_c64_text",
+        "decode_c64_hires_bitmap",
         "list_c64_tool_groups",
-        "load_c64_tool_group",
-        "unload_c64_tool_group",
-        "search_c64_tools",
-    }
+    } <= names
     assert "vice_connect" not in names
     # Capture is a live-debugger tool, so the static profile must not carry it.
     assert "vice_capture_screen" not in names

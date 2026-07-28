@@ -9,6 +9,7 @@ from c64_mcp.errors import RequestError
 from c64_mcp.profile_tools import (
     apply_c64_symbol_profile,
     get_c64_symbol_profile,
+    load_c64_profile,
 )
 
 
@@ -39,11 +40,10 @@ class FakeProfileGhidra:
         return {"committed": not dry_run}
 
 
-def test_get_returns_the_complete_bundled_profile() -> None:
+def test_get_returns_the_bundled_runtime_profile() -> None:
     profile = get_c64_symbol_profile()
 
-    assert profile["id"] == "c64"
-    assert profile["symbols"]
+    assert profile == load_c64_profile()
     assert profile["equates"]
     assert profile["memory_blocks"]
 
@@ -65,7 +65,7 @@ def test_apply_forwards_only_the_bundled_profile_and_explicit_program() -> None:
     call = ghidra.calls[0]
     profile = call["profile"]
     assert isinstance(profile, Mapping)
-    assert profile["id"] == "c64"
+    assert profile == load_c64_profile()
     assert call == {
         "program": "snapshot",
         "profile": profile,
