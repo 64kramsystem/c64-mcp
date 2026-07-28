@@ -4,6 +4,7 @@
 
 ### Added
 
+- `tools/release` now accepts an exact `X.Y.Z` release version as well as `major`, `minor`, or `patch`, and no longer runs test suites before building and publishing a release.
 - `vice_capture_screen`, in the **`vice`** group rather than `graphics`, because
   the default `static` profile deliberately keeps live-debugger schemas out of
   context. It asks the connector for one composited frame plus the palette VICE
