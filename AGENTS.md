@@ -10,8 +10,13 @@
 
 ## Cross-repo and profile coupling
 
-- `src/c64_mcp/contracts/c64-vice-api-v1.json` is a packaged copy of the connector's generated contract and must stay byte-identical to it. The check lives in `tests/test_vice_contract.py` and is opt-in: `C64_MCP_CONTRACT_REPO_CHECK=1`. A connector surface bump means updating this copy and `REQUIRED_SURFACE_REVISION` together.
-- Adding, moving or removing a tool changes exact counts asserted in `tests/test_tool_profiles.py` and `tests/test_server.py`. Update them deliberately rather than to whatever makes them pass: those counts are what catch a live-debugger tool landing in the `static` profile, which is meant to keep live schemas out of the agent's context.
+- `src/c64_mcp/contracts/c64-vice-api-v1.json` and `REQUIRED_SURFACE_REVISION`
+  describe the connector surface consumed at runtime and must evolve together. Verify
+  compatibility through the production contract loader and handshake behavior, not
+  byte-for-byte repository comparisons.
+- Tool-profile membership is observable server behavior. Verify which tools a profile
+  exposes through production registration and discovery; do not pin exact total counts
+  or mirror profile declarations in tests.
 - Live VICE tests need a build at r46020 or later. Earlier builds overrun their own allocation while answering `display get`, so the connector refuses the command and those tests skip.
 
 ## Scope and compatibility
@@ -32,9 +37,35 @@ not reserved for them.
 
 This is a standing instruction from the maintainer, not an oversight to correct.
 
-## Releasing
+## Testing and releasing
 
-- **Do not retain unit tests for release tooling.** The completed repository must
+Tests must execute production code and verify observable behavior.
+
+### Repository policy and declarative content
+
+Do not add repository-policy or declarative-content tests. Do not test repository
+layout, filenames, paths, file or class existence, directory structure, source text,
+documentation, agent instructions, wording, branding, line counts, exact inventories,
+symlinks, or the presence or absence of retired components.
+
+Do not test static declarations merely by reading or matching their contents. This
+includes Markdown, JSON, YAML, TOML, XML, manifests, POM metadata, workflow files,
+environment templates, dependency declarations, catalogs, schemas, allowlists,
+configuration files, and generated snapshots. Do not assert strings, regular
+expressions, counts, ordering, keys, or duplicated values across such files.
+
+Declarative input may be used only to test the production code that consumes it.
+Exercise the real parser, loader, build, deployment, or runtime behavior with temporary
+fixtures, and assert the resulting behavior rather than the declaration's text or
+repository location.
+
+When a repository-policy test obstructs a legitimate change, delete the test. Do not
+alter documentation, instructions, source layout, configuration, or metadata merely to
+satisfy it.
+
+### Release tooling
+
+- **Do not retain automated tests for release tooling.** The completed repository must
   contain no unit tests, fixtures, mutation checks, or CI assertions targeting it.
 - **Test release-tooling changes before release.** Use temporary tests and controlled,
   non-publishing runs to exercise the affected paths, then remove all temporary test
