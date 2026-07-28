@@ -4,10 +4,14 @@ One command:
 
     tools/release minor        # or major / patch
 
-It refuses unless the checkout is on the default branch, clean, and exactly in
-sync with origin. Then it writes the version, regenerates the lock, rolls the
-changelog, runs the gates against that release candidate, builds, commits, tags,
-and pushes the branch and the tag.
+A release tags its own commit `v<version>`, so a HEAD already carrying such a tag
+has nothing to release: the run says so and exits 0 without touching anything.
+Only `v<semver>` counts; a tag in any other scheme is not a release.
+
+Otherwise it refuses unless the checkout is on the default branch, clean, and
+exactly in sync with origin. Then it writes the version, regenerates the lock,
+rolls the changelog, runs the gates against that release candidate, builds,
+commits, tags, and pushes the branch and the tag.
 
 There is no publishing step: nothing consumes a c64 release, it runs from a local
 venv path, and its compatibility with the connector rests on the `c64.vice/1`
@@ -220,6 +224,21 @@ def ensure_in_sync_with_origin(repo_root: Path, runner: Runner = run) -> None:
         )
 
 
+def head_release_tag(repo_root: Path, runner: Runner = run) -> str | None:
+    """The version already released at HEAD, if any.
+
+    A release tags its own commit, so a tagged HEAD has nothing left to release.
+    Only `v<semver>` counts: a tag in any other scheme is not a release of this
+    line.
+    """
+    for tag in runner(
+        ["git", "tag", "--points-at", "HEAD", "--list", "v*"], repo_root
+    ).split():
+        if _SEMVER_RE.fullmatch(tag[1:]):
+            return tag[1:]
+    return None
+
+
 def ensure_tag_absent(repo_root: Path, tag: str, runner: Runner = run) -> None:
     local = runner(["git", "tag", "--list", tag], repo_root).strip()
     if local:
@@ -303,11 +322,12 @@ def verify_artifact_contents(repo_root: Path, version: str) -> list[Artifact]:
 
 
 def ensure_publish_token() -> None:
-    """Refuse before anything else if the PyPI token is absent.
+    """Refuse before anything irreversible if the PyPI token is absent.
 
-    Checked first, not at publish time: the push and the tag come earlier and
+    Checked up front, not at publish time: the push and the tag come earlier and
     cannot be retracted, so discovering a missing token afterwards would leave a
-    released tag with nothing on PyPI.
+    released tag with nothing on PyPI. It sits just below the already-released
+    check, which needs no token because it publishes nothing.
     """
     if not os.environ.get(PUBLISH_TOKEN_ENV):
         raise ReleaseError(
@@ -318,9 +338,17 @@ def ensure_publish_token() -> None:
 
 def release(repo_root: Path, bump: str, runner: Runner = run) -> str:
     """Cut a release in one command: gate, build, commit, tag, push, publish."""
-    ensure_publish_token()
     ensure_default_branch(repo_root, runner)
     ensure_clean(repo_root, runner)
+
+    released = head_release_tag(repo_root, runner)
+    if released is not None:
+        print(f"HEAD is already tagged v{released}; nothing to release")
+        return released
+
+    # After the skip: a run with nothing to release needs no PyPI token. Still
+    # before everything irreversible, which is what the check is for.
+    ensure_publish_token()
     ensure_in_sync_with_origin(repo_root, runner)
 
     version = prepare(repo_root, bump, runner)

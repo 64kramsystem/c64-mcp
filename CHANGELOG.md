@@ -50,6 +50,16 @@
 
 ### Changed
 
+- `tools/release` now exits successfully when HEAD already carries its release
+  tag, reporting that there is nothing to release rather than refusing at
+  `ensure_tag_absent`. A release tags its own commit, so a tagged HEAD is the
+  record that this commit was released, and a repository with nothing new
+  becomes a no-op instead of an error — which is what lets
+  `~/code/scripts/release_ghidra_tools`, running this script alongside the
+  connector's and GhidraMCP-next's, be re-run after any one of them fails. Only
+  `v<semver>` tags count. The `UV_PUBLISH_TOKEN` check moved below the skip, so
+  a run with nothing to release no longer demands a token it will not use; it
+  still precedes everything irreversible, which is the point of the check.
 - The bundled C64 symbol profile is now version 1.1.0 and qualifies all
   platform-symbol addresses with the default `RAM` space. Applying the profile
   remains deterministic and idempotent after ROM and I/O overlays exist,
