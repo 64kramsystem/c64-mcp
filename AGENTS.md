@@ -2,6 +2,12 @@
 
 - Never use conventional-commit prefixes (`feat/`, …) in commit titles or branch names
 
+## Agent review
+
+- Every change except `AGENTS.md` must be reviewed with an agent skill before completion.
+- Claude Code agents must use `/codex review`.
+- Codex agents must use `$claude review`.
+
 ## Cross-repo and profile coupling
 
 - `src/c64_mcp/contracts/c64-vice-api-v1.json` is a packaged copy of the connector's generated contract and must stay byte-identical to it. The check lives in `tests/test_vice_contract.py` and is opt-in: `C64_MCP_CONTRACT_REPO_CHECK=1`. A connector surface bump means updating this copy and `REQUIRED_SURFACE_REVISION` together.
@@ -11,14 +17,14 @@
 ## Scope and compatibility
 
 Do not weigh release cost when scoping work. "That needs a release" is not an argument
-for cutting a tool, deferring a tool group, or leaving a capability as a throwaway script
-outside the package. Releasing is one command. Decide what to build on usefulness and
-correctness alone.
+for cutting a capability, deferring related work, or leaving it as a throwaway script
+outside the maintained package. Releasing is one command. Decide what to build on
+usefulness and correctness alone.
 
-Do not preserve compatibility for its own sake. Breaking changes to MCP tool names,
-argument names, tool-group membership, and response shapes are acceptable whenever they
-produce a better contract. Do not add a parallel legacy response, a deprecation shim, a
-compatibility flag, or a second versioned tool in order to avoid a break: change the
+Do not preserve compatibility for its own sake. Breaking changes to public names,
+argument names, group membership, and result shapes are acceptable whenever they produce
+a better contract. Do not add a parallel legacy response, a deprecation shim, a
+compatibility flag, or a second versioned interface in order to avoid a break: change the
 contract and record it in `CHANGELOG.md`.
 
 Breaking changes ride a **minor** version bump (`tools/release minor`). A major bump is
@@ -28,8 +34,10 @@ This is a standing instruction from the maintainer, not an oversight to correct.
 
 ## Releasing
 
-- **Do not write tests for the release script.** No unit tests, no fixtures, no
-  mutation checks, no CI assertions about it. Releasing is verified by running
-  `tools/release <major|minor|patch>` and seeing what happens; a test suite around
-  it has repeatedly cost more than it caught. If a release breaks, fix the script.
+- **Do not retain unit tests for release tooling.** The completed repository must
+  contain no unit tests, fixtures, mutation checks, or CI assertions targeting it.
+- **Test release-tooling changes before release.** Use temporary tests and controlled,
+  non-publishing runs to exercise the affected paths, then remove all temporary test
+  artifacts. Report what was tested and its result; the first real release must not
+  serve as the test.
 - This is a standing instruction from the maintainer, not an oversight to correct.
