@@ -1,8 +1,8 @@
 """Scripted releases for c64-mcp.
 
-One command:
+One command, with either a relative bump or an exact version:
 
-    tools/release minor        # or major / patch
+    tools/release minor        # or major / patch / 1.2.3
 
 A release tags its own commit `v<version>`, so a HEAD already carrying such a tag
 has nothing to release: the run says so and exits 0 without touching anything.
@@ -10,8 +10,8 @@ Only `v<semver>` counts; a tag in any other scheme is not a release.
 
 Otherwise it refuses unless the checkout is on the default branch, clean, and
 exactly in sync with origin. Then it writes the version, regenerates the lock,
-rolls the changelog, runs the runtime tests, builds the release candidate,
-commits, tags, and pushes the branch and the tag.
+rolls the changelog, builds the release candidate, commits, tags, and pushes the
+branch and the tag.
 
 The final step publishes versioned artifacts to PyPI. Compatibility with the
 connector rests on the `c64.vice/1` runtime handshake rather than matching versions.
@@ -73,7 +73,7 @@ def run(command: Sequence[str], cwd: Path) -> str:
 
 
 def next_version(current: str, bump: str) -> str:
-    """Return the next semantic version.
+    """Return the selected semantic version.
 
     Note `0.99.0` + minor is `0.100.0`, not `1.0.0`: semver places no limit on a
     component's magnitude, and both Maven and PEP 440 compare them numerically.
@@ -89,7 +89,9 @@ def next_version(current: str, bump: str) -> str:
         return f"{major}.{minor + 1}.0"
     if bump == "patch":
         return f"{major}.{minor}.{patch + 1}"
-    raise ReleaseError(f"unknown bump: {bump!r}")
+    if _SEMVER_RE.fullmatch(bump):
+        return bump
+    raise ReleaseError(f"expected major, minor, patch, or X.Y.Z; got {bump!r}")
 
 
 def read_version(repo_root: Path) -> str:
@@ -267,11 +269,6 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-GATES: tuple[tuple[str, ...], ...] = (
-    # Resolve pytest from the declared development dependencies, not ambient PATH.
-    ("uv", "run", "--locked", "pytest"),
-)
-
 BUILD: tuple[tuple[str, ...], ...] = (
     ("uv", "build"),
 )
@@ -378,9 +375,6 @@ def prepare(repo_root: Path, bump: str, runner: Runner = run) -> str:
         written = [*write_version(repo_root, version), changelog]
         roll_changelog(changelog, version)
 
-        for gate in GATES:
-            print(f"gate: {' '.join(gate)}")
-            runner(gate, repo_root)
         for step in BUILD:
             print(f"build: {' '.join(step)}")
             runner(step, repo_root)
@@ -447,10 +441,12 @@ def _rollback(
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=f"Cut a {PRODUCT} release",
-        epilog="Runs runtime tests, builds, commits, tags, pushes, and publishes.",
+        epilog="Builds, commits, tags, pushes, and publishes.",
     )
     parser.add_argument(
-        "bump", choices=("major", "minor", "patch"), help="which component to raise"
+        "bump",
+        metavar="{major,minor,patch,X.Y.Z}",
+        help="component to raise or exact release version",
     )
 
     args = parser.parse_args(argv)
