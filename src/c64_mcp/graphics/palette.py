@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-import re
-
-from ..errors import RequestError
-
 Rgb = tuple[int, int, int]
 
 # Pepto PAL, from https://www.pepto.de/projects/colorvic/. Listed literally so
@@ -28,80 +24,4 @@ PEPTO_PAL: tuple[Rgb, ...] = (
     (0x6C, 0x5E, 0xB5),  # 14 light blue
     (0x95, 0x95, 0x95),  # 15 light grey
 )
-PALETTE_NAMES: tuple[str, ...] = (
-    "black",
-    "white",
-    "red",
-    "cyan",
-    "purple",
-    "green",
-    "blue",
-    "yellow",
-    "orange",
-    "brown",
-    "light red",
-    "dark grey",
-    "grey",
-    "light green",
-    "light blue",
-    "light grey",
-)
 MAX_PALETTE_ENTRIES = 256
-_HEX_TRIPLE = re.compile(r"^#?[0-9a-fA-F]{6}$")
-
-
-def resolve_palette(value: object | None) -> list[Rgb]:
-    """Return Pepto PAL, or a caller palette of hex strings or RGB triples."""
-
-    if value is None:
-        return list(PEPTO_PAL)
-    if not isinstance(value, list) or not value:
-        raise RequestError(
-            "palette must be a non-empty array of '#rrggbb' strings or "
-            "[r, g, b] triples"
-        )
-    if len(value) > MAX_PALETTE_ENTRIES:
-        raise RequestError(
-            f"palette must not exceed {MAX_PALETTE_ENTRIES} entries"
-        )
-    result: list[Rgb] = []
-    for index, entry in enumerate(value):
-        result.append(_entry(entry, index))
-    return result
-
-
-def _entry(entry: object, index: int) -> Rgb:
-    if isinstance(entry, str):
-        if not _HEX_TRIPLE.fullmatch(entry):
-            raise RequestError(
-                f"palette entry {index} must be six hexadecimal digits, "
-                "optionally '#'-prefixed"
-            )
-        digits = entry.lstrip("#")
-        return (
-            int(digits[0:2], 16),
-            int(digits[2:4], 16),
-            int(digits[4:6], 16),
-        )
-    if isinstance(entry, (list, tuple)):
-        if len(entry) != 3:
-            raise RequestError(
-                f"palette entry {index} must hold exactly three channels"
-            )
-        channels: list[int] = []
-        for channel in entry:
-            if (
-                not isinstance(channel, int)
-                or isinstance(channel, bool)
-                or channel < 0
-                or channel > 255
-            ):
-                raise RequestError(
-                    f"palette entry {index} channels must be integers "
-                    "from 0 to 255"
-                )
-            channels.append(channel)
-        return (channels[0], channels[1], channels[2])
-    raise RequestError(
-        f"palette entry {index} must be a hex string or an [r, g, b] triple"
-    )

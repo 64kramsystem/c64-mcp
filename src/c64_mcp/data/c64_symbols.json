@@ -1,0 +1,827 @@
+[
+  {
+    "address": "RAM:0000",
+    "name": "PROCESSOR_PORT_DIRECTION",
+    "namespace": "C64::CPU"
+  },
+  {
+    "address": "RAM:0001",
+    "name": "PROCESSOR_PORT",
+    "namespace": "C64::CPU"
+  },
+  {
+    "address": "RAM:d000",
+    "name": "SPRITE0_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d001",
+    "name": "SPRITE0_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d002",
+    "name": "SPRITE1_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d003",
+    "name": "SPRITE1_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d004",
+    "name": "SPRITE2_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d005",
+    "name": "SPRITE2_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d006",
+    "name": "SPRITE3_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d007",
+    "name": "SPRITE3_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d008",
+    "name": "SPRITE4_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d009",
+    "name": "SPRITE4_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00a",
+    "name": "SPRITE5_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00b",
+    "name": "SPRITE5_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00c",
+    "name": "SPRITE6_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00d",
+    "name": "SPRITE6_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00e",
+    "name": "SPRITE7_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d00f",
+    "name": "SPRITE7_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d010",
+    "name": "SPRITE_X_MSB",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d011",
+    "name": "CONTROL_1",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d012",
+    "name": "RASTER",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d013",
+    "name": "LIGHT_PEN_X",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d014",
+    "name": "LIGHT_PEN_Y",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d015",
+    "name": "SPRITE_ENABLE",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d016",
+    "name": "CONTROL_2",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d017",
+    "name": "SPRITE_Y_EXPAND",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d018",
+    "name": "MEMORY_POINTERS",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d019",
+    "name": "INTERRUPT_STATUS",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01a",
+    "name": "INTERRUPT_ENABLE",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01b",
+    "name": "SPRITE_PRIORITY",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01c",
+    "name": "SPRITE_MULTICOLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01d",
+    "name": "SPRITE_X_EXPAND",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01e",
+    "name": "SPRITE_SPRITE_COLLISION",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d01f",
+    "name": "SPRITE_BACKGROUND_COLLISION",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d020",
+    "name": "BORDER_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d021",
+    "name": "BACKGROUND_COLOR_0",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d022",
+    "name": "BACKGROUND_COLOR_1",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d023",
+    "name": "BACKGROUND_COLOR_2",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d024",
+    "name": "BACKGROUND_COLOR_3",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d025",
+    "name": "SPRITE_MULTICOLOR_0",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d026",
+    "name": "SPRITE_MULTICOLOR_1",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d027",
+    "name": "SPRITE0_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d028",
+    "name": "SPRITE1_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d029",
+    "name": "SPRITE2_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d02a",
+    "name": "SPRITE3_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d02b",
+    "name": "SPRITE4_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d02c",
+    "name": "SPRITE5_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d02d",
+    "name": "SPRITE6_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d02e",
+    "name": "SPRITE7_COLOR",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d800",
+    "name": "COLOR_RAM",
+    "namespace": "C64::VIC"
+  },
+  {
+    "address": "RAM:d400",
+    "name": "VOICE1_FREQ_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d401",
+    "name": "VOICE1_FREQ_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d402",
+    "name": "VOICE1_PULSE_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d403",
+    "name": "VOICE1_PULSE_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d404",
+    "name": "VOICE1_CONTROL",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d405",
+    "name": "VOICE1_ATTACK_DECAY",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d406",
+    "name": "VOICE1_SUSTAIN_RELEASE",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d407",
+    "name": "VOICE2_FREQ_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d408",
+    "name": "VOICE2_FREQ_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d409",
+    "name": "VOICE2_PULSE_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40a",
+    "name": "VOICE2_PULSE_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40b",
+    "name": "VOICE2_CONTROL",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40c",
+    "name": "VOICE2_ATTACK_DECAY",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40d",
+    "name": "VOICE2_SUSTAIN_RELEASE",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40e",
+    "name": "VOICE3_FREQ_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d40f",
+    "name": "VOICE3_FREQ_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d410",
+    "name": "VOICE3_PULSE_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d411",
+    "name": "VOICE3_PULSE_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d412",
+    "name": "VOICE3_CONTROL",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d413",
+    "name": "VOICE3_ATTACK_DECAY",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d414",
+    "name": "VOICE3_SUSTAIN_RELEASE",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d415",
+    "name": "FILTER_CUTOFF_LO",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d416",
+    "name": "FILTER_CUTOFF_HI",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d417",
+    "name": "FILTER_RESONANCE_ROUTING",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d418",
+    "name": "FILTER_MODE_VOLUME",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d419",
+    "name": "PADDLE_X",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d41a",
+    "name": "PADDLE_Y",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d41b",
+    "name": "OSCILLATOR3_RANDOM",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:d41c",
+    "name": "ENVELOPE3",
+    "namespace": "C64::SID"
+  },
+  {
+    "address": "RAM:dc00",
+    "name": "DATA_PORT_A",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc01",
+    "name": "DATA_PORT_B",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc02",
+    "name": "DATA_DIRECTION_A",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc03",
+    "name": "DATA_DIRECTION_B",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc04",
+    "name": "TIMER_A_LO",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc05",
+    "name": "TIMER_A_HI",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc06",
+    "name": "TIMER_B_LO",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc07",
+    "name": "TIMER_B_HI",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc08",
+    "name": "TOD_TENTHS",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc09",
+    "name": "TOD_SECONDS",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0a",
+    "name": "TOD_MINUTES",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0b",
+    "name": "TOD_HOURS",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0c",
+    "name": "SERIAL_DATA",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0d",
+    "name": "INTERRUPT_CONTROL",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0e",
+    "name": "CONTROL_A",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dc0f",
+    "name": "CONTROL_B",
+    "namespace": "C64::CIA1"
+  },
+  {
+    "address": "RAM:dd00",
+    "name": "DATA_PORT_A",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd01",
+    "name": "DATA_PORT_B",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd02",
+    "name": "DATA_DIRECTION_A",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd03",
+    "name": "DATA_DIRECTION_B",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd04",
+    "name": "TIMER_A_LO",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd05",
+    "name": "TIMER_A_HI",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd06",
+    "name": "TIMER_B_LO",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd07",
+    "name": "TIMER_B_HI",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd08",
+    "name": "TOD_TENTHS",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd09",
+    "name": "TOD_SECONDS",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0a",
+    "name": "TOD_MINUTES",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0b",
+    "name": "TOD_HOURS",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0c",
+    "name": "SERIAL_DATA",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0d",
+    "name": "INTERRUPT_CONTROL",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0e",
+    "name": "CONTROL_A",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:dd0f",
+    "name": "CONTROL_B",
+    "namespace": "C64::CIA2"
+  },
+  {
+    "address": "RAM:ff81",
+    "name": "CINT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff84",
+    "name": "IOINIT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff87",
+    "name": "RAMTAS",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff8a",
+    "name": "RESTOR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff8d",
+    "name": "VECTOR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff90",
+    "name": "SETMSG",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff93",
+    "name": "SECOND",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff96",
+    "name": "TKSA",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff99",
+    "name": "MEMTOP",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff9c",
+    "name": "MEMBOT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ff9f",
+    "name": "SCNKEY",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffa2",
+    "name": "SETTMO",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffa5",
+    "name": "ACPTR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffa8",
+    "name": "CIOUT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffab",
+    "name": "UNTLK",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffae",
+    "name": "UNLSN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffb1",
+    "name": "LISTEN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffb4",
+    "name": "TALK",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffb7",
+    "name": "READST",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffba",
+    "name": "SETLFS",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffbd",
+    "name": "SETNAM",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffc0",
+    "name": "OPEN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffc3",
+    "name": "CLOSE",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffc6",
+    "name": "CHKIN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffc9",
+    "name": "CHKOUT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffcc",
+    "name": "CLRCHN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffcf",
+    "name": "CHRIN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffd2",
+    "name": "CHROUT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffd5",
+    "name": "LOAD",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffd8",
+    "name": "SAVE",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffdb",
+    "name": "SETTIM",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffde",
+    "name": "RDTIM",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffe1",
+    "name": "STOP",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffe4",
+    "name": "GETIN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffe7",
+    "name": "CLALL",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffea",
+    "name": "UDTIM",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:ffed",
+    "name": "SCREEN",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:fff0",
+    "name": "PLOT",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:fff3",
+    "name": "IOBASE",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:fffa",
+    "name": "NMI_VECTOR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:fffc",
+    "name": "RESET_VECTOR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:fffe",
+    "name": "IRQ_VECTOR",
+    "namespace": "C64::KERNAL"
+  },
+  {
+    "address": "RAM:0090",
+    "name": "IO_STATUS",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0091",
+    "name": "STOP_KEY_FLAG",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0099",
+    "name": "DEFAULT_INPUT_DEVICE",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:009a",
+    "name": "DEFAULT_OUTPUT_DEVICE",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:00c6",
+    "name": "KEYBOARD_BUFFER_LENGTH",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:00d3",
+    "name": "CURSOR_COLUMN",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:00d6",
+    "name": "CURSOR_ROW",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0286",
+    "name": "TEXT_COLOR",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0288",
+    "name": "SCREEN_MEMORY_PAGE",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0314",
+    "name": "IRQ_RAM_VECTOR",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0316",
+    "name": "BRK_RAM_VECTOR",
+    "namespace": "C64::WORKSPACE"
+  },
+  {
+    "address": "RAM:0318",
+    "name": "NMI_RAM_VECTOR",
+    "namespace": "C64::WORKSPACE"
+  }
+]

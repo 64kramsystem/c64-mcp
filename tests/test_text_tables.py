@@ -35,7 +35,6 @@ def test_selected_normative_screen_code_entries() -> None:
     assert upper[0x01].glyph == "A"
     assert lower[0x01].glyph == "a"
     assert lower[0x41].glyph == "A"
-    assert upper[0x81].reverse_video is True
     assert upper[0x81].glyph == upper[0x01].glyph
 
 
@@ -49,8 +48,10 @@ def test_normative_mode_specific_aliases() -> None:
     assert screen_lower[0x5E].glyph == "↑"
     assert petscii_upper[0xFF].glyph == screen_upper[0x5E].glyph
     assert petscii_lower[0xFF].glyph == screen_lower[0x5E].glyph
-    assert all(entry.reverse_video for entry in screen_upper[0x80:])
-    assert all(not entry.reverse_video for entry in screen_upper[:0x80])
+    assert all(
+        screen_upper[index].glyph == screen_upper[index & 0x7F].glyph
+        for index in range(0x80, 0x100)
+    )
     assert all(
         not entry.printable
         for entry in (

@@ -15,1793 +15,1537 @@
         "byte": 0,
         "glyph": null,
         "name": "CONTROL_00",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 1,
         "glyph": null,
         "name": "CONTROL_01",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 2,
         "glyph": null,
         "name": "CONTROL_02",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 3,
         "glyph": null,
         "name": "STOP",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 4,
         "glyph": null,
         "name": "CONTROL_04",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 5,
         "glyph": null,
         "name": "WHITE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 6,
         "glyph": null,
         "name": "CONTROL_06",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 7,
         "glyph": null,
         "name": "CONTROL_07",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 8,
         "glyph": null,
         "name": "DISABLE_SHIFT_CBM",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 9,
         "glyph": null,
         "name": "ENABLE_SHIFT_CBM",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 10,
         "glyph": null,
         "name": "CONTROL_0A",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 11,
         "glyph": null,
         "name": "CONTROL_0B",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 12,
         "glyph": null,
         "name": "CONTROL_0C",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 13,
         "glyph": null,
         "name": "RETURN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 14,
         "glyph": null,
         "name": "LOWERCASE_GRAPHICS",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 15,
         "glyph": null,
         "name": "CONTROL_0F",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 16,
         "glyph": null,
         "name": "CONTROL_10",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 17,
         "glyph": null,
         "name": "CURSOR_DOWN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 18,
         "glyph": null,
         "name": "REVERSE_ON",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 19,
         "glyph": null,
         "name": "HOME",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 20,
         "glyph": null,
         "name": "DELETE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 21,
         "glyph": null,
         "name": "CONTROL_15",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 22,
         "glyph": null,
         "name": "CONTROL_16",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 23,
         "glyph": null,
         "name": "CONTROL_17",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 24,
         "glyph": null,
         "name": "CONTROL_18",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 25,
         "glyph": null,
         "name": "CONTROL_19",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 26,
         "glyph": null,
         "name": "CONTROL_1A",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 27,
         "glyph": null,
         "name": "CONTROL_1B",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 28,
         "glyph": null,
         "name": "RED",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 29,
         "glyph": null,
         "name": "CURSOR_RIGHT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 30,
         "glyph": null,
         "name": "GREEN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 31,
         "glyph": null,
         "name": "BLUE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 32,
         "glyph": " ",
         "name": "SPACE",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 33,
         "glyph": "!",
         "name": "CHAR_21",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 34,
         "glyph": "\"",
         "name": "CHAR_22",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 35,
         "glyph": "#",
         "name": "CHAR_23",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 36,
         "glyph": "$",
         "name": "CHAR_24",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 37,
         "glyph": "%",
         "name": "CHAR_25",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 38,
         "glyph": "&",
         "name": "CHAR_26",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 39,
         "glyph": "'",
         "name": "CHAR_27",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 40,
         "glyph": "(",
         "name": "CHAR_28",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 41,
         "glyph": ")",
         "name": "CHAR_29",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 42,
         "glyph": "*",
         "name": "CHAR_2A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 43,
         "glyph": "+",
         "name": "CHAR_2B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 44,
         "glyph": ",",
         "name": "CHAR_2C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 45,
         "glyph": "-",
         "name": "CHAR_2D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 46,
         "glyph": ".",
         "name": "CHAR_2E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 47,
         "glyph": "/",
         "name": "CHAR_2F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 48,
         "glyph": "0",
         "name": "CHAR_30",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 49,
         "glyph": "1",
         "name": "CHAR_31",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 50,
         "glyph": "2",
         "name": "CHAR_32",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 51,
         "glyph": "3",
         "name": "CHAR_33",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 52,
         "glyph": "4",
         "name": "CHAR_34",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 53,
         "glyph": "5",
         "name": "CHAR_35",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 54,
         "glyph": "6",
         "name": "CHAR_36",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 55,
         "glyph": "7",
         "name": "CHAR_37",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 56,
         "glyph": "8",
         "name": "CHAR_38",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 57,
         "glyph": "9",
         "name": "CHAR_39",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 58,
         "glyph": ":",
         "name": "CHAR_3A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 59,
         "glyph": ";",
         "name": "CHAR_3B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 60,
         "glyph": "<",
         "name": "CHAR_3C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 61,
         "glyph": "=",
         "name": "CHAR_3D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 62,
         "glyph": ">",
         "name": "CHAR_3E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 63,
         "glyph": "?",
         "name": "CHAR_3F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 64,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 65,
         "glyph": "A",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 66,
         "glyph": "B",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 67,
         "glyph": "C",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 68,
         "glyph": "D",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 69,
         "glyph": "E",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 70,
         "glyph": "F",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 71,
         "glyph": "G",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 72,
         "glyph": "H",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 73,
         "glyph": "I",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 74,
         "glyph": "J",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 75,
         "glyph": "K",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 76,
         "glyph": "L",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 77,
         "glyph": "M",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 78,
         "glyph": "N",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 79,
         "glyph": "O",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 80,
         "glyph": "P",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 81,
         "glyph": "Q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 82,
         "glyph": "R",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 83,
         "glyph": "S",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 84,
         "glyph": "T",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 85,
         "glyph": "U",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 86,
         "glyph": "V",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 87,
         "glyph": "W",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 88,
         "glyph": "X",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 89,
         "glyph": "Y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 90,
         "glyph": "Z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 91,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 92,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 93,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 94,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 95,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 96,
         "glyph": null,
         "name": "GRAPHIC_40",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 97,
         "glyph": null,
         "name": "GRAPHIC_41",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 98,
         "glyph": null,
         "name": "GRAPHIC_42",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 99,
         "glyph": null,
         "name": "GRAPHIC_43",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 100,
         "glyph": null,
         "name": "GRAPHIC_44",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 101,
         "glyph": null,
         "name": "GRAPHIC_45",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 102,
         "glyph": null,
         "name": "GRAPHIC_46",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 103,
         "glyph": null,
         "name": "GRAPHIC_47",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 104,
         "glyph": null,
         "name": "GRAPHIC_48",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 105,
         "glyph": null,
         "name": "GRAPHIC_49",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 106,
         "glyph": null,
         "name": "GRAPHIC_4A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 107,
         "glyph": null,
         "name": "GRAPHIC_4B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 108,
         "glyph": null,
         "name": "GRAPHIC_4C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 109,
         "glyph": null,
         "name": "GRAPHIC_4D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 110,
         "glyph": null,
         "name": "GRAPHIC_4E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 111,
         "glyph": null,
         "name": "GRAPHIC_4F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 112,
         "glyph": null,
         "name": "GRAPHIC_50",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 113,
         "glyph": null,
         "name": "GRAPHIC_51",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 114,
         "glyph": null,
         "name": "GRAPHIC_52",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 115,
         "glyph": null,
         "name": "GRAPHIC_53",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 116,
         "glyph": null,
         "name": "GRAPHIC_54",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 117,
         "glyph": null,
         "name": "GRAPHIC_55",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 118,
         "glyph": null,
         "name": "GRAPHIC_56",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 119,
         "glyph": null,
         "name": "GRAPHIC_57",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 120,
         "glyph": null,
         "name": "GRAPHIC_58",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 121,
         "glyph": null,
         "name": "GRAPHIC_59",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 122,
         "glyph": null,
         "name": "GRAPHIC_5A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 123,
         "glyph": null,
         "name": "GRAPHIC_5B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 124,
         "glyph": null,
         "name": "GRAPHIC_5C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 125,
         "glyph": null,
         "name": "GRAPHIC_5D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 126,
         "glyph": "π",
         "name": "PI",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 127,
         "glyph": null,
         "name": "GRAPHIC_5F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 128,
         "glyph": null,
         "name": "CONTROL_80",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 129,
         "glyph": null,
         "name": "ORANGE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 130,
         "glyph": null,
         "name": "CONTROL_82",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 131,
         "glyph": null,
         "name": "CONTROL_83",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 132,
         "glyph": null,
         "name": "CONTROL_84",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 133,
         "glyph": null,
         "name": "F1",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 134,
         "glyph": null,
         "name": "F3",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 135,
         "glyph": null,
         "name": "F5",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 136,
         "glyph": null,
         "name": "F7",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 137,
         "glyph": null,
         "name": "F2",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 138,
         "glyph": null,
         "name": "F4",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 139,
         "glyph": null,
         "name": "F6",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 140,
         "glyph": null,
         "name": "F8",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 141,
         "glyph": null,
         "name": "SHIFT_RETURN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 142,
         "glyph": null,
         "name": "UPPERCASE_GRAPHICS",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 143,
         "glyph": null,
         "name": "CONTROL_8F",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 144,
         "glyph": null,
         "name": "BLACK",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 145,
         "glyph": null,
         "name": "CURSOR_UP",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 146,
         "glyph": null,
         "name": "REVERSE_OFF",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 147,
         "glyph": null,
         "name": "CLR",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 148,
         "glyph": null,
         "name": "INSERT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 149,
         "glyph": null,
         "name": "BROWN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 150,
         "glyph": null,
         "name": "LIGHT_RED",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 151,
         "glyph": null,
         "name": "DARK_GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 152,
         "glyph": null,
         "name": "GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 153,
         "glyph": null,
         "name": "LIGHT_GREEN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 154,
         "glyph": null,
         "name": "LIGHT_BLUE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 155,
         "glyph": null,
         "name": "LIGHT_GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 156,
         "glyph": null,
         "name": "PURPLE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 157,
         "glyph": null,
         "name": "CURSOR_LEFT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 158,
         "glyph": null,
         "name": "YELLOW",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 159,
         "glyph": null,
         "name": "CYAN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 160,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 161,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 162,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 163,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 164,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 165,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 166,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 167,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 168,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 169,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 170,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 171,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 172,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 173,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 174,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 175,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 176,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 177,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 178,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 179,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 180,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 181,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 182,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 183,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 184,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 185,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 186,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 187,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 188,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 189,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 190,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 191,
         "glyph": null,
         "name": "GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 192,
         "glyph": null,
         "name": "GRAPHIC_40",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 193,
         "glyph": null,
         "name": "GRAPHIC_41",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 194,
         "glyph": null,
         "name": "GRAPHIC_42",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 195,
         "glyph": null,
         "name": "GRAPHIC_43",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 196,
         "glyph": null,
         "name": "GRAPHIC_44",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 197,
         "glyph": null,
         "name": "GRAPHIC_45",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 198,
         "glyph": null,
         "name": "GRAPHIC_46",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 199,
         "glyph": null,
         "name": "GRAPHIC_47",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 200,
         "glyph": null,
         "name": "GRAPHIC_48",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 201,
         "glyph": null,
         "name": "GRAPHIC_49",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 202,
         "glyph": null,
         "name": "GRAPHIC_4A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 203,
         "glyph": null,
         "name": "GRAPHIC_4B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 204,
         "glyph": null,
         "name": "GRAPHIC_4C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 205,
         "glyph": null,
         "name": "GRAPHIC_4D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 206,
         "glyph": null,
         "name": "GRAPHIC_4E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 207,
         "glyph": null,
         "name": "GRAPHIC_4F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 208,
         "glyph": null,
         "name": "GRAPHIC_50",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 209,
         "glyph": null,
         "name": "GRAPHIC_51",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 210,
         "glyph": null,
         "name": "GRAPHIC_52",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 211,
         "glyph": null,
         "name": "GRAPHIC_53",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 212,
         "glyph": null,
         "name": "GRAPHIC_54",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 213,
         "glyph": null,
         "name": "GRAPHIC_55",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 214,
         "glyph": null,
         "name": "GRAPHIC_56",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 215,
         "glyph": null,
         "name": "GRAPHIC_57",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 216,
         "glyph": null,
         "name": "GRAPHIC_58",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 217,
         "glyph": null,
         "name": "GRAPHIC_59",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 218,
         "glyph": null,
         "name": "GRAPHIC_5A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 219,
         "glyph": null,
         "name": "GRAPHIC_5B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 220,
         "glyph": null,
         "name": "GRAPHIC_5C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 221,
         "glyph": null,
         "name": "GRAPHIC_5D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 222,
         "glyph": "π",
         "name": "PI",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 223,
         "glyph": null,
         "name": "GRAPHIC_5F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 224,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 225,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 226,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 227,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 228,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 229,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 230,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 231,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 232,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 233,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 234,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 235,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 236,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 237,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 238,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 239,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 240,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 241,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 242,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 243,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 244,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 245,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 246,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 247,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 248,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 249,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 250,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 251,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 252,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 253,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 254,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 255,
         "glyph": "π",
         "name": "PI",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       }
     ],
     "petscii_lower": [
@@ -1809,1793 +1553,1537 @@
         "byte": 0,
         "glyph": null,
         "name": "CONTROL_00",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 1,
         "glyph": null,
         "name": "CONTROL_01",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 2,
         "glyph": null,
         "name": "CONTROL_02",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 3,
         "glyph": null,
         "name": "STOP",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 4,
         "glyph": null,
         "name": "CONTROL_04",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 5,
         "glyph": null,
         "name": "WHITE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 6,
         "glyph": null,
         "name": "CONTROL_06",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 7,
         "glyph": null,
         "name": "CONTROL_07",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 8,
         "glyph": null,
         "name": "DISABLE_SHIFT_CBM",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 9,
         "glyph": null,
         "name": "ENABLE_SHIFT_CBM",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 10,
         "glyph": null,
         "name": "CONTROL_0A",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 11,
         "glyph": null,
         "name": "CONTROL_0B",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 12,
         "glyph": null,
         "name": "CONTROL_0C",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 13,
         "glyph": null,
         "name": "RETURN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 14,
         "glyph": null,
         "name": "LOWERCASE_GRAPHICS",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 15,
         "glyph": null,
         "name": "CONTROL_0F",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 16,
         "glyph": null,
         "name": "CONTROL_10",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 17,
         "glyph": null,
         "name": "CURSOR_DOWN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 18,
         "glyph": null,
         "name": "REVERSE_ON",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 19,
         "glyph": null,
         "name": "HOME",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 20,
         "glyph": null,
         "name": "DELETE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 21,
         "glyph": null,
         "name": "CONTROL_15",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 22,
         "glyph": null,
         "name": "CONTROL_16",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 23,
         "glyph": null,
         "name": "CONTROL_17",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 24,
         "glyph": null,
         "name": "CONTROL_18",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 25,
         "glyph": null,
         "name": "CONTROL_19",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 26,
         "glyph": null,
         "name": "CONTROL_1A",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 27,
         "glyph": null,
         "name": "CONTROL_1B",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 28,
         "glyph": null,
         "name": "RED",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 29,
         "glyph": null,
         "name": "CURSOR_RIGHT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 30,
         "glyph": null,
         "name": "GREEN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 31,
         "glyph": null,
         "name": "BLUE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 32,
         "glyph": " ",
         "name": "SPACE",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 33,
         "glyph": "!",
         "name": "CHAR_21",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 34,
         "glyph": "\"",
         "name": "CHAR_22",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 35,
         "glyph": "#",
         "name": "CHAR_23",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 36,
         "glyph": "$",
         "name": "CHAR_24",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 37,
         "glyph": "%",
         "name": "CHAR_25",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 38,
         "glyph": "&",
         "name": "CHAR_26",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 39,
         "glyph": "'",
         "name": "CHAR_27",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 40,
         "glyph": "(",
         "name": "CHAR_28",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 41,
         "glyph": ")",
         "name": "CHAR_29",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 42,
         "glyph": "*",
         "name": "CHAR_2A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 43,
         "glyph": "+",
         "name": "CHAR_2B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 44,
         "glyph": ",",
         "name": "CHAR_2C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 45,
         "glyph": "-",
         "name": "CHAR_2D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 46,
         "glyph": ".",
         "name": "CHAR_2E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 47,
         "glyph": "/",
         "name": "CHAR_2F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 48,
         "glyph": "0",
         "name": "CHAR_30",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 49,
         "glyph": "1",
         "name": "CHAR_31",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 50,
         "glyph": "2",
         "name": "CHAR_32",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 51,
         "glyph": "3",
         "name": "CHAR_33",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 52,
         "glyph": "4",
         "name": "CHAR_34",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 53,
         "glyph": "5",
         "name": "CHAR_35",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 54,
         "glyph": "6",
         "name": "CHAR_36",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 55,
         "glyph": "7",
         "name": "CHAR_37",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 56,
         "glyph": "8",
         "name": "CHAR_38",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 57,
         "glyph": "9",
         "name": "CHAR_39",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 58,
         "glyph": ":",
         "name": "CHAR_3A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 59,
         "glyph": ";",
         "name": "CHAR_3B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 60,
         "glyph": "<",
         "name": "CHAR_3C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 61,
         "glyph": "=",
         "name": "CHAR_3D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 62,
         "glyph": ">",
         "name": "CHAR_3E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 63,
         "glyph": "?",
         "name": "CHAR_3F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 64,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 65,
         "glyph": "a",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 66,
         "glyph": "b",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 67,
         "glyph": "c",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 68,
         "glyph": "d",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 69,
         "glyph": "e",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 70,
         "glyph": "f",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 71,
         "glyph": "g",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 72,
         "glyph": "h",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 73,
         "glyph": "i",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 74,
         "glyph": "j",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 75,
         "glyph": "k",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 76,
         "glyph": "l",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 77,
         "glyph": "m",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 78,
         "glyph": "n",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 79,
         "glyph": "o",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 80,
         "glyph": "p",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 81,
         "glyph": "q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 82,
         "glyph": "r",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 83,
         "glyph": "s",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 84,
         "glyph": "t",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 85,
         "glyph": "u",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 86,
         "glyph": "v",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 87,
         "glyph": "w",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 88,
         "glyph": "x",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 89,
         "glyph": "y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 90,
         "glyph": "z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 91,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 92,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 93,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 94,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 95,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 96,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 97,
         "glyph": "A",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 98,
         "glyph": "B",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 99,
         "glyph": "C",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 100,
         "glyph": "D",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 101,
         "glyph": "E",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 102,
         "glyph": "F",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 103,
         "glyph": "G",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 104,
         "glyph": "H",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 105,
         "glyph": "I",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 106,
         "glyph": "J",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 107,
         "glyph": "K",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 108,
         "glyph": "L",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 109,
         "glyph": "M",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 110,
         "glyph": "N",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 111,
         "glyph": "O",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 112,
         "glyph": "P",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 113,
         "glyph": "Q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 114,
         "glyph": "R",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 115,
         "glyph": "S",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 116,
         "glyph": "T",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 117,
         "glyph": "U",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 118,
         "glyph": "V",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 119,
         "glyph": "W",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 120,
         "glyph": "X",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 121,
         "glyph": "Y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 122,
         "glyph": "Z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 123,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 124,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 125,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 126,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 127,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 128,
         "glyph": null,
         "name": "CONTROL_80",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 129,
         "glyph": null,
         "name": "ORANGE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 130,
         "glyph": null,
         "name": "CONTROL_82",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 131,
         "glyph": null,
         "name": "CONTROL_83",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 132,
         "glyph": null,
         "name": "CONTROL_84",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 133,
         "glyph": null,
         "name": "F1",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 134,
         "glyph": null,
         "name": "F3",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 135,
         "glyph": null,
         "name": "F5",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 136,
         "glyph": null,
         "name": "F7",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 137,
         "glyph": null,
         "name": "F2",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 138,
         "glyph": null,
         "name": "F4",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 139,
         "glyph": null,
         "name": "F6",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 140,
         "glyph": null,
         "name": "F8",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 141,
         "glyph": null,
         "name": "SHIFT_RETURN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 142,
         "glyph": null,
         "name": "UPPERCASE_GRAPHICS",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 143,
         "glyph": null,
         "name": "CONTROL_8F",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 144,
         "glyph": null,
         "name": "BLACK",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 145,
         "glyph": null,
         "name": "CURSOR_UP",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 146,
         "glyph": null,
         "name": "REVERSE_OFF",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 147,
         "glyph": null,
         "name": "CLR",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 148,
         "glyph": null,
         "name": "INSERT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 149,
         "glyph": null,
         "name": "BROWN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 150,
         "glyph": null,
         "name": "LIGHT_RED",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 151,
         "glyph": null,
         "name": "DARK_GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 152,
         "glyph": null,
         "name": "GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 153,
         "glyph": null,
         "name": "LIGHT_GREEN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 154,
         "glyph": null,
         "name": "LIGHT_BLUE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 155,
         "glyph": null,
         "name": "LIGHT_GRAY",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 156,
         "glyph": null,
         "name": "PURPLE",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 157,
         "glyph": null,
         "name": "CURSOR_LEFT",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 158,
         "glyph": null,
         "name": "YELLOW",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 159,
         "glyph": null,
         "name": "CYAN",
-        "printable": false,
-        "reverse_video": false
+        "printable": false
       },
       {
         "byte": 160,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 161,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 162,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 163,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 164,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 165,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 166,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 167,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 168,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 169,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 170,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 171,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 172,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 173,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 174,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 175,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 176,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 177,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 178,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 179,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 180,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 181,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 182,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 183,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 184,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 185,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 186,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 187,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 188,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 189,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 190,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 191,
         "glyph": null,
         "name": "GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 192,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 193,
         "glyph": "A",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 194,
         "glyph": "B",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 195,
         "glyph": "C",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 196,
         "glyph": "D",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 197,
         "glyph": "E",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 198,
         "glyph": "F",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 199,
         "glyph": "G",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 200,
         "glyph": "H",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 201,
         "glyph": "I",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 202,
         "glyph": "J",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 203,
         "glyph": "K",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 204,
         "glyph": "L",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 205,
         "glyph": "M",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 206,
         "glyph": "N",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 207,
         "glyph": "O",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 208,
         "glyph": "P",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 209,
         "glyph": "Q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 210,
         "glyph": "R",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 211,
         "glyph": "S",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 212,
         "glyph": "T",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 213,
         "glyph": "U",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 214,
         "glyph": "V",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 215,
         "glyph": "W",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 216,
         "glyph": "X",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 217,
         "glyph": "Y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 218,
         "glyph": "Z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 219,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 220,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 221,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 222,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 223,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 224,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 225,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 226,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 227,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 228,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 229,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 230,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 231,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 232,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 233,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 234,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 235,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 236,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 237,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 238,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 239,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 240,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 241,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 242,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 243,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 244,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 245,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 246,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 247,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 248,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 249,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 250,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 251,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 252,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 253,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 254,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 255,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       }
     ],
     "screen_code_upper": [
@@ -3603,1793 +3091,1537 @@
         "byte": 0,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 1,
         "glyph": "A",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 2,
         "glyph": "B",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 3,
         "glyph": "C",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 4,
         "glyph": "D",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 5,
         "glyph": "E",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 6,
         "glyph": "F",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 7,
         "glyph": "G",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 8,
         "glyph": "H",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 9,
         "glyph": "I",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 10,
         "glyph": "J",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 11,
         "glyph": "K",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 12,
         "glyph": "L",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 13,
         "glyph": "M",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 14,
         "glyph": "N",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 15,
         "glyph": "O",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 16,
         "glyph": "P",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 17,
         "glyph": "Q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 18,
         "glyph": "R",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 19,
         "glyph": "S",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 20,
         "glyph": "T",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 21,
         "glyph": "U",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 22,
         "glyph": "V",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 23,
         "glyph": "W",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 24,
         "glyph": "X",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 25,
         "glyph": "Y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 26,
         "glyph": "Z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 27,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 28,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 29,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 30,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 31,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 32,
         "glyph": " ",
         "name": "SPACE",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 33,
         "glyph": "!",
         "name": "CHAR_21",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 34,
         "glyph": "\"",
         "name": "CHAR_22",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 35,
         "glyph": "#",
         "name": "CHAR_23",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 36,
         "glyph": "$",
         "name": "CHAR_24",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 37,
         "glyph": "%",
         "name": "CHAR_25",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 38,
         "glyph": "&",
         "name": "CHAR_26",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 39,
         "glyph": "'",
         "name": "CHAR_27",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 40,
         "glyph": "(",
         "name": "CHAR_28",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 41,
         "glyph": ")",
         "name": "CHAR_29",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 42,
         "glyph": "*",
         "name": "CHAR_2A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 43,
         "glyph": "+",
         "name": "CHAR_2B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 44,
         "glyph": ",",
         "name": "CHAR_2C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 45,
         "glyph": "-",
         "name": "CHAR_2D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 46,
         "glyph": ".",
         "name": "CHAR_2E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 47,
         "glyph": "/",
         "name": "CHAR_2F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 48,
         "glyph": "0",
         "name": "CHAR_30",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 49,
         "glyph": "1",
         "name": "CHAR_31",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 50,
         "glyph": "2",
         "name": "CHAR_32",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 51,
         "glyph": "3",
         "name": "CHAR_33",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 52,
         "glyph": "4",
         "name": "CHAR_34",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 53,
         "glyph": "5",
         "name": "CHAR_35",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 54,
         "glyph": "6",
         "name": "CHAR_36",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 55,
         "glyph": "7",
         "name": "CHAR_37",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 56,
         "glyph": "8",
         "name": "CHAR_38",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 57,
         "glyph": "9",
         "name": "CHAR_39",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 58,
         "glyph": ":",
         "name": "CHAR_3A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 59,
         "glyph": ";",
         "name": "CHAR_3B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 60,
         "glyph": "<",
         "name": "CHAR_3C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 61,
         "glyph": "=",
         "name": "CHAR_3D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 62,
         "glyph": ">",
         "name": "CHAR_3E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 63,
         "glyph": "?",
         "name": "CHAR_3F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 64,
         "glyph": null,
         "name": "GRAPHIC_40",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 65,
         "glyph": null,
         "name": "GRAPHIC_41",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 66,
         "glyph": null,
         "name": "GRAPHIC_42",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 67,
         "glyph": null,
         "name": "GRAPHIC_43",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 68,
         "glyph": null,
         "name": "GRAPHIC_44",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 69,
         "glyph": null,
         "name": "GRAPHIC_45",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 70,
         "glyph": null,
         "name": "GRAPHIC_46",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 71,
         "glyph": null,
         "name": "GRAPHIC_47",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 72,
         "glyph": null,
         "name": "GRAPHIC_48",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 73,
         "glyph": null,
         "name": "GRAPHIC_49",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 74,
         "glyph": null,
         "name": "GRAPHIC_4A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 75,
         "glyph": null,
         "name": "GRAPHIC_4B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 76,
         "glyph": null,
         "name": "GRAPHIC_4C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 77,
         "glyph": null,
         "name": "GRAPHIC_4D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 78,
         "glyph": null,
         "name": "GRAPHIC_4E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 79,
         "glyph": null,
         "name": "GRAPHIC_4F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 80,
         "glyph": null,
         "name": "GRAPHIC_50",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 81,
         "glyph": null,
         "name": "GRAPHIC_51",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 82,
         "glyph": null,
         "name": "GRAPHIC_52",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 83,
         "glyph": null,
         "name": "GRAPHIC_53",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 84,
         "glyph": null,
         "name": "GRAPHIC_54",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 85,
         "glyph": null,
         "name": "GRAPHIC_55",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 86,
         "glyph": null,
         "name": "GRAPHIC_56",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 87,
         "glyph": null,
         "name": "GRAPHIC_57",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 88,
         "glyph": null,
         "name": "GRAPHIC_58",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 89,
         "glyph": null,
         "name": "GRAPHIC_59",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 90,
         "glyph": null,
         "name": "GRAPHIC_5A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 91,
         "glyph": null,
         "name": "GRAPHIC_5B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 92,
         "glyph": null,
         "name": "GRAPHIC_5C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 93,
         "glyph": null,
         "name": "GRAPHIC_5D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 94,
         "glyph": "π",
         "name": "PI",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 95,
         "glyph": null,
         "name": "GRAPHIC_5F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 96,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 97,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 98,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 99,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 100,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 101,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 102,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 103,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 104,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 105,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 106,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 107,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 108,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 109,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 110,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 111,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 112,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 113,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 114,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 115,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 116,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 117,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 118,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 119,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 120,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 121,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 122,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 123,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 124,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 125,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 126,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 127,
         "glyph": null,
         "name": "GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 128,
         "glyph": "@",
         "name": "REVERSE_AT",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 129,
         "glyph": "A",
         "name": "REVERSE_LETTER_A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 130,
         "glyph": "B",
         "name": "REVERSE_LETTER_B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 131,
         "glyph": "C",
         "name": "REVERSE_LETTER_C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 132,
         "glyph": "D",
         "name": "REVERSE_LETTER_D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 133,
         "glyph": "E",
         "name": "REVERSE_LETTER_E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 134,
         "glyph": "F",
         "name": "REVERSE_LETTER_F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 135,
         "glyph": "G",
         "name": "REVERSE_LETTER_G",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 136,
         "glyph": "H",
         "name": "REVERSE_LETTER_H",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 137,
         "glyph": "I",
         "name": "REVERSE_LETTER_I",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 138,
         "glyph": "J",
         "name": "REVERSE_LETTER_J",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 139,
         "glyph": "K",
         "name": "REVERSE_LETTER_K",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 140,
         "glyph": "L",
         "name": "REVERSE_LETTER_L",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 141,
         "glyph": "M",
         "name": "REVERSE_LETTER_M",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 142,
         "glyph": "N",
         "name": "REVERSE_LETTER_N",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 143,
         "glyph": "O",
         "name": "REVERSE_LETTER_O",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 144,
         "glyph": "P",
         "name": "REVERSE_LETTER_P",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 145,
         "glyph": "Q",
         "name": "REVERSE_LETTER_Q",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 146,
         "glyph": "R",
         "name": "REVERSE_LETTER_R",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 147,
         "glyph": "S",
         "name": "REVERSE_LETTER_S",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 148,
         "glyph": "T",
         "name": "REVERSE_LETTER_T",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 149,
         "glyph": "U",
         "name": "REVERSE_LETTER_U",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 150,
         "glyph": "V",
         "name": "REVERSE_LETTER_V",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 151,
         "glyph": "W",
         "name": "REVERSE_LETTER_W",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 152,
         "glyph": "X",
         "name": "REVERSE_LETTER_X",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 153,
         "glyph": "Y",
         "name": "REVERSE_LETTER_Y",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 154,
         "glyph": "Z",
         "name": "REVERSE_LETTER_Z",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 155,
         "glyph": "[",
         "name": "REVERSE_LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 156,
         "glyph": "£",
         "name": "REVERSE_POUND",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 157,
         "glyph": "]",
         "name": "REVERSE_RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 158,
         "glyph": "↑",
         "name": "REVERSE_UP_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 159,
         "glyph": "←",
         "name": "REVERSE_LEFT_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 160,
         "glyph": " ",
         "name": "REVERSE_SPACE",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 161,
         "glyph": "!",
         "name": "REVERSE_CHAR_21",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 162,
         "glyph": "\"",
         "name": "REVERSE_CHAR_22",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 163,
         "glyph": "#",
         "name": "REVERSE_CHAR_23",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 164,
         "glyph": "$",
         "name": "REVERSE_CHAR_24",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 165,
         "glyph": "%",
         "name": "REVERSE_CHAR_25",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 166,
         "glyph": "&",
         "name": "REVERSE_CHAR_26",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 167,
         "glyph": "'",
         "name": "REVERSE_CHAR_27",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 168,
         "glyph": "(",
         "name": "REVERSE_CHAR_28",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 169,
         "glyph": ")",
         "name": "REVERSE_CHAR_29",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 170,
         "glyph": "*",
         "name": "REVERSE_CHAR_2A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 171,
         "glyph": "+",
         "name": "REVERSE_CHAR_2B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 172,
         "glyph": ",",
         "name": "REVERSE_CHAR_2C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 173,
         "glyph": "-",
         "name": "REVERSE_CHAR_2D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 174,
         "glyph": ".",
         "name": "REVERSE_CHAR_2E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 175,
         "glyph": "/",
         "name": "REVERSE_CHAR_2F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 176,
         "glyph": "0",
         "name": "REVERSE_CHAR_30",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 177,
         "glyph": "1",
         "name": "REVERSE_CHAR_31",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 178,
         "glyph": "2",
         "name": "REVERSE_CHAR_32",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 179,
         "glyph": "3",
         "name": "REVERSE_CHAR_33",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 180,
         "glyph": "4",
         "name": "REVERSE_CHAR_34",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 181,
         "glyph": "5",
         "name": "REVERSE_CHAR_35",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 182,
         "glyph": "6",
         "name": "REVERSE_CHAR_36",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 183,
         "glyph": "7",
         "name": "REVERSE_CHAR_37",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 184,
         "glyph": "8",
         "name": "REVERSE_CHAR_38",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 185,
         "glyph": "9",
         "name": "REVERSE_CHAR_39",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 186,
         "glyph": ":",
         "name": "REVERSE_CHAR_3A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 187,
         "glyph": ";",
         "name": "REVERSE_CHAR_3B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 188,
         "glyph": "<",
         "name": "REVERSE_CHAR_3C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 189,
         "glyph": "=",
         "name": "REVERSE_CHAR_3D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 190,
         "glyph": ">",
         "name": "REVERSE_CHAR_3E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 191,
         "glyph": "?",
         "name": "REVERSE_CHAR_3F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 192,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_40",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 193,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_41",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 194,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_42",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 195,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_43",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 196,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_44",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 197,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_45",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 198,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_46",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 199,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_47",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 200,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_48",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 201,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_49",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 202,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 203,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 204,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 205,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 206,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 207,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_4F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 208,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_50",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 209,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_51",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 210,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_52",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 211,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_53",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 212,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_54",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 213,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_55",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 214,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_56",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 215,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_57",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 216,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_58",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 217,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_59",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 218,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_5A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 219,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_5B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 220,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_5C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 221,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_5D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 222,
         "glyph": "π",
         "name": "REVERSE_PI",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 223,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_5F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 224,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_60",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 225,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_61",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 226,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_62",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 227,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_63",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 228,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_64",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 229,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_65",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 230,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_66",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 231,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_67",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 232,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_68",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 233,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_69",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 234,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 235,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 236,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 237,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 238,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 239,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 240,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_70",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 241,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_71",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 242,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_72",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 243,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_73",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 244,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_74",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 245,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_75",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 246,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_76",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 247,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_77",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 248,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_78",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 249,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_79",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 250,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 251,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 252,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 253,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 254,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 255,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       }
     ],
     "screen_code_lower": [
@@ -5397,1793 +4629,1537 @@
         "byte": 0,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 1,
         "glyph": "a",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 2,
         "glyph": "b",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 3,
         "glyph": "c",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 4,
         "glyph": "d",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 5,
         "glyph": "e",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 6,
         "glyph": "f",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 7,
         "glyph": "g",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 8,
         "glyph": "h",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 9,
         "glyph": "i",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 10,
         "glyph": "j",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 11,
         "glyph": "k",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 12,
         "glyph": "l",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 13,
         "glyph": "m",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 14,
         "glyph": "n",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 15,
         "glyph": "o",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 16,
         "glyph": "p",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 17,
         "glyph": "q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 18,
         "glyph": "r",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 19,
         "glyph": "s",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 20,
         "glyph": "t",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 21,
         "glyph": "u",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 22,
         "glyph": "v",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 23,
         "glyph": "w",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 24,
         "glyph": "x",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 25,
         "glyph": "y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 26,
         "glyph": "z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 27,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 28,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 29,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 30,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 31,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 32,
         "glyph": " ",
         "name": "SPACE",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 33,
         "glyph": "!",
         "name": "CHAR_21",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 34,
         "glyph": "\"",
         "name": "CHAR_22",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 35,
         "glyph": "#",
         "name": "CHAR_23",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 36,
         "glyph": "$",
         "name": "CHAR_24",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 37,
         "glyph": "%",
         "name": "CHAR_25",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 38,
         "glyph": "&",
         "name": "CHAR_26",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 39,
         "glyph": "'",
         "name": "CHAR_27",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 40,
         "glyph": "(",
         "name": "CHAR_28",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 41,
         "glyph": ")",
         "name": "CHAR_29",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 42,
         "glyph": "*",
         "name": "CHAR_2A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 43,
         "glyph": "+",
         "name": "CHAR_2B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 44,
         "glyph": ",",
         "name": "CHAR_2C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 45,
         "glyph": "-",
         "name": "CHAR_2D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 46,
         "glyph": ".",
         "name": "CHAR_2E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 47,
         "glyph": "/",
         "name": "CHAR_2F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 48,
         "glyph": "0",
         "name": "CHAR_30",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 49,
         "glyph": "1",
         "name": "CHAR_31",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 50,
         "glyph": "2",
         "name": "CHAR_32",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 51,
         "glyph": "3",
         "name": "CHAR_33",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 52,
         "glyph": "4",
         "name": "CHAR_34",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 53,
         "glyph": "5",
         "name": "CHAR_35",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 54,
         "glyph": "6",
         "name": "CHAR_36",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 55,
         "glyph": "7",
         "name": "CHAR_37",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 56,
         "glyph": "8",
         "name": "CHAR_38",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 57,
         "glyph": "9",
         "name": "CHAR_39",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 58,
         "glyph": ":",
         "name": "CHAR_3A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 59,
         "glyph": ";",
         "name": "CHAR_3B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 60,
         "glyph": "<",
         "name": "CHAR_3C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 61,
         "glyph": "=",
         "name": "CHAR_3D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 62,
         "glyph": ">",
         "name": "CHAR_3E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 63,
         "glyph": "?",
         "name": "CHAR_3F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 64,
         "glyph": "@",
         "name": "AT",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 65,
         "glyph": "A",
         "name": "LETTER_A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 66,
         "glyph": "B",
         "name": "LETTER_B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 67,
         "glyph": "C",
         "name": "LETTER_C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 68,
         "glyph": "D",
         "name": "LETTER_D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 69,
         "glyph": "E",
         "name": "LETTER_E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 70,
         "glyph": "F",
         "name": "LETTER_F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 71,
         "glyph": "G",
         "name": "LETTER_G",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 72,
         "glyph": "H",
         "name": "LETTER_H",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 73,
         "glyph": "I",
         "name": "LETTER_I",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 74,
         "glyph": "J",
         "name": "LETTER_J",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 75,
         "glyph": "K",
         "name": "LETTER_K",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 76,
         "glyph": "L",
         "name": "LETTER_L",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 77,
         "glyph": "M",
         "name": "LETTER_M",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 78,
         "glyph": "N",
         "name": "LETTER_N",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 79,
         "glyph": "O",
         "name": "LETTER_O",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 80,
         "glyph": "P",
         "name": "LETTER_P",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 81,
         "glyph": "Q",
         "name": "LETTER_Q",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 82,
         "glyph": "R",
         "name": "LETTER_R",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 83,
         "glyph": "S",
         "name": "LETTER_S",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 84,
         "glyph": "T",
         "name": "LETTER_T",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 85,
         "glyph": "U",
         "name": "LETTER_U",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 86,
         "glyph": "V",
         "name": "LETTER_V",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 87,
         "glyph": "W",
         "name": "LETTER_W",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 88,
         "glyph": "X",
         "name": "LETTER_X",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 89,
         "glyph": "Y",
         "name": "LETTER_Y",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 90,
         "glyph": "Z",
         "name": "LETTER_Z",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 91,
         "glyph": "[",
         "name": "LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 92,
         "glyph": "£",
         "name": "POUND",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 93,
         "glyph": "]",
         "name": "RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 94,
         "glyph": "↑",
         "name": "UP_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 95,
         "glyph": "←",
         "name": "LEFT_ARROW",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 96,
         "glyph": null,
         "name": "GRAPHIC_60",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 97,
         "glyph": null,
         "name": "GRAPHIC_61",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 98,
         "glyph": null,
         "name": "GRAPHIC_62",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 99,
         "glyph": null,
         "name": "GRAPHIC_63",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 100,
         "glyph": null,
         "name": "GRAPHIC_64",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 101,
         "glyph": null,
         "name": "GRAPHIC_65",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 102,
         "glyph": null,
         "name": "GRAPHIC_66",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 103,
         "glyph": null,
         "name": "GRAPHIC_67",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 104,
         "glyph": null,
         "name": "GRAPHIC_68",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 105,
         "glyph": null,
         "name": "GRAPHIC_69",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 106,
         "glyph": null,
         "name": "GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 107,
         "glyph": null,
         "name": "GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 108,
         "glyph": null,
         "name": "GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 109,
         "glyph": null,
         "name": "GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 110,
         "glyph": null,
         "name": "GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 111,
         "glyph": null,
         "name": "GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 112,
         "glyph": null,
         "name": "GRAPHIC_70",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 113,
         "glyph": null,
         "name": "GRAPHIC_71",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 114,
         "glyph": null,
         "name": "GRAPHIC_72",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 115,
         "glyph": null,
         "name": "GRAPHIC_73",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 116,
         "glyph": null,
         "name": "GRAPHIC_74",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 117,
         "glyph": null,
         "name": "GRAPHIC_75",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 118,
         "glyph": null,
         "name": "GRAPHIC_76",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 119,
         "glyph": null,
         "name": "GRAPHIC_77",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 120,
         "glyph": null,
         "name": "GRAPHIC_78",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 121,
         "glyph": null,
         "name": "GRAPHIC_79",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 122,
         "glyph": null,
         "name": "GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 123,
         "glyph": null,
         "name": "GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 124,
         "glyph": null,
         "name": "GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 125,
         "glyph": null,
         "name": "GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 126,
         "glyph": null,
         "name": "GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 127,
         "glyph": null,
         "name": "GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": false
+        "printable": true
       },
       {
         "byte": 128,
         "glyph": "@",
         "name": "REVERSE_AT",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 129,
         "glyph": "a",
         "name": "REVERSE_LETTER_A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 130,
         "glyph": "b",
         "name": "REVERSE_LETTER_B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 131,
         "glyph": "c",
         "name": "REVERSE_LETTER_C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 132,
         "glyph": "d",
         "name": "REVERSE_LETTER_D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 133,
         "glyph": "e",
         "name": "REVERSE_LETTER_E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 134,
         "glyph": "f",
         "name": "REVERSE_LETTER_F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 135,
         "glyph": "g",
         "name": "REVERSE_LETTER_G",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 136,
         "glyph": "h",
         "name": "REVERSE_LETTER_H",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 137,
         "glyph": "i",
         "name": "REVERSE_LETTER_I",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 138,
         "glyph": "j",
         "name": "REVERSE_LETTER_J",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 139,
         "glyph": "k",
         "name": "REVERSE_LETTER_K",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 140,
         "glyph": "l",
         "name": "REVERSE_LETTER_L",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 141,
         "glyph": "m",
         "name": "REVERSE_LETTER_M",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 142,
         "glyph": "n",
         "name": "REVERSE_LETTER_N",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 143,
         "glyph": "o",
         "name": "REVERSE_LETTER_O",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 144,
         "glyph": "p",
         "name": "REVERSE_LETTER_P",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 145,
         "glyph": "q",
         "name": "REVERSE_LETTER_Q",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 146,
         "glyph": "r",
         "name": "REVERSE_LETTER_R",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 147,
         "glyph": "s",
         "name": "REVERSE_LETTER_S",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 148,
         "glyph": "t",
         "name": "REVERSE_LETTER_T",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 149,
         "glyph": "u",
         "name": "REVERSE_LETTER_U",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 150,
         "glyph": "v",
         "name": "REVERSE_LETTER_V",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 151,
         "glyph": "w",
         "name": "REVERSE_LETTER_W",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 152,
         "glyph": "x",
         "name": "REVERSE_LETTER_X",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 153,
         "glyph": "y",
         "name": "REVERSE_LETTER_Y",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 154,
         "glyph": "z",
         "name": "REVERSE_LETTER_Z",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 155,
         "glyph": "[",
         "name": "REVERSE_LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 156,
         "glyph": "£",
         "name": "REVERSE_POUND",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 157,
         "glyph": "]",
         "name": "REVERSE_RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 158,
         "glyph": "↑",
         "name": "REVERSE_UP_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 159,
         "glyph": "←",
         "name": "REVERSE_LEFT_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 160,
         "glyph": " ",
         "name": "REVERSE_SPACE",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 161,
         "glyph": "!",
         "name": "REVERSE_CHAR_21",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 162,
         "glyph": "\"",
         "name": "REVERSE_CHAR_22",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 163,
         "glyph": "#",
         "name": "REVERSE_CHAR_23",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 164,
         "glyph": "$",
         "name": "REVERSE_CHAR_24",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 165,
         "glyph": "%",
         "name": "REVERSE_CHAR_25",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 166,
         "glyph": "&",
         "name": "REVERSE_CHAR_26",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 167,
         "glyph": "'",
         "name": "REVERSE_CHAR_27",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 168,
         "glyph": "(",
         "name": "REVERSE_CHAR_28",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 169,
         "glyph": ")",
         "name": "REVERSE_CHAR_29",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 170,
         "glyph": "*",
         "name": "REVERSE_CHAR_2A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 171,
         "glyph": "+",
         "name": "REVERSE_CHAR_2B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 172,
         "glyph": ",",
         "name": "REVERSE_CHAR_2C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 173,
         "glyph": "-",
         "name": "REVERSE_CHAR_2D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 174,
         "glyph": ".",
         "name": "REVERSE_CHAR_2E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 175,
         "glyph": "/",
         "name": "REVERSE_CHAR_2F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 176,
         "glyph": "0",
         "name": "REVERSE_CHAR_30",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 177,
         "glyph": "1",
         "name": "REVERSE_CHAR_31",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 178,
         "glyph": "2",
         "name": "REVERSE_CHAR_32",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 179,
         "glyph": "3",
         "name": "REVERSE_CHAR_33",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 180,
         "glyph": "4",
         "name": "REVERSE_CHAR_34",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 181,
         "glyph": "5",
         "name": "REVERSE_CHAR_35",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 182,
         "glyph": "6",
         "name": "REVERSE_CHAR_36",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 183,
         "glyph": "7",
         "name": "REVERSE_CHAR_37",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 184,
         "glyph": "8",
         "name": "REVERSE_CHAR_38",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 185,
         "glyph": "9",
         "name": "REVERSE_CHAR_39",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 186,
         "glyph": ":",
         "name": "REVERSE_CHAR_3A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 187,
         "glyph": ";",
         "name": "REVERSE_CHAR_3B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 188,
         "glyph": "<",
         "name": "REVERSE_CHAR_3C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 189,
         "glyph": "=",
         "name": "REVERSE_CHAR_3D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 190,
         "glyph": ">",
         "name": "REVERSE_CHAR_3E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 191,
         "glyph": "?",
         "name": "REVERSE_CHAR_3F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 192,
         "glyph": "@",
         "name": "REVERSE_AT",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 193,
         "glyph": "A",
         "name": "REVERSE_LETTER_A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 194,
         "glyph": "B",
         "name": "REVERSE_LETTER_B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 195,
         "glyph": "C",
         "name": "REVERSE_LETTER_C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 196,
         "glyph": "D",
         "name": "REVERSE_LETTER_D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 197,
         "glyph": "E",
         "name": "REVERSE_LETTER_E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 198,
         "glyph": "F",
         "name": "REVERSE_LETTER_F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 199,
         "glyph": "G",
         "name": "REVERSE_LETTER_G",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 200,
         "glyph": "H",
         "name": "REVERSE_LETTER_H",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 201,
         "glyph": "I",
         "name": "REVERSE_LETTER_I",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 202,
         "glyph": "J",
         "name": "REVERSE_LETTER_J",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 203,
         "glyph": "K",
         "name": "REVERSE_LETTER_K",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 204,
         "glyph": "L",
         "name": "REVERSE_LETTER_L",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 205,
         "glyph": "M",
         "name": "REVERSE_LETTER_M",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 206,
         "glyph": "N",
         "name": "REVERSE_LETTER_N",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 207,
         "glyph": "O",
         "name": "REVERSE_LETTER_O",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 208,
         "glyph": "P",
         "name": "REVERSE_LETTER_P",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 209,
         "glyph": "Q",
         "name": "REVERSE_LETTER_Q",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 210,
         "glyph": "R",
         "name": "REVERSE_LETTER_R",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 211,
         "glyph": "S",
         "name": "REVERSE_LETTER_S",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 212,
         "glyph": "T",
         "name": "REVERSE_LETTER_T",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 213,
         "glyph": "U",
         "name": "REVERSE_LETTER_U",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 214,
         "glyph": "V",
         "name": "REVERSE_LETTER_V",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 215,
         "glyph": "W",
         "name": "REVERSE_LETTER_W",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 216,
         "glyph": "X",
         "name": "REVERSE_LETTER_X",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 217,
         "glyph": "Y",
         "name": "REVERSE_LETTER_Y",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 218,
         "glyph": "Z",
         "name": "REVERSE_LETTER_Z",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 219,
         "glyph": "[",
         "name": "REVERSE_LEFT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 220,
         "glyph": "£",
         "name": "REVERSE_POUND",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 221,
         "glyph": "]",
         "name": "REVERSE_RIGHT_BRACKET",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 222,
         "glyph": "↑",
         "name": "REVERSE_UP_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 223,
         "glyph": "←",
         "name": "REVERSE_LEFT_ARROW",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 224,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_60",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 225,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_61",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 226,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_62",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 227,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_63",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 228,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_64",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 229,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_65",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 230,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_66",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 231,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_67",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 232,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_68",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 233,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_69",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 234,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 235,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 236,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 237,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 238,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 239,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_6F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 240,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_70",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 241,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_71",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 242,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_72",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 243,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_73",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 244,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_74",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 245,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_75",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 246,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_76",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 247,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_77",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 248,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_78",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 249,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_79",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 250,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7A",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 251,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7B",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 252,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7C",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 253,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7D",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 254,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7E",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       },
       {
         "byte": 255,
         "glyph": null,
         "name": "REVERSE_GRAPHIC_7F",
-        "printable": true,
-        "reverse_video": true
+        "printable": true
       }
     ]
   }

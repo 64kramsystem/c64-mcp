@@ -1,17 +1,14 @@
 # Changelog
 
 ## Unreleased
-### Added
-
-- Added revision-3 connector wrappers to the `vice` group for PETSCII keyboard input, raw joyport input, snapshot save/load, retained event pages, and sequence-guarded state captures bounded to 16 KiB. State capture uses non-side-effecting Binary Monitor peeks, including for I/O.
-- Added `import_vice_phase`, which resolves only exact `default`/`cpu`, `ram`, `rom`, and `io` bank names, chains bounded captures for full observed CPU/RAM/ROM and `$D000-$DFFF` I/O images, atomically writes hashed binary evidence and one final JSON manifest, and calls Ghidra `apply_memory_image` once for phase-qualified overlay blocks and durable metadata. `overwrite=true` refreshes existing exact phase blocks in place.
-- Added `vice_capture_transition` for exact-checkpoint before/after register and range hashes, coalesced byte changes, optional PETSCII/joyport input, explicit checkpoint deletion, cleanup provenance, and an optional atomic manifest.
-- Added the opt-in `reversing` group with bounded phase/transition workflows and search-only `search_6502_indexed_operands` and `find_split_pointer_partners` tools.
-
 ### Changed
 
-- The packaged connector contract now requires API 1.1 and surface revision 3. `vice_capture_screen` retrieves opaque display captures in chunks no larger than 16 KiB, validates the complete SHA-256, and guarantees discard cleanup instead of accepting a large inline frame.
-- `tools/release` now refuses when HEAD is already tagged `v<version>`, instead of reporting nothing to release and exiting 0.
+- **Breaking:** removed tool profiles, runtime group/catalog management, symbol-profile orchestration, text search/definition, graphics composites, VICE-backed graphics sources, custom static palettes, authentication configuration, and compatibility shims.
+- The server now publishes its complete tool set eagerly. C64 symbols are applied through one idempotent `batch_create_labels` call, including namespaces and the endpoint's `labels_created`, `labels_skipped`, and `labels_failed` counts.
+- Display capture is an optional connector feature rather than a prerequisite for every VICE tool.
+- Remote byte transfers use bounded 16 KiB chunks.
+- `tools/release` directly builds, commits, tags, atomically pushes, and publishes without GitHub API machinery.
+- `tools/release` refuses to create another release from an already tagged commit.
 
 ## 0.100.0
 ### Added

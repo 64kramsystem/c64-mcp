@@ -9,10 +9,6 @@ class C64McpError(RuntimeError):
     """Base error for caller-visible C64 MCP failures."""
 
 
-class ConfigurationError(C64McpError):
-    """Invalid process or tool configuration."""
-
-
 class GhidraError(C64McpError):
     """Failure returned by the public Ghidra HTTP boundary."""
 
@@ -83,8 +79,8 @@ class ViceError(C64McpError):
         return cls(code, message, **details)
 
 
-class ProfileError(C64McpError):
-    """Invalid bundled or caller-supplied symbol profile."""
+class SymbolDataError(C64McpError):
+    """Invalid bundled C64 symbol data."""
 
 
 class CodecDataError(C64McpError):
@@ -101,7 +97,3 @@ class TextLimitError(RequestError):
 
 class GraphicsLimitError(RequestError):
     """A bounded graphics operation exceeded a hard safety limit."""
-
-
-class TokenCycleError(RequestError):
-    """Recursive token expansion contains a cycle."""
