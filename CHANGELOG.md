@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 0.101.0
 ### Changed
 
 - **Breaking:** removed tool profiles, runtime group/catalog management, symbol-profile orchestration, text search/definition, graphics composites, VICE-backed graphics sources, custom static palettes, authentication configuration, and compatibility shims.
