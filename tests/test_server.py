@@ -169,6 +169,17 @@ async def test_server_registers_representative_vice_tools_with_safe_defaults() -
         "drive8",
         "drive9",
     ]
+    phase = by_name["import_vice_phase"]["properties"]
+    assert phase["dry_run"]["default"] is True
+    assert phase["overwrite"]["default"] is False
+    assert phase["ghidra_timeout_ms"]["default"] == 30_000
+    transition = by_name["vice_capture_transition"]["properties"]
+    assert transition["checkpoint_operations"]["default"] == 4
+    assert transition["overwrite"]["default"] is False
+    indexed = by_name["search_6502_indexed_operands"]["properties"]
+    assert indexed["limit"]["default"] == 1_000
+    assert "dry_run" not in indexed
+    assert "batch_update" not in indexed
 
 
 @pytest.mark.asyncio

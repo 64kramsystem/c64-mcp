@@ -22,6 +22,10 @@ PROCESS_ARGUMENT = {"object_path": "C64"}
 DEFAULT_TIMEOUT_MS = 10_000
 MAX_TIMEOUT_MS = 55_000
 MAX_MEMORY_BYTES = 65_536
+MAX_STATE_CAPTURE_BYTES = 16_384
+MAX_DISPLAY_CAPTURE_CHUNK_BYTES = 16_384
+MAX_EVENT_LIMIT = 1_024
+MAX_KEYBOARD_BYTES = 255
 _LOWER_HEX = re.compile(r"^[0-9a-f]*$")
 
 BytesInput = str | list[int]
@@ -491,6 +495,198 @@ class ViceSession:
         except ViceError as error:
             return error.as_result()
 
+    def read_display_capture(
+        self,
+        *,
+        capture_id: str,
+        offset: int,
+        max_bytes: int = MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_read_display_capture",
+                {
+                    "capture_id": _nonblank(capture_id, "capture_id"),
+                    "offset": _nonnegative(offset, "offset"),
+                    "max_bytes": _bounded(
+                        max_bytes,
+                        "max_bytes",
+                        minimum=1,
+                        maximum=MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
+                    ),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag=None,
+                include_timeout_argument=False,
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def discard_display_capture(
+        self,
+        *,
+        capture_id: str,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_discard_display_capture",
+                {"capture_id": _nonblank(capture_id, "capture_id")},
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_display_capture_may_have_changed",
+                include_timeout_argument=False,
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def feed_keyboard(
+        self,
+        *,
+        data: BytesInput,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            payload = _bytes(data)
+            if not 1 <= len(payload) <= MAX_KEYBOARD_BYTES:
+                raise _invalid(
+                    f"data must contain 1 to {MAX_KEYBOARD_BYTES} bytes"
+                )
+            return self._operation_result(
+                "c64_vice_v1_feed_keyboard",
+                {"data": {"encoding": "hex", "data": payload.hex()}},
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_input_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def set_joyport(
+        self,
+        *,
+        port: int,
+        value: int,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_set_joyport",
+                {
+                    "port": _bounded(port, "port", minimum=1, maximum=2),
+                    "value": _bounded(value, "value", minimum=0, maximum=255),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_input_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def save_snapshot(
+        self,
+        *,
+        filename: str,
+        save_roms: bool = False,
+        save_disks: bool = True,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_save_snapshot",
+                {
+                    "filename": _snapshot_filename(filename),
+                    "save_roms": _boolean(save_roms, "save_roms"),
+                    "save_disks": _boolean(save_disks, "save_disks"),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_snapshot_file_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def load_snapshot(
+        self,
+        *,
+        filename: str,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_load_snapshot",
+                {"filename": _snapshot_filename(filename)},
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_state_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def list_events(
+        self,
+        *,
+        after_sequence: int,
+        limit: int = 128,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_list_events",
+                {
+                    "after_sequence": _nonnegative(
+                        after_sequence, "after_sequence"
+                    ),
+                    "limit": _bounded(
+                        limit,
+                        "limit",
+                        minimum=1,
+                        maximum=MAX_EVENT_LIMIT,
+                    ),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag=None,
+                include_timeout_argument=False,
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def capture_state(
+        self,
+        *,
+        expected_event_sequence: int,
+        expected_command_sequence: int,
+        ranges: list[dict[str, object]],
+        register_names: list[str] | None = None,
+        include_checkpoints: bool = True,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            flat_ranges, names = _capture_ranges(ranges)
+            registers = (
+                []
+                if register_names is None
+                else _string_list(register_names, "register_names")
+            )
+            return self._operation_result(
+                "c64_vice_v1_capture_state",
+                {
+                    "expected_event_sequence": _nonnegative(
+                        expected_event_sequence, "expected_event_sequence"
+                    ),
+                    "expected_command_sequence": _nonnegative(
+                        expected_command_sequence,
+                        "expected_command_sequence",
+                    ),
+                    "ranges": flat_ranges,
+                    "names": names,
+                    "register_names": registers,
+                    "include_checkpoints": _boolean(
+                        include_checkpoints, "include_checkpoints"
+                    ),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag=None,
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def copy_memory_to_ghidra(
         self,
         *,
@@ -645,6 +841,7 @@ class ViceSession:
         *,
         timeout_ms: int,
         mutation_flag: str | None,
+        include_timeout_argument: bool = True,
     ) -> dict[str, object]:
         try:
             return self._invoke(
@@ -652,6 +849,7 @@ class ViceSession:
                 arguments,
                 timeout_ms=timeout_ms,
                 mutation_flag=mutation_flag,
+                include_timeout_argument=include_timeout_argument,
             )
         except GhidraTransportError as error:
             raise _transport_error(
@@ -673,6 +871,7 @@ class ViceSession:
         *,
         timeout_ms: int,
         mutation_flag: str | None,
+        include_timeout_argument: bool = True,
     ) -> dict[str, object]:
         timeout = _bounded(
             timeout_ms,
@@ -682,7 +881,8 @@ class ViceSession:
         )
         capture = self._capture()
         values = {"process": dict(PROCESS_ARGUMENT), **dict(arguments)}
-        values["timeout_ms"] = timeout
+        if include_timeout_argument:
+            values["timeout_ms"] = timeout
         try:
             invocation = self._ghidra.invoke_target_method(
                 capture.token,
@@ -1020,6 +1220,40 @@ def _string_list(value: object, field: str) -> list[str]:
     return result
 
 
+def _capture_ranges(
+    value: object,
+) -> tuple[list[int], list[str]]:
+    if not isinstance(value, list):
+        raise _invalid("ranges must be an array")
+    flat: list[int] = []
+    names: list[str] = []
+    total = 0
+    for index, item in enumerate(value):
+        if not isinstance(item, Mapping):
+            raise _invalid(f"ranges[{index}] must be an object")
+        name = item.get("name")
+        if not isinstance(name, str) or not name:
+            raise _invalid(f"ranges[{index}].name must not be blank")
+        if name in names:
+            raise _invalid("range names must not contain duplicates")
+        start, end = _address_range(item.get("start"), item.get("end"))
+        memspace = _nonnegative(
+            item.get("memspace", 0), f"ranges[{index}].memspace"
+        )
+        bank_id = _nonnegative(
+            item.get("bank_id"), f"ranges[{index}].bank_id"
+        )
+        total += end - start + 1
+        if total > MAX_STATE_CAPTURE_BYTES:
+            raise _invalid(
+                "ranges exceed the "
+                f"{MAX_STATE_CAPTURE_BYTES}-byte capture limit"
+            )
+        flat.extend((memspace, bank_id, start, end))
+        names.append(name)
+    return flat, names
+
+
 def _address_range(start: object, end: object) -> tuple[int, int]:
     begin = _address(start, "start")
     finish = _address(end, "end")
@@ -1067,6 +1301,24 @@ def _bounded(
 def _boolean(value: object, field: str) -> bool:
     if not isinstance(value, bool):
         raise _invalid(f"{field} must be a boolean")
+    return value
+
+
+def _snapshot_filename(value: object) -> str:
+    if not isinstance(value, str) or not value or "\0" in value:
+        raise _invalid("filename must be a nonblank NUL-free string")
+    try:
+        encoded = value.encode("utf-8")
+    except UnicodeEncodeError as error:
+        raise _invalid("filename must be valid UTF-8") from error
+    if len(encoded) > 255:
+        raise _invalid("filename must contain at most 255 UTF-8 bytes")
+    return value
+
+
+def _nonblank(value: object, field: str) -> str:
+    if not isinstance(value, str) or not value:
+        raise _invalid(f"{field} must not be blank")
     return value
 
 

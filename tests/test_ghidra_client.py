@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import json
 import urllib.error
+import urllib.parse
 from email.message import Message
 from typing import Any
 
@@ -209,6 +210,99 @@ def test_mutating_convenience_calls_always_name_the_program(
 
     assert all("program=snapshot" in request.full_url for request in requests)
     assert [request.method for request in requests] == ["POST", "POST", "POST"]
+
+
+def test_memory_image_uses_one_atomic_endpoint_with_error_policy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: dict[str, Any] = {}
+
+    def fake_open(request: Any, timeout: float) -> FakeResponse:
+        observed["request"] = request
+        observed["timeout"] = timeout
+        return FakeResponse(b'{"committed":false}')
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_open)
+    blocks = [
+        {
+            "name": "INTRO_RAM",
+            "start": "RAM:0000",
+            "overlay": True,
+            "bytes": "aabb",
+        }
+    ]
+    metadata = {"phase": "INTRO"}
+
+    result = GhidraClient("http://127.0.0.1:8089").apply_memory_image(
+        "snapshot",
+        blocks,
+        metadata,
+        conflict_policy="replace_exact",
+        dry_run=True,
+        timeout_ms=45_000,
+    )
+
+    request = observed["request"]
+    assert request.full_url.endswith(
+        "/apply_memory_image?program=snapshot"
+    )
+    assert json.loads(request.data) == {
+        "blocks": blocks,
+        "metadata": metadata,
+        "conflict_policy": "replace_exact",
+        "dry_run": True,
+    }
+    assert result == {"committed": False}
+    assert observed["timeout"] == 45.0
+
+
+def test_reversing_search_queries(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    requests: list[Any] = []
+
+    def fake_open(request: Any, timeout: float) -> FakeResponse:
+        del timeout
+        requests.append(request)
+        return FakeResponse(b"{}")
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_open)
+    client = GhidraClient("http://127.0.0.1:8089")
+    client.search_6502_indexed_operands(
+        "snapshot",
+        target_start="RAM:8000",
+        target_end="RAM:8FFF",
+        source_start="RAM:1000",
+        source_end="RAM:1FFF",
+        limit=20,
+        offset=4,
+    )
+    client.find_split_pointer_partners(
+        "snapshot",
+        first_start="RAM:2000",
+        count=16,
+        partner_start="RAM:2100",
+        partner_end="RAM:21FF",
+        target_start="RAM:8000",
+        target_end="RAM:8FFF",
+    )
+    first_query = urllib.parse.parse_qs(
+        urllib.parse.urlparse(requests[0].full_url).query
+    )
+    assert first_query == {
+        "program": ["snapshot"],
+        "target_start": ["RAM:8000"],
+        "target_end": ["RAM:8FFF"],
+        "source_start": ["RAM:1000"],
+        "source_end": ["RAM:1FFF"],
+        "limit": ["20"],
+        "offset": ["4"],
+    }
+    split_query = urllib.parse.parse_qs(
+        urllib.parse.urlparse(requests[1].full_url).query
+    )
+    assert split_query["first_start"] == ["RAM:2000"]
+    assert split_query["count"] == ["16"]
 
 
 @pytest.mark.parametrize("program", ["", " ", "\n"])

@@ -80,6 +80,39 @@ async def test_screen_capture_belongs_to_vice_not_graphics() -> None:
 
 
 @pytest.mark.asyncio
+async def test_phase_and_analysis_tools_belong_to_reversing() -> None:
+    settings = Settings.from_environ({"C64_MCP_TOOL_PROFILE": "full"})
+    server = create_server(settings, ghidra=object())
+
+    listing = await _call(server, "list_c64_tool_groups", {})
+    groups = {group["group"]: group for group in listing["groups"]}
+
+    assert {
+        "import_vice_phase",
+        "vice_capture_transition",
+        "search_6502_indexed_operands",
+        "find_split_pointer_partners",
+    } <= set(groups["reversing"]["tools"])
+    assert "import_vice_phase" not in groups["vice"]["tools"]
+    assert {
+        "vice_feed_keyboard",
+        "vice_set_joyport",
+        "vice_save_snapshot",
+        "vice_load_snapshot",
+        "vice_list_events",
+        "vice_capture_state",
+    } <= set(groups["vice"]["tools"])
+    assert not {
+        "vice_feed_keyboard",
+        "vice_set_joyport",
+        "vice_save_snapshot",
+        "vice_load_snapshot",
+        "vice_list_events",
+        "vice_capture_state",
+    } & set(groups["reversing"]["tools"])
+
+
+@pytest.mark.asyncio
 async def test_graphics_is_hidden_from_the_vice_profile() -> None:
     settings = Settings.from_environ({"C64_MCP_TOOL_PROFILE": "vice"})
     server = create_server(settings, ghidra=object())

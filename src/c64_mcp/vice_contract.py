@@ -14,11 +14,9 @@ from .errors import ViceError
 _CONTRACT_PACKAGE = "c64_mcp.contracts"
 _CONTRACT_NAME = "c64-vice-api-v1.json"
 
-# Revision 2 introduced the display.capture capability and the
-# c64_vice_v1_capture_display method that vice_capture_screen calls. Refusing
-# an older connector here, in the handshake, reports one clear cause instead of
-# a missing-method failure at the first capture.
-REQUIRED_SURFACE_REVISION = 2
+# Revision 3 introduced bounded state and display capture plus deterministic
+# input, snapshot, and event operations.
+REQUIRED_SURFACE_REVISION = 3
 
 
 @dataclass(frozen=True)
@@ -77,9 +75,14 @@ def validate_capabilities(
         raise _incompatible("connector protocol must be c64.vice")
     major = _integer(result.get("api_major"), "api_major")
     minor = _integer(result.get("api_minor"), "api_minor")
-    if major != 1 or minor < 0:
+    contract_api = _mapping(contract.get("api"), "packaged API")
+    required_major = _integer(contract_api.get("major"), "packaged API major")
+    required_minor = _integer(contract_api.get("minor"), "packaged API minor")
+    if major != required_major or minor < required_minor:
         raise _incompatible(
-            f"unsupported connector API {major}.{minor}; require 1.0 or newer 1.x"
+            f"unsupported connector API {major}.{minor}; require "
+            f"{required_major}.{required_minor} or newer "
+            f"{required_major}.x"
         )
     if result.get("machine") != "c64":
         raise _incompatible("connector machine must be c64")
@@ -90,8 +93,8 @@ def validate_capabilities(
         raise _incompatible(
             f"connector surface revision {surface} is too old; this C64 MCP "
             f"requires surface revision {REQUIRED_SURFACE_REVISION}, which "
-            "adds c64_vice_v1_capture_display. Upgrade the Ghidra VICE "
-            "connector."
+            "adds bounded state and display capture. Upgrade the Ghidra "
+            "VICE connector."
         )
     if _integer(result.get("binary_monitor_api"), "binary_monitor_api") != 2:
         raise _incompatible("connector binary-monitor API must be 2")
@@ -113,13 +116,15 @@ def validate_capabilities(
     required_capabilities = _string_set(
         contract.get("capabilities"), "packaged capabilities"
     )
-    if minor == 0 and capabilities != required_capabilities:
+    if minor == required_minor and capabilities != required_capabilities:
         raise _incompatible(
-            "API 1.0 capability set does not exactly match the contract"
+            f"API {major}.{minor} capability set does not exactly match "
+            "the contract"
         )
-    if minor > 0 and not required_capabilities <= capabilities:
+    if minor > required_minor and not required_capabilities <= capabilities:
         raise _incompatible(
-            "newer API 1.x connector omits required capabilities"
+            f"newer API {required_major}.x connector omits required "
+            "capabilities"
         )
 
     limits = _limits(result.get("limits"), contract.get("limits"))

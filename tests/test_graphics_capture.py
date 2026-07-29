@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import inspect
 import io
 import json
@@ -32,12 +33,13 @@ PALETTE = [
 
 def capture_result(**overrides: Any) -> dict[str, Any]:
     result: dict[str, Any] = {
+        "capture_id": "frame-1",
         "width": WIDTH,
         "height": HEIGHT,
         "inner": dict(INNER),
         "bits_per_pixel": 8,
         "buffer_length": len(BUFFER),
-        "buffer_base64": base64.b64encode(BUFFER).decode("ascii"),
+        "buffer_sha256": hashlib.sha256(BUFFER).hexdigest(),
         "palette": [dict(entry) for entry in PALETTE],
         "vice_version": "3.11.0.0",
         "vice_revision": None,
@@ -47,9 +49,15 @@ def capture_result(**overrides: Any) -> dict[str, Any]:
 
 
 class FakeCaptureSession:
-    """A connector that answers one capture call from a canned envelope."""
+    """A connector that serves one canned capture through bounded chunks."""
 
-    def __init__(self, envelope: dict[str, object] | None = None) -> None:
+    def __init__(
+        self,
+        envelope: dict[str, object] | None = None,
+        *,
+        buffer: bytes = BUFFER,
+    ) -> None:
+        self.buffer = buffer
         self.envelope: dict[str, object] = (
             envelope
             if envelope is not None
@@ -68,11 +76,73 @@ class FakeCaptureSession:
     def capture_display(
         self, *, use_vic: bool = True, timeout_ms: int = 10_000
     ) -> dict[str, object]:
-        self.calls.append({"use_vic": use_vic, "timeout_ms": timeout_ms})
+        self.calls.append(
+            {
+                "operation": "capture",
+                "use_vic": use_vic,
+                "timeout_ms": timeout_ms,
+            }
+        )
         return self.envelope
 
+    def read_display_capture(
+        self,
+        *,
+        capture_id: str,
+        offset: int,
+        max_bytes: int = 16_384,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        self.calls.append(
+            {
+                "operation": "read",
+                "capture_id": capture_id,
+                "offset": offset,
+                "max_bytes": max_bytes,
+                "timeout_ms": timeout_ms,
+            }
+        )
+        data = self.buffer[offset : offset + max_bytes]
+        next_offset = offset + len(data)
+        complete = next_offset == len(self.buffer)
+        result = self.envelope["result"]
+        assert isinstance(result, dict)
+        return {
+            "ok": True,
+            "result": {
+                "capture_id": capture_id,
+                "offset": offset,
+                "byte_count": len(data),
+                "bytes": data.hex(),
+                "complete": complete,
+                "next_offset": None if complete else next_offset,
+                "buffer_length": result["buffer_length"],
+                "buffer_sha256": result["buffer_sha256"],
+            },
+        }
 
-def session_returning(**overrides: Any) -> FakeCaptureSession:
+    def discard_display_capture(
+        self,
+        *,
+        capture_id: str,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        self.calls.append(
+            {
+                "operation": "discard",
+                "capture_id": capture_id,
+                "timeout_ms": timeout_ms,
+            }
+        )
+        return {
+            "ok": True,
+            "result": {"capture_id": capture_id, "discarded": True},
+        }
+
+
+def session_returning(
+    *, buffer: bytes = BUFFER, **overrides: Any
+) -> FakeCaptureSession:
     return FakeCaptureSession(
         {
             "api": "c64.vice/1",
@@ -82,7 +152,8 @@ def session_returning(**overrides: Any) -> FakeCaptureSession:
             "connection_state": "connected",
             "execution_state": "stopped",
             "result": capture_result(**overrides),
-        }
+        },
+        buffer=buffer,
     )
 
 
@@ -135,7 +206,12 @@ def test_the_defaults_are_passed_through_to_the_connector() -> None:
 
     vice_capture_screen(session)
 
-    assert session.calls == [{"use_vic": True, "timeout_ms": 10_000}]
+    assert session.calls[0] == {
+        "operation": "capture",
+        "use_vic": True,
+        "timeout_ms": 10_000,
+    }
+    assert session.calls[-1]["operation"] == "discard"
 
 
 def test_connector_arguments_are_forwarded() -> None:
@@ -143,7 +219,12 @@ def test_connector_arguments_are_forwarded() -> None:
 
     vice_capture_screen(session, use_vic=False, timeout_ms=2_500)
 
-    assert session.calls == [{"use_vic": False, "timeout_ms": 2_500}]
+    assert session.calls[0] == {
+        "operation": "capture",
+        "use_vic": False,
+        "timeout_ms": 2_500,
+    }
+    assert all(call["timeout_ms"] == 2_500 for call in session.calls)
 
 
 def test_the_default_crop_returns_only_the_inner_screen_rectangle() -> None:
@@ -192,7 +273,8 @@ def test_a_real_frame_geometry_crops_to_the_visible_screen() -> None:
                 "inner": inner,
                 "bits_per_pixel": 8,
                 "buffer_length": width * height,
-                "buffer_base64": base64.b64encode(buffer).decode("ascii"),
+                "buffer_sha256": hashlib.sha256(buffer).hexdigest(),
+                "capture_id": "pal-frame",
                 "palette": [
                     {"r": index, "g": index, "b": index}
                     for index in range(16)
@@ -200,7 +282,8 @@ def test_a_real_frame_geometry_crops_to_the_visible_screen() -> None:
                 "vice_version": "3.11.0.0",
                 "vice_revision": None,
             },
-        }
+        },
+        buffer=buffer,
     )
 
     result = vice_capture_screen(session)
@@ -210,6 +293,100 @@ def test_a_real_frame_geometry_crops_to_the_visible_screen() -> None:
     matrix = pixels(result)
     assert matrix[0][0] == (32 + 35) % 16
     assert matrix[199][319] == (32 + 319 + 35 + 199) % 16
+    reads = [
+        call for call in session.calls if call["operation"] == "read"
+    ]
+    assert len(reads) > 1
+    assert all(call["max_bytes"] <= 16_384 for call in reads)
+    assert session.calls[-1]["operation"] == "discard"
+
+
+def test_a_corrupt_chunk_is_rejected_and_the_capture_is_discarded() -> None:
+    corrupt = bytearray(BUFFER)
+    corrupt[5] ^= 0xFF
+    session = FakeCaptureSession(buffer=bytes(corrupt))
+
+    with pytest.raises(ViceError, match="buffer_sha256"):
+        vice_capture_screen(session)
+
+    assert session.calls[-1]["operation"] == "discard"
+
+
+def test_short_nonfinal_chunks_are_followed_until_complete() -> None:
+    class ShortChunks(FakeCaptureSession):
+        def read_display_capture(
+            self,
+            *,
+            capture_id: str,
+            offset: int,
+            max_bytes: int = 16_384,
+            timeout_ms: int = 10_000,
+        ) -> dict[str, object]:
+            self.calls.append(
+                {
+                    "operation": "read",
+                    "capture_id": capture_id,
+                    "offset": offset,
+                    "max_bytes": max_bytes,
+                    "timeout_ms": timeout_ms,
+                }
+            )
+            data = self.buffer[offset : offset + min(max_bytes, 5)]
+            next_offset = offset + len(data)
+            complete = next_offset == len(self.buffer)
+            result = self.envelope["result"]
+            assert isinstance(result, dict)
+            return {
+                "ok": True,
+                "result": {
+                    "capture_id": capture_id,
+                    "offset": offset,
+                    "byte_count": len(data),
+                    "bytes": data.hex(),
+                    "complete": complete,
+                    "next_offset": None if complete else next_offset,
+                    "buffer_length": result["buffer_length"],
+                    "buffer_sha256": result["buffer_sha256"],
+                },
+            }
+
+    session = ShortChunks()
+
+    result = vice_capture_screen(session, crop=False)
+
+    assert pixels(result)[0] == list(range(WIDTH))
+    assert len(
+        [call for call in session.calls if call["operation"] == "read"]
+    ) == 6
+    assert session.calls[-1]["operation"] == "discard"
+
+
+def test_a_failed_chunk_read_still_discards_the_capture() -> None:
+    class FailedRead(FakeCaptureSession):
+        def read_display_capture(
+            self,
+            *,
+            capture_id: str,
+            offset: int,
+            max_bytes: int = 16_384,
+            timeout_ms: int = 10_000,
+        ) -> dict[str, object]:
+            self.calls.append({"operation": "read"})
+            return {
+                "ok": False,
+                "error": {
+                    "code": "display_capture_not_found",
+                    "message": "replaced",
+                },
+            }
+
+    session = FailedRead()
+
+    with pytest.raises(ViceError) as caught:
+        vice_capture_screen(session)
+
+    assert caught.value.code == "display_capture_not_found"
+    assert session.calls[-1]["operation"] == "discard"
 
 
 def test_the_palette_is_the_one_vice_returned_not_the_static_default() -> None:
@@ -279,15 +456,9 @@ def test_the_summary_field_set_is_exact() -> None:
     [
         ({"bits_per_pixel": 4}, "bits_per_pixel"),
         ({"buffer_length": WIDTH * HEIGHT + 1}, "buffer_length"),
-        (
-            {
-                "buffer_base64": base64.b64encode(BUFFER[:-1]).decode(
-                    "ascii"
-                )
-            },
-            "buffer_base64",
-        ),
-        ({"buffer_base64": "not base64!!"}, "buffer_base64"),
+        ({"buffer_sha256": "A" * 64}, "buffer_sha256"),
+        ({"buffer_sha256": "not a digest"}, "buffer_sha256"),
+        ({"capture_id": ""}, "capture_id"),
         (
             {"inner": {**INNER, "x_offset": 4}},
             "inner",
@@ -311,6 +482,8 @@ def test_each_envelope_rule_surfaces_vice_connector_incompatible(
 
     assert caught.value.code == "vice_connector_incompatible"
     assert field in str(caught.value)
+    if field != "capture_id":
+        assert session.calls[-1]["operation"] == "discard"
 
 
 def test_a_missing_result_object_is_incompatible() -> None:

@@ -15,7 +15,7 @@ P = ParamSpec("P")
 R = TypeVar("R")
 McpContext = Context[Any, Any, Any]
 
-TOOL_GROUPS = ("symbols", "text", "graphics", "vice")
+TOOL_GROUPS = ("symbols", "text", "graphics", "vice", "reversing")
 GROUP_DESCRIPTIONS = {
     "symbols": "C64 platform symbols, equates, and memory-map profiles",
     "text": "PETSCII and screen-code decoding, search, and annotation",
@@ -23,6 +23,7 @@ GROUP_DESCRIPTIONS = {
         "VIC-II bitmap, character, charset, and sprite decoding to PNG"
     ),
     "vice": "Live VICE debugger control and static-memory copying",
+    "reversing": "Phase capture, transition evidence, and 6502 analysis",
 }
 PROFILE_GROUPS: dict[ToolProfile, frozenset[str]] = {
     "minimal": frozenset(),

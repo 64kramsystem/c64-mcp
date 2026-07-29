@@ -207,6 +207,83 @@ class GhidraClient:
             {"program": program},
         )
 
+    def apply_memory_image(
+        self,
+        program: str,
+        blocks: list[Mapping[str, object]],
+        metadata: Mapping[str, object],
+        *,
+        conflict_policy: str = "error",
+        dry_run: bool = True,
+        timeout_ms: int = 30_000,
+    ) -> dict[str, object]:
+        _require_program(program)
+        return self.call_post(
+            "/apply_memory_image",
+            {
+                "blocks": blocks,
+                "metadata": metadata,
+                "conflict_policy": conflict_policy,
+                "dry_run": dry_run,
+            },
+            {"program": program},
+            timeout=timeout_ms / 1000.0,
+        )
+
+    def search_6502_indexed_operands(
+        self,
+        program: str,
+        *,
+        target_start: str,
+        target_end: str,
+        source_start: str,
+        source_end: str,
+        limit: int = 1_000,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        _require_program(program)
+        return self.call_get(
+            "/search_6502_indexed_operands",
+            {
+                "program": program,
+                "target_start": target_start,
+                "target_end": target_end,
+                "source_start": source_start,
+                "source_end": source_end,
+                "limit": limit,
+                "offset": offset,
+            },
+        )
+
+    def find_split_pointer_partners(
+        self,
+        program: str,
+        *,
+        first_start: str,
+        count: int,
+        partner_start: str,
+        partner_end: str,
+        target_start: str,
+        target_end: str,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        _require_program(program)
+        return self.call_get(
+            "/find_split_pointer_partners",
+            {
+                "program": program,
+                "first_start": first_start,
+                "count": count,
+                "partner_start": partner_start,
+                "partner_end": partner_end,
+                "target_start": target_start,
+                "target_end": target_end,
+                "limit": limit,
+                "offset": offset,
+            },
+        )
+
     def write_memory_bytes(
         self,
         program: str,
