@@ -35,61 +35,41 @@ from .modes import (
     render_sprites,
     sprite_layout,
 )
-from .palette import Rgb, resolve_palette
+from .palette import PEPTO_PAL, Rgb
 from .png import encode_indexed_png
 from .sources import (
     GraphicsGhidraClient,
-    GraphicsViceSession,
     SourcePlan,
     parse_source,
+    validate_inline_source,
 )
 
-COMMON_SUMMARY_FIELDS = (
-    "mode",
-    "width",
-    "height",
-    "sources",
-    "palette_size",
-    "used_indices",
-    "unmapped_indices",
-    "unmapped_pixel_count",
-    "warnings",
-    "output_path",
-)
 GLYPH_BYTES = 8
 
 
 def decode_c64_hires_bitmap(
     ghidra: GraphicsGhidraClient,
-    vice: GraphicsViceSession,
     *,
     bitmap: object,
     screen: object,
     columns: int = 40,
     rows: int = 25,
-    palette: object | None = None,
     output_path: str | None = None,
     overwrite: bool = False,
-    allow_non_atomic_vice_reads: bool = False,
 ) -> CallToolResult:
     """Render standard bitmap mode from bitmap and video-matrix bytes."""
 
     target = output_target(output_path, overwrite)
-    colours = resolve_palette(palette)
+    colours = list(PEPTO_PAL)
     columns, rows = cell_geometry(columns, rows)
     bitmap_spec = parse_source(bitmap, "bitmap")
     screen_spec = parse_source(screen, "screen")
-    plan = SourcePlan(
-        ghidra,
-        vice,
-        allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
-    )
-    plan.declare(bitmap_spec, columns * rows * GLYPH_BYTES)
-    plan.declare(screen_spec, columns * rows)
-    plan.commit()
+    validate_inline_source(bitmap_spec, columns * rows * GLYPH_BYTES)
+    validate_inline_source(screen_spec, columns * rows)
+    plan = SourcePlan(ghidra)
     raster = render_hires_bitmap(
-        bitmap=plan.load(bitmap_spec),
-        screen=plan.load(screen_spec),
+        bitmap=plan.load(bitmap_spec, columns * rows * GLYPH_BYTES),
+        screen=plan.load(screen_spec, columns * rows),
         columns=columns,
         rows=rows,
     )
@@ -98,7 +78,6 @@ def decode_c64_hires_bitmap(
 
 def decode_c64_multicolor_bitmap(
     ghidra: GraphicsGhidraClient,
-    vice: GraphicsViceSession,
     *,
     bitmap: object,
     screen: object,
@@ -106,45 +85,35 @@ def decode_c64_multicolor_bitmap(
     columns: int = 40,
     rows: int = 25,
     background: int = 0,
-    palette: object | None = None,
     output_path: str | None = None,
     overwrite: bool = False,
-    allow_non_atomic_vice_reads: bool = False,
 ) -> CallToolResult:
     """Render multicolor bitmap mode from bitmap, screen, and colour RAM."""
 
     target = output_target(output_path, overwrite)
-    colours = resolve_palette(palette)
+    colours = list(PEPTO_PAL)
     columns, rows = cell_geometry(columns, rows)
     background = colour_index(background, "background")
     bitmap_spec = parse_source(bitmap, "bitmap")
     screen_spec = parse_source(screen, "screen")
     color_spec = parse_source(color, "color")
-    plan = SourcePlan(
-        ghidra,
-        vice,
-        allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
-    )
-    plan.declare(bitmap_spec, columns * rows * GLYPH_BYTES)
-    plan.declare(screen_spec, columns * rows)
-    plan.declare(color_spec, columns * rows)
-    plan.commit()
+    validate_inline_source(bitmap_spec, columns * rows * GLYPH_BYTES)
+    validate_inline_source(screen_spec, columns * rows)
+    validate_inline_source(color_spec, columns * rows)
+    plan = SourcePlan(ghidra)
     raster = render_multicolor_bitmap(
-        bitmap=plan.load(bitmap_spec),
-        screen=plan.load(screen_spec),
-        color=plan.load(color_spec),
+        bitmap=plan.load(bitmap_spec, columns * rows * GLYPH_BYTES),
+        screen=plan.load(screen_spec, columns * rows),
+        color=plan.load(color_spec, columns * rows),
         columns=columns,
         rows=rows,
         background=background,
     )
-    return _emit(
-        "multicolor_bitmap", raster, plan, colours, target, overwrite
-    )
+    return _emit("multicolor_bitmap", raster, plan, colours, target, overwrite)
 
 
 def decode_c64_charset(
     ghidra: GraphicsGhidraClient,
-    vice: GraphicsViceSession,
     *,
     charset: object,
     glyph_count: int = 256,
@@ -154,15 +123,13 @@ def decode_c64_charset(
     multicolor: bool = False,
     background_1: int | None = None,
     background_2: int | None = None,
-    palette: object | None = None,
     output_path: str | None = None,
     overwrite: bool = False,
-    allow_non_atomic_vice_reads: bool = False,
 ) -> CallToolResult:
     """Render a character set as a sheet of 8x8 glyphs."""
 
     target = output_target(output_path, overwrite)
-    colours = resolve_palette(palette)
+    colours = list(PEPTO_PAL)
     layout = charset_layout(
         glyph_count=glyph_count,
         sheet_columns=sheet_columns,
@@ -173,15 +140,9 @@ def decode_c64_charset(
         background_2=background_2,
     )
     charset_spec = parse_source(charset, "charset")
-    plan = SourcePlan(
-        ghidra,
-        vice,
-        allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
-    )
-    plan.declare(charset_spec, layout.required)
-    plan.commit()
+    plan = SourcePlan(ghidra)
     raster = render_charset(
-        charset=plan.load(charset_spec),
+        charset=plan.load(charset_spec, layout.required),
         glyph_count=glyph_count,
         sheet_columns=sheet_columns,
         foreground=foreground,
@@ -203,7 +164,6 @@ def decode_c64_charset(
 
 def decode_c64_char_screen(
     ghidra: GraphicsGhidraClient,
-    vice: GraphicsViceSession,
     *,
     screen: object,
     charset: object,
@@ -215,15 +175,13 @@ def decode_c64_char_screen(
     multicolor: bool = False,
     background_1: int | None = None,
     background_2: int | None = None,
-    palette: object | None = None,
     output_path: str | None = None,
     overwrite: bool = False,
-    allow_non_atomic_vice_reads: bool = False,
 ) -> CallToolResult:
     """Render text mode: screen codes indexing a character set."""
 
     target = output_target(output_path, overwrite)
-    colours = resolve_palette(palette)
+    colours = list(PEPTO_PAL)
     columns, rows = cell_geometry(columns, rows)
     background = colour_index(background, "background")
     foreground = colour_index(foreground, "foreground")
@@ -240,25 +198,17 @@ def decode_c64_char_screen(
     screen_spec = parse_source(screen, "screen")
     charset_spec = parse_source(charset, "charset")
     color_spec = None if color is None else parse_source(color, "color")
-    plan = SourcePlan(
-        ghidra,
-        vice,
-        allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
-    )
-    plan.declare(screen_spec, columns * rows)
-    plan.declare(charset_spec, None)
+    validate_inline_source(screen_spec, columns * rows)
     if color_spec is not None:
-        plan.declare(color_spec, columns * rows)
-    plan.commit()
-    screen_bytes = plan.load(screen_spec)
+        validate_inline_source(color_spec, columns * rows)
+    plan = SourcePlan(ghidra)
+    screen_bytes = plan.load(screen_spec, columns * rows)
     # The charset requirement is not knowable until the screen codes are in
     # hand: only glyphs up to the highest code present have to be supplied.
-    plan.resolve(
-        charset_spec,
-        charset_bytes_required(screen_bytes[: columns * rows]),
+    charset_bytes = plan.load(
+        charset_spec, charset_bytes_required(screen_bytes[: columns * rows])
     )
-    charset_bytes = plan.load(charset_spec)
-    color_bytes = None if color_spec is None else plan.load(color_spec)
+    color_bytes = None if color_spec is None else plan.load(color_spec, columns * rows)
     raster = render_char_screen(
         screen=screen_bytes,
         charset=charset_bytes,
@@ -276,7 +226,6 @@ def decode_c64_char_screen(
 
 def decode_c64_sprites(
     ghidra: GraphicsGhidraClient,
-    vice: GraphicsViceSession,
     *,
     sprites: object,
     sprite_count: int,
@@ -287,15 +236,13 @@ def decode_c64_sprites(
     multicolor_0: int | None = None,
     multicolor_1: int | None = None,
     background: int = 0,
-    palette: object | None = None,
     output_path: str | None = None,
     overwrite: bool = False,
-    allow_non_atomic_vice_reads: bool = False,
 ) -> CallToolResult:
     """Render sprite definitions onto a sheet over a background colour."""
 
     target = output_target(output_path, overwrite)
-    colours = resolve_palette(palette)
+    colours = list(PEPTO_PAL)
     # Validating up front keeps a bad request from costing a remote read.
     layout = sprite_layout(
         sprite_count=sprite_count,
@@ -308,15 +255,9 @@ def decode_c64_sprites(
         background=background,
     )
     sprites_spec = parse_source(sprites, "sprites")
-    plan = SourcePlan(
-        ghidra,
-        vice,
-        allow_non_atomic_vice_reads=allow_non_atomic_vice_reads,
-    )
-    plan.declare(sprites_spec, layout.required)
-    plan.commit()
+    plan = SourcePlan(ghidra)
     raster = render_sprites(
-        data=plan.load(sprites_spec),
+        data=plan.load(sprites_spec, layout.required),
         sprite_count=sprite_count,
         sprite_stride=sprite_stride,
         sheet_columns=sheet_columns,
@@ -333,9 +274,7 @@ def decode_c64_sprites(
         colours,
         target,
         overwrite,
-        extra={
-            "transparent_pixel_count": raster.transparent_pixel_count
-        },
+        extra={"transparent_pixel_count": raster.transparent_pixel_count},
     )
 
 
@@ -351,22 +290,18 @@ def output_target(output_path: object, overwrite: object) -> Path | None:
     target = Path(output_path).expanduser()
     if target.exists() and not overwrite:
         raise RequestError(
-            f"output_path {target} already exists; pass overwrite=true to "
-            "replace it"
+            f"output_path {target} already exists; pass overwrite=true to replace it"
         )
     parent = target.parent
     if not parent.is_dir():
-        raise RequestError(
-            f"output_path directory {parent} does not exist"
-        )
+        raise RequestError(f"output_path directory {parent} does not exist")
     return target
 
 
 def write_atomically(target: Path, data: bytes, overwrite: bool) -> None:
     if target.exists() and not overwrite:
         raise RequestError(
-            f"output_path {target} already exists; pass overwrite=true to "
-            "replace it"
+            f"output_path {target} already exists; pass overwrite=true to replace it"
         )
     handle, temporary = tempfile.mkstemp(
         dir=str(target.parent), prefix=f".{target.name}.", suffix=".part"
@@ -402,9 +337,6 @@ def _emit(
         "sources": plan.summary(),
         "palette_size": encoded.palette_size,
         "used_indices": list(encoded.used_indices),
-        "unmapped_indices": list(encoded.unmapped_indices),
-        "unmapped_pixel_count": encoded.unmapped_pixel_count,
-        "warnings": list(plan.warnings),
         "output_path": None if target is None else str(target),
     }
     if extra:

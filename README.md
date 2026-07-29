@@ -1,241 +1,62 @@
 # c64-mcp
 
-C64-specific MCP tools layered over the public `ghidra-mcp` HTTP API and the
-separately installed Ghidra VICE connector.
+Small C64-specific MCP tools layered over GhidraMCP-next and the separately installed Ghidra VICE connector. The server uses stdio and never opens VICE's binary-monitor socket.
 
-The server uses stdio transport by default. It does not open a VICE binary
-monitor socket; the connector remains the sole owner of that connection.
+## Tools
 
-## Tool visibility
+### Static analysis
 
-The default `static` profile exposes the symbol, text, and graphics groups
-plus four small catalog-management tools. This keeps live-debugger schemas out of the
-agent context until they are needed. `minimal` starts with management tools
-only, `vice` starts with the live-debugger group, and `full` exposes every
-tool.
+- `apply_c64_symbols` creates the bundled C64 hardware and KERNAL labels in one idempotent Ghidra batch. Symbols use nested `C64::...` namespaces, and the result reports `labels_created`, `labels_skipped`, and `labels_failed`.
+- `decode_c64_text` decodes inline bytes or a bounded Ghidra read as upper or lower PETSCII or screen codes. Input may use a fixed length, a terminator, or a one/two-byte little-endian length prefix. Token keys are decimal unless prefixed with `0x`.
+- `decode_c64_hires_bitmap` and `decode_c64_multicolor_bitmap` render bitmap memory.
+- `decode_c64_charset`, `decode_c64_char_screen`, and `decode_c64_sprites` render character and sprite data.
 
-Use `list_c64_tool_groups`, `search_c64_tools`, and
-`load_c64_tool_group` to discover and expose hidden tools at runtime.
-`unload_c64_tool_group` removes only groups loaded after startup; profile
-baseline groups remain visible. Thus `static` followed by loading `all`
-still permits unloading the transient VICE group, while the `full` profile
-does not permit partial unloading.
-
-## VICE debugger tools
-
-The `vice_*` tools bind to the active **VICE C64 Debugger** TraceRMI target
-through the generic Ghidra MCP HTTP API. Install and launch the separately
-released `ghidra-vice-connector` first, then call `vice_connect`. The handshake
-checks the complete versioned `c64.vice/1` method schema, capability set,
-machine, limits, and immutable connector instance ID. Compatibility is based
-on that runtime contract rather than an assumed package-version pairing.
-
-The handshake requires connector API 1.1 and **surface revision 3**, which add
-bounded state and display capture, event history, input, and snapshot
-operations. An older connector is refused during the handshake.
-
-The tool set covers cached status, dynamic registers and banks, bank-aware
-memory, checkpoints, execution control, stop-event waits, reset, and screen
-capture. `vice_disconnect` releases only this MCP process's local binding; it
-never closes the connector socket, trace, or VICE process. `vice_status` is
-cached and performs no discovery or network operation.
-
-`vice_capture_screen` returns the composited frame as an indexed PNG. It lives
-in the `vice` group rather than `graphics`, because it needs the live debugger.
-The connector returns the debug frame — border and blanking included — as one
-palette index per byte, together with the palette VICE is using. C64 MCP reads
-the opaque capture in chunks no larger than 16 KiB, verifies every chunk and
-the complete SHA-256, and always discards the capture token. The default
-`crop=true` keeps only the inner screen rectangle; `crop=false` returns the
-whole debug buffer.
-
-The summary fields are `mode`, `width`, `height`, `cropped`, `inner`,
-`palette_size`, `used_indices`, `distinct_index_count`, and `output_path`.
-When supplied, `output_path` is expanded and its parent must already exist;
-the target is checked before capture, written atomically, and refused if it
-exists unless `overwrite=true`.
-
-Capture requires a stopped emulator, because any binary-monitor command traps
-VICE into the monitor: call `vice_interrupt`, capture, then `vice_resume`, so
-the stop stays visible instead of hiding inside a read-only-looking call. It
-also requires a VICE at r46020 or later; earlier builds, including the 3.10
-release, overrun their allocation while answering `display get`, and the
-connector refuses them by design.
-
-`copy_vice_memory_to_ghidra` performs one complete connector read, verifies the
-exact byte count, computes SHA-256, and calls the generic
-`write_memory_bytes` endpoint exactly once. It defaults to `dry_run=true` and
-never returns the complete payload. It does not create memory blocks or
-disassemble.
-
-Connector, generic target-method, and HTTP timeouts remain distinguishable.
-Mutating timeout responses explicitly say which VICE or Ghidra state may have
-changed, and no timed-out operation is retried automatically. The C64 MCP
-contains no VICE monitor host, port, socket, or binary protocol fallback.
-
-## C64 symbol profile
-
-`get_c64_symbol_profile` returns the bundled, versioned C64 platform profile.
-`apply_c64_symbol_profile` applies that exact profile to an explicitly named
-Ghidra program through the generic `apply_symbol_profile` endpoint. It
-defaults to `dry_run=true`, `conflict_policy=error`, and memory-block creation
-disabled. Re-applying an unchanged profile is idempotent.
-
-The profile covers the 6510 processor port, all VIC-II and SID registers,
-both CIA devices, color RAM, the 39 standard KERNAL jump-table entry points,
-processor vectors, and common KERNAL workspace addresses. Value-only equates
-name documented VIC-II, SID, and CIA control bits. Optional RAM, ROM, I/O,
-and color-RAM block templates are only considered when
-`create_memory_blocks=true`; the generic endpoint preflights the complete
-request before mutation and refuses ordinary-block overlap.
-
-Every platform-symbol address explicitly targets the default `RAM` address
-space. This keeps CPU-visible register and ROM references unambiguous after
-ROM, I/O, or color-RAM overlays have been added. The bundled profile supports
-`6502:LE:16:default` programs whose default CPU space is named `RAM`; an
-overlay must not reuse that name.
-
-The checked-in profile is generated deterministically by
-`tools/generate_c64_profile.py`. Every symbol group cites its authoritative
-Commodore manual or chip data sheet in the package data.
-
-## C64 text tools
-
-The server includes immutable 256-entry mappings for upper/graphics and
-lower/upper PETSCII and C64 screen codes:
-
-- `decode_c64_text` decodes inline hex/byte arrays or an exact bounded read
-  from a named Ghidra program.
-- `search_c64_text` searches an inclusive program range by exact raw bytes or
-  exact decoded Unicode code points.
-- `define_c64_text` decodes first, then sends one flat contiguous region to
-  Ghidra with byte typing, an optional label/namespace, and a complete plate
-  comment. It defaults to `dry_run=true`.
-
-Every decode uses exactly one of a positive fixed `length`, a one-byte
-`terminator`, or a one/two-byte little-endian `prefix_size`. Terminators are
-consumed but excluded from text. Prefixes are consumed and excluded from
-text, and may either describe payload length or include themselves.
-
-`high_bit` accepts `exact`, `strip`, or `annotate_reverse`; the latter is
-screen-code-only. `controls` accepts `names`, `escaped`, or `unicode`.
-Lossless payload output retains every original text byte as a stable fragment
-such as `{A:$41}`, `{CLR:$93}`, or `{REV A:$81}`. Prefix and terminator bytes
-remain available in `consumed_bytes` and the per-byte records even though
-framing bytes are excluded from both decoded text renderings.
-
-Caller token maps use unprefixed decimal keys (`"129"`) or explicitly
-hexadecimal keys (`"0x81"`). Expansion is single-pass by default. Recursive
-mode recognizes two-digit hexadecimal references such as `{81}`, enforces a
-caller-selected depth, detects cycles, and fails rather than truncating when
-the aggregate rendering cap is exceeded.
-
-All reads and inline inputs have a 1 MiB hard cap. Search defaults to 64 KiB
-and 100 results, with hard caps of 1 MiB and 1,000 results. Ghidra reads must
-be complete; partial or unmapped reads are errors.
-
-The normative mapping source is Appendices B and C of the official
-*Commodore 64 Programmer's Reference Guide*. The generated package data
-records the source URL and printed page references.
-
-## C64 graphics tools
-
-Five per-mode decoders turn C64 graphics memory into an indexed PNG:
-
-- `decode_c64_hires_bitmap` takes `bitmap` and `screen`; a set bit uses the
-  screen byte's high nybble and a clear bit its low nybble.
-- `decode_c64_multicolor_bitmap` adds `color`; the bit pairs select
-  `background`, the screen high nybble, the screen low nybble, and the
-  colour-RAM low nybble.
-- `decode_c64_charset` renders a character set as a sheet `sheet_columns`
-  glyphs wide, optionally in multicolor.
-- `decode_c64_char_screen` renders text mode from `screen` and `charset`. With
-  `multicolor=true`, `color` is required because colour-RAM bit 3 selects each
-  cell's mode; only glyphs up to the highest screen code present must be
-  supplied.
-- `decode_c64_sprites` renders 24x21 hires or 12x21 multicolor definitions onto
-  a sheet. `sprite_stride` defaults to 64, the padded definition-block size;
-  63 is accepted for packed records. Transparent pixels composite onto
-  `background`.
-
-Every byte input takes one discriminated source:
+Graphics inputs explicitly name their source:
 
 ```json
 {"kind": "inline", "bytes": "00ff"}
-{"kind": "ghidra", "program": "name", "start": "ram:2000"}
-{"kind": "vice", "bank_id": 1, "start": 8192}
+{"kind": "ghidra", "program": "game", "start": "RAM:2000"}
 ```
 
-`bank_id` is mandatory for a VICE source: the same address holds different
-bytes in different banks. A VICE read that would run past `$FFFF` is refused
-rather than wrapped. Naming more than one VICE source while the emulator is
-running is refused unless `allow_non_atomic_vice_reads=true`, which then
-reports a `non_atomic_vice_reads` warning.
+Renderers return an indexed PNG and a compact summary. `output_path` is optional; an existing file is replaced only when `overwrite=true`. Static rendering uses the Pepto PAL palette.
 
-A source shorter than the geometry requires is an error before any rendering
-and before any remote read; extra inline bytes are ignored and counted in the
-summary. Colours are Pepto PAL unless a `palette` of `#rrggbb` strings or
-`[r, g, b]` triples is supplied; indices past a short palette extend `PLTE`
-with black and are reported as `unmapped_indices`. `output_path` writes the
-PNG atomically and refuses an existing file unless `overwrite=true`.
+### Live VICE
 
-Cell geometry is capped at 64 columns, 64 rows, and 2,048 cells; glyph and
-sprite counts at 256; sheet width at 64. These tools are read-only: nothing is
-written into a program or into VICE.
+Call `vice_connect` after the VICE connector has established its TraceRMI session. The remaining `vice_*` tools cover:
 
-These decoders render bytes, wherever they came from; `vice_capture_screen`,
-in the VICE group above, renders what the emulator is actually showing. Use the
-decoders for an off-screen buffer or a program's data, and capture for the
-composited result.
+- status, registers, banks, and bank-aware memory;
+- checkpoints, step/next/finish, resume, interrupt, and stop waits;
+- deterministic keyboard and joystick input;
+- reset and snapshot save/load;
+- capture of VICE's composited display;
+- copying one verified VICE memory range into Ghidra.
 
-## Reversing workflows
+`vice_disconnect` drops only this process's binding. It does not close VICE, the connector, or the trace.
 
-The `vice` group includes low-level tools to feed raw PETSCII, set an active-low
-joyport byte, save or load snapshots, page retained events, and atomically
-capture registers, checkpoints, and up to 16 KiB of named bank ranges guarded
-by exact event and command sequences. State capture always uses
-non-side-effecting Binary Monitor peeks, including for I/O. The opt-in
-`reversing` group builds bounded evidence workflows and thin 6502 Ghidra
-searches on those primitives.
+Binary-monitor reads require VICE to be stopped. A normal sequence is `vice_interrupt`, read or capture, then `vice_resume`. Display capture is optional: other VICE tools remain usable when the connector lacks it. Capture requires the display methods and a VICE build with the safe display-command fix.
 
-`import_vice_phase` requires exact connector bank names: `default` or `cpu`
-for the CPU-visible bank, plus one each of `ram`, `rom`, and `io`. It never
-guesses missing or ambiguous roles. It captures the exact observed CPU view
-and complete RAM and ROM banks through `$0000-$FFFF`, plus I/O through
-`$D000-$DFFF`; retaining all four views preserves phase-specific banking and
-cartridge mappings that cannot safely be derived later. Captures are chained
-by returned sequences. Before contacting VICE, `output_dir` is expanded,
-created, checked for writes, and all final names are checked for conflicts.
-Four SHA-256-described `.bin` files and one final JSON manifest are written
-atomically; one generic `apply_memory_image` call previews or creates
-phase-qualified overlay blocks and stores capture metadata in the program.
-Phase names are upper-cased for artifact and block names. `overwrite` replaces
-local evidence files and exact same-name/same-range phase blocks; other Ghidra
-block conflicts remain errors.
+`copy_vice_memory_to_ghidra` reads the complete range once, verifies its length and SHA-256, then makes one Ghidra write request. It defaults to `dry_run=true`.
 
-`vice_capture_transition` captures caller-named ranges, creates one
-workflow-owned stopping checkpoint, optionally feeds PETSCII or sets a joyport
-value, and accepts only a stop event naming that checkpoint. It returns
-register and range hashes, coalesced byte changes, event provenance, and
-joystick/checkpoint cleanup results; `manifest_path` persists the same
-inventory.
-Its parent directory must already exist, and the manifest is written
-atomically only after capture and cleanup; existing files are refused unless
-`overwrite=true`.
+`vice_set_joyport` injects one raw active-low joystick-line byte on public port 1 or 2. The value remains in effect until another input, reset, or emulator shutdown changes it.
 
-`search_6502_indexed_operands` and `find_split_pointer_partners` expose the
-generic qualified-address searches without modifying the Ghidra program.
+## Limits and behavior
+
+- Text and graphics sources are capped at 64 KiB.
+- VICE memory calls transfer at most 16 KiB; a verified copy into Ghidra may span 64 KiB.
+- Keyboard input is capped at 255 bytes.
+- Graphics geometry is bounded before remote reads.
+- Requests are never retried automatically. A timed-out mutation may already have changed VICE or Ghidra, so inspect state before repeating it.
+- The Ghidra and connector boundaries are local and unauthenticated.
 
 ## Configuration
 
 - `GHIDRA_MCP_URL` defaults to `http://127.0.0.1:8089`.
-- `GHIDRA_MCP_AUTH_TOKEN` optionally supplies a bearer token.
 - `GHIDRA_MCP_TIMEOUT` defaults to 30 seconds.
-- `C64_MCP_TOOL_PROFILE` accepts `minimal`, `static`, `vice`, or
-  `full`; the default is `static`.
 
-The `--tool-profile` command-line option overrides the environment setting.
+Run with:
 
-VICE method calls accept a caller-visible `timeout_ms` from 1 through 55,000.
-The wrapper reserves an additional five seconds for generic TraceRMI
-invocation and another five seconds for HTTP transport.
+```sh
+uv run c64-mcp
+```
+
+The package contains the immutable text tables and C64 symbol data used by the tools.

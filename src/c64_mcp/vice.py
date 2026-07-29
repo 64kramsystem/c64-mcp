@@ -21,11 +21,10 @@ from .vice_contract import (
 PROCESS_ARGUMENT = {"object_path": "C64"}
 DEFAULT_TIMEOUT_MS = 10_000
 MAX_TIMEOUT_MS = 55_000
-MAX_MEMORY_BYTES = 65_536
-MAX_STATE_CAPTURE_BYTES = 16_384
-MAX_DISPLAY_CAPTURE_CHUNK_BYTES = 16_384
-MAX_EVENT_LIMIT = 1_024
+MAX_MEMORY_BYTES = 16_384
+MAX_COPY_BYTES = 65_536
 MAX_KEYBOARD_BYTES = 255
+MAX_DISPLAY_CAPTURE_CHUNK_BYTES = 16_384
 _LOWER_HEX = re.compile(r"^[0-9a-f]*$")
 
 BytesInput = str | list[int]
@@ -63,20 +62,14 @@ class _Binding:
     connector_name: str
     connector_version: str
     vice_version: str
-    methods: frozenset[str]
     connection_state: str
     execution_state: str
-    valid: bool = True
-    stale: bool = False
-    last_event_sequence: int = 0
+    stop_count: int = 0
     last_pc: int | None = None
-    last_error: dict[str, object] | None = None
-    max_command_sequence: int = 0
 
 
 @dataclass(frozen=True)
 class _Capture:
-    generation: int
     token: str
     instance_id: str
 
@@ -88,7 +81,6 @@ class ViceSession:
         self._ghidra = ghidra
         self._lock = threading.RLock()
         self._connect_lock = threading.Lock()
-        self._generation = 0
         self._binding: _Binding | None = None
 
     def connect(self) -> dict[str, object]:
@@ -99,33 +91,24 @@ class ViceSession:
         except GhidraTransportError as error:
             return _transport_error(error, mutation_flag=None).as_result()
         except GhidraError as error:
-            return _ghidra_response_error(
-                error, mutation_flag=None
-            ).as_result()
+            return _ghidra_response_error(error, mutation_flag=None).as_result()
         except ViceError as error:
             return error.as_result()
 
     def _connect(self) -> dict[str, object]:
         with self._connect_lock:
             with self._lock:
-                generation = self._generation
-
+                if self._binding is not None:
+                    return self._status_locked(idempotent=True)
             discovery = self._ghidra.target_methods()
             token = validate_discovery(discovery)
-            method_names = frozenset(
-                cast(str, item["name"])
-                for item in _method_records(discovery)
-                if isinstance(item.get("name"), str)
-            )
             capabilities_invocation = self._ghidra.invoke_target_method(
                 token,
                 "c64_vice_v1_capabilities",
                 {"process": dict(PROCESS_ARGUMENT)},
                 connector_timeout_ms=DEFAULT_TIMEOUT_MS,
             )
-            capabilities_envelope = parse_handshake_envelope(
-                capabilities_invocation
-            )
+            capabilities_envelope = parse_handshake_envelope(capabilities_invocation)
             info = validate_capabilities(capabilities_envelope)
 
             status_invocation = self._ghidra.invoke_target_method(
@@ -138,51 +121,23 @@ class ViceSession:
                 status_invocation,
                 expected_instance=info.instance_id,
             )
-            candidate = _binding_from_handshake(
-                token, method_names, info, status_envelope
-            )
+            candidate = _binding_from_handshake(token, info, status_envelope)
 
             with self._lock:
-                if self._generation != generation:
-                    raise ViceError(
-                        "vice_connector_changed",
-                        "the local binding changed during vice_connect; "
-                        "retry explicitly",
-                    )
-                current = self._binding
-                if current is not None and current.valid:
-                    if (
-                        current.token != candidate.token
-                        or current.instance_id != candidate.instance_id
-                    ):
-                        raise ViceError(
-                            "vice_binding_conflict",
-                            "a different healthy connector is already bound; "
-                            "run vice_disconnect first",
-                            bound_target_token=current.token,
-                            discovered_target_token=candidate.token,
-                        )
-                    return self._status_locked(idempotent=True)
-                self._generation += 1
                 self._binding = candidate
                 return self._status_locked(idempotent=False)
 
     def disconnect(self) -> dict[str, object]:
         """Release only this process's binding, leaving connector ownership alone."""
 
-        with self._lock:
+        with self._connect_lock, self._lock:
             had_binding = self._binding is not None
-            self._generation += 1
             self._binding = None
             return {
                 "ok": True,
                 "state": "unbound",
                 "released": had_binding,
                 "connector_externally_owned": True,
-                "message": (
-                    "Local binding released. The Ghidra VICE connector, "
-                    "trace, and VICE process remain externally owned."
-                ),
             }
 
     def status(self) -> dict[str, object]:
@@ -242,9 +197,7 @@ class ViceSession:
         except ViceError as error:
             return error.as_result()
 
-    def list_banks(
-        self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
-    ) -> dict[str, object]:
+    def list_banks(self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS) -> dict[str, object]:
         return self._public_operation(
             "c64_vice_v1_list_banks", {}, timeout_ms=timeout_ms
         )
@@ -276,9 +229,7 @@ class ViceSession:
                     "memspace": _nonnegative(memspace, "memspace"),
                 },
                 timeout_ms=timeout_ms,
-                mutation_flag=(
-                    "vice_state_may_have_changed" if side_effects else None
-                ),
+                mutation_flag=("vice_state_may_have_changed" if side_effects else None),
             )
         except ViceError as error:
             return error.as_result()
@@ -300,7 +251,7 @@ class ViceSession:
                 raise _invalid("bytes must not be empty")
             if len(data) > MAX_MEMORY_BYTES or begin + len(data) > 0x10000:
                 raise _invalid(
-                    "bytes must fit a non-wrapping 16-bit range of at most 65536"
+                    "bytes must fit a non-wrapping 16-bit range of at most 16384"
                 )
             return self._operation_result(
                 "c64_vice_v1_write_memory",
@@ -406,9 +357,7 @@ class ViceSession:
     ) -> dict[str, object]:
         return self._counted_execution("c64_vice_v1_next", count, timeout_ms)
 
-    def finish(
-        self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
-    ) -> dict[str, object]:
+    def finish(self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS) -> dict[str, object]:
         return self._public_operation(
             "c64_vice_v1_finish",
             {},
@@ -416,9 +365,7 @@ class ViceSession:
             mutation_flag="vice_state_may_have_changed",
         )
 
-    def resume(
-        self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
-    ) -> dict[str, object]:
+    def resume(self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS) -> dict[str, object]:
         return self._public_operation(
             "c64_vice_v1_resume",
             {},
@@ -426,9 +373,7 @@ class ViceSession:
             mutation_flag="vice_state_may_have_changed",
         )
 
-    def interrupt(
-        self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
-    ) -> dict[str, object]:
+    def interrupt(self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS) -> dict[str, object]:
         return self._public_operation(
             "c64_vice_v1_interrupt",
             {},
@@ -439,15 +384,15 @@ class ViceSession:
     def wait_for_stop(
         self,
         *,
-        after_sequence: int,
+        after_stop_count: int,
         timeout_ms: int,
     ) -> dict[str, object]:
         try:
             return self._operation_result(
                 "c64_vice_v1_wait_for_stop",
                 {
-                    "after_sequence": _nonnegative(
-                        after_sequence, "after_sequence"
+                    "after_stop_count": _nonnegative(
+                        after_stop_count, "after_stop_count"
                     )
                 },
                 timeout_ms=timeout_ms,
@@ -462,10 +407,8 @@ class ViceSession:
         kind: str = "soft",
         timeout_ms: int = DEFAULT_TIMEOUT_MS,
     ) -> dict[str, object]:
-        if kind not in {"soft", "hard", "drive8", "drive9"}:
-            return _invalid(
-                "kind must be soft, hard, drive8, or drive9"
-            ).as_result()
+        if kind not in {"soft", "hard"}:
+            return _invalid("kind must be soft or hard").as_result()
         return self._public_operation(
             "c64_vice_v1_reset",
             {"kind": kind},
@@ -501,7 +444,6 @@ class ViceSession:
         capture_id: str,
         offset: int,
         max_bytes: int = MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
-        timeout_ms: int = DEFAULT_TIMEOUT_MS,
     ) -> dict[str, object]:
         try:
             return self._operation_result(
@@ -516,24 +458,19 @@ class ViceSession:
                         maximum=MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
                     ),
                 },
-                timeout_ms=timeout_ms,
+                timeout_ms=DEFAULT_TIMEOUT_MS,
                 mutation_flag=None,
                 include_timeout_argument=False,
             )
         except ViceError as error:
             return error.as_result()
 
-    def discard_display_capture(
-        self,
-        *,
-        capture_id: str,
-        timeout_ms: int = DEFAULT_TIMEOUT_MS,
-    ) -> dict[str, object]:
+    def discard_display_capture(self, *, capture_id: str) -> dict[str, object]:
         try:
             return self._operation_result(
                 "c64_vice_v1_discard_display_capture",
                 {"capture_id": _nonblank(capture_id, "capture_id")},
-                timeout_ms=timeout_ms,
+                timeout_ms=DEFAULT_TIMEOUT_MS,
                 mutation_flag="vice_display_capture_may_have_changed",
                 include_timeout_argument=False,
             )
@@ -549,9 +486,7 @@ class ViceSession:
         try:
             payload = _bytes(data)
             if not 1 <= len(payload) <= MAX_KEYBOARD_BYTES:
-                raise _invalid(
-                    f"data must contain 1 to {MAX_KEYBOARD_BYTES} bytes"
-                )
+                raise _invalid("data must contain 1 to 255 bytes")
             return self._operation_result(
                 "c64_vice_v1_feed_keyboard",
                 {"data": {"encoding": "hex", "data": payload.hex()}},
@@ -593,7 +528,7 @@ class ViceSession:
             return self._operation_result(
                 "c64_vice_v1_save_snapshot",
                 {
-                    "filename": _snapshot_filename(filename),
+                    "filename": _nonblank(filename, "filename"),
                     "save_roms": _boolean(save_roms, "save_roms"),
                     "save_disks": _boolean(save_disks, "save_disks"),
                 },
@@ -612,77 +547,9 @@ class ViceSession:
         try:
             return self._operation_result(
                 "c64_vice_v1_load_snapshot",
-                {"filename": _snapshot_filename(filename)},
+                {"filename": _nonblank(filename, "filename")},
                 timeout_ms=timeout_ms,
                 mutation_flag="vice_state_may_have_changed",
-            )
-        except ViceError as error:
-            return error.as_result()
-
-    def list_events(
-        self,
-        *,
-        after_sequence: int,
-        limit: int = 128,
-        timeout_ms: int = DEFAULT_TIMEOUT_MS,
-    ) -> dict[str, object]:
-        try:
-            return self._operation_result(
-                "c64_vice_v1_list_events",
-                {
-                    "after_sequence": _nonnegative(
-                        after_sequence, "after_sequence"
-                    ),
-                    "limit": _bounded(
-                        limit,
-                        "limit",
-                        minimum=1,
-                        maximum=MAX_EVENT_LIMIT,
-                    ),
-                },
-                timeout_ms=timeout_ms,
-                mutation_flag=None,
-                include_timeout_argument=False,
-            )
-        except ViceError as error:
-            return error.as_result()
-
-    def capture_state(
-        self,
-        *,
-        expected_event_sequence: int,
-        expected_command_sequence: int,
-        ranges: list[dict[str, object]],
-        register_names: list[str] | None = None,
-        include_checkpoints: bool = True,
-        timeout_ms: int = DEFAULT_TIMEOUT_MS,
-    ) -> dict[str, object]:
-        try:
-            flat_ranges, names = _capture_ranges(ranges)
-            registers = (
-                []
-                if register_names is None
-                else _string_list(register_names, "register_names")
-            )
-            return self._operation_result(
-                "c64_vice_v1_capture_state",
-                {
-                    "expected_event_sequence": _nonnegative(
-                        expected_event_sequence, "expected_event_sequence"
-                    ),
-                    "expected_command_sequence": _nonnegative(
-                        expected_command_sequence,
-                        "expected_command_sequence",
-                    ),
-                    "ranges": flat_ranges,
-                    "names": names,
-                    "register_names": registers,
-                    "include_checkpoints": _boolean(
-                        include_checkpoints, "include_checkpoints"
-                    ),
-                },
-                timeout_ms=timeout_ms,
-                mutation_flag=None,
             )
         except ViceError as error:
             return error.as_result()
@@ -695,68 +562,78 @@ class ViceSession:
         end: int,
         program: str,
         destination: str,
-        conflict_policy: str = "error",
         dry_run: bool = True,
         memspace: int = 0,
         timeout_ms: int = DEFAULT_TIMEOUT_MS,
     ) -> dict[str, object]:
-        """Read exactly once, validate completely, then write exactly once."""
+        """Read stable stopped RAM in chunks, then write it once to Ghidra."""
 
         try:
             begin, finish = _address_range(start, end)
             length = finish - begin + 1
+            if length > MAX_COPY_BYTES:
+                raise _invalid("copy range must contain at most 65536 bytes")
             if not isinstance(program, str) or not program.strip():
                 raise _invalid("program must not be blank")
             if not isinstance(destination, str) or not destination.strip():
                 raise _invalid("destination must not be blank")
-            if conflict_policy not in {"error", "overwrite_bytes"}:
-                raise _invalid(
-                    "conflict_policy must be error or overwrite_bytes"
-                )
             if not isinstance(dry_run, bool):
                 raise _invalid("dry_run must be a boolean")
-            source = self._invoke(
-                "c64_vice_v1_read_memory",
-                {
-                    "bank_id": _nonnegative(bank_id, "bank_id"),
-                    "start": begin,
-                    "end": finish,
-                    "side_effects": False,
-                    "max_bytes": length,
-                    "memspace": _nonnegative(memspace, "memspace"),
-                },
-                timeout_ms=timeout_ms,
-                mutation_flag=None,
-            )
-            result = _result_mapping(source)
-            raw = result.get("bytes")
-            if (
-                not isinstance(raw, str)
-                or len(raw) % 2
-                or _LOWER_HEX.fullmatch(raw) is None
-            ):
-                raise _incompatible_read("memory read omitted hexadecimal bytes")
-            data = bytes.fromhex(raw)
-            byte_count = result.get("byte_count")
-            if (
-                result.get("complete") is not True
-                or result.get("next_address") is not None
-                or not isinstance(byte_count, int)
-                or isinstance(byte_count, bool)
-                or byte_count != length
-                or len(data) != length
-            ):
-                raise _incompatible_read(
-                    "memory read was not complete at the exact requested length"
+            data = bytearray()
+            cursor = begin
+            observed_stop_count: int | None = None
+            while cursor <= finish:
+                source = self._invoke(
+                    "c64_vice_v1_read_memory",
+                    {
+                        "bank_id": _nonnegative(bank_id, "bank_id"),
+                        "start": cursor,
+                        "end": finish,
+                        "side_effects": False,
+                        "max_bytes": min(MAX_MEMORY_BYTES, finish - cursor + 1),
+                        "memspace": _nonnegative(memspace, "memspace"),
+                    },
+                    timeout_ms=timeout_ms,
+                    mutation_flag=None,
                 )
-            digest = hashlib.sha256(data).hexdigest()
+                if source.get("execution_state") != "stopped":
+                    raise _incompatible_read(
+                        "VICE changed execution state during the copy"
+                    )
+                stop_count = _nonnegative(source.get("stop_count"), "stop_count")
+                if observed_stop_count is None:
+                    observed_stop_count = stop_count
+                elif stop_count != observed_stop_count:
+                    raise _incompatible_read(
+                        "VICE stopped again during the copy; retry from a "
+                        "stable checkpoint"
+                    )
+                result = _result_mapping(source)
+                raw = result.get("bytes")
+                if (
+                    not isinstance(raw, str)
+                    or len(raw) % 2
+                    or _LOWER_HEX.fullmatch(raw) is None
+                ):
+                    raise _incompatible_read("memory read omitted hexadecimal bytes")
+                chunk = bytes.fromhex(raw)
+                if not chunk or len(chunk) > finish - cursor + 1:
+                    raise _incompatible_read(
+                        "memory read returned an invalid chunk length"
+                    )
+                data.extend(chunk)
+                cursor += len(chunk)
+            if len(data) != length:
+                raise _incompatible_read("memory copy length changed")
+            copied = bytes(data)
+            digest = hashlib.sha256(copied).hexdigest()
             try:
                 write = self._ghidra.write_memory_bytes_result(
                     program,
                     destination,
-                    data.hex(),
+                    copied.hex(),
                     dry_run=dry_run,
-                    conflict_policy=conflict_policy,
+                    conflict_policy="overwrite_bytes",
                 )
             except GhidraTransportError as error:
                 translated = _transport_error(
@@ -765,7 +642,7 @@ class ViceSession:
                     mutating=not dry_run,
                 ).as_result()
                 translated.update(
-                    _copy_summary(begin, finish, destination, data, digest)
+                    _copy_summary(begin, finish, destination, copied, digest)
                 )
                 return translated
             except GhidraError as error:
@@ -775,27 +652,23 @@ class ViceSession:
                     mutating=not dry_run,
                 ).as_result()
                 translated.update(
-                    _copy_summary(begin, finish, destination, data, digest)
+                    _copy_summary(begin, finish, destination, copied, digest)
                 )
                 return translated
-            summary = _copy_summary(begin, finish, destination, data, digest)
+            summary = _copy_summary(begin, finish, destination, copied, digest)
             summary["write_result"] = write
             summary["committed"] = write.get("committed", False)
             summary["differing_ranges"] = write.get("differing_ranges", [])
             if "error" in write or write.get("ok") is False:
                 summary["ok"] = False
-                summary["error"] = write.get(
-                    "error", "Ghidra destination write failed"
-                )
+                summary["error"] = write.get("error", "Ghidra destination write failed")
                 return summary
             summary["ok"] = True
             return summary
         except GhidraTransportError as error:
             return _transport_error(error, mutation_flag=None).as_result()
         except GhidraError as error:
-            return _ghidra_response_error(
-                error, mutation_flag=None
-            ).as_result()
+            return _ghidra_response_error(error, mutation_flag=None).as_result()
         except ViceError as error:
             return error.as_result()
 
@@ -805,11 +678,7 @@ class ViceSession:
         try:
             return self._operation_result(
                 method,
-                {
-                    "count": _bounded(
-                        count, "count", minimum=1, maximum=65_535
-                    )
-                },
+                {"count": _bounded(count, "count", minimum=1, maximum=65_535)},
                 timeout_ms=timeout_ms,
                 mutation_flag="vice_state_may_have_changed",
             )
@@ -909,17 +778,7 @@ class ViceSession:
                     "vice_not_connected",
                     "run vice_connect before using VICE tools",
                 )
-            if not binding.valid:
-                state = "stale" if binding.stale else "disconnected"
-                raise ViceError(
-                    "vice_connector_changed"
-                    if binding.stale
-                    else "vice_connection_lost",
-                    f"the cached VICE binding is {state}; run vice_connect again",
-                    last_error=binding.last_error,
-                )
             return _Capture(
-                generation=self._generation,
                 token=binding.token,
                 instance_id=binding.instance_id,
             )
@@ -935,65 +794,42 @@ class ViceSession:
                 return
             _refresh_binding(binding, envelope)
 
-    def _apply_failure(
-        self, capture: _Capture, error: ViceError
-    ) -> None:
+    def _apply_failure(self, capture: _Capture, error: ViceError) -> None:
         with self._lock:
-            binding = self._matching_binding(capture)
-            if binding is None:
-                return
-            sequence = _optional_nonnegative(
-                error.details.get("command_sequence")
-            )
-            if (
-                sequence is not None
-                and sequence < binding.max_command_sequence
-            ):
-                return
-            if sequence is not None:
-                binding.max_command_sequence = sequence
-            binding.last_error = cast(
-                dict[str, object], error.as_result()["error"]
-            )
-            if error.code == "vice_connector_changed":
-                self._generation += 1
-                binding.valid = False
-                binding.stale = True
-            elif error.code in {
+            if self._matching_binding(capture) is not None and error.code in {
+                "vice_connector_changed",
                 "vice_connection_lost",
                 "vice_protocol_error",
             }:
-                self._generation += 1
-                binding.valid = False
-                binding.connection_state = "disconnected"
+                self._binding = None
 
     def _matching_binding(self, capture: _Capture) -> _Binding | None:
         binding = self._binding
         if (
             binding is None
-            or self._generation != capture.generation
             or binding.token != capture.token
             or binding.instance_id != capture.instance_id
         ):
             return None
         return binding
 
-    def _status_locked(
-        self, *, idempotent: bool | None
-    ) -> dict[str, object]:
+    def _status_locked(self, *, idempotent: bool | None) -> dict[str, object]:
         binding = self._binding
         if binding is None:
             result: dict[str, object] = {
                 "ok": True,
                 "state": "unbound",
-                "generation": self._generation,
             }
         else:
-            state = _public_state(binding)
+            state = (
+                binding.execution_state
+                if binding.connection_state == "connected"
+                and binding.execution_state in {"running", "stopped"}
+                else binding.connection_state
+            )
             result = {
                 "ok": True,
                 "state": state,
-                "generation": self._generation,
                 "target_token": binding.token,
                 "instance_id": binding.instance_id,
                 "connector_name": binding.connector_name,
@@ -1001,10 +837,8 @@ class ViceSession:
                 "vice_version": binding.vice_version,
                 "connection_state": binding.connection_state,
                 "execution_state": binding.execution_state,
-                "last_event_sequence": binding.last_event_sequence,
+                "stop_count": binding.stop_count,
                 "last_pc": binding.last_pc,
-                "last_error": binding.last_error,
-                "max_command_sequence": binding.max_command_sequence,
             }
         if idempotent is not None:
             result["idempotent"] = idempotent
@@ -1013,100 +847,31 @@ class ViceSession:
 
 def _binding_from_handshake(
     token: str,
-    methods: frozenset[str],
     info: CapabilityInfo,
     status: Mapping[str, object],
 ) -> _Binding:
-    result = _result_mapping(status)
-    binding = _Binding(
+    return _Binding(
         token=token,
         instance_id=info.instance_id,
         connector_name=info.connector_name,
         connector_version=info.connector_version,
         vice_version=info.vice_version,
-        methods=methods,
         connection_state=_state(status.get("connection_state"), "connection"),
         execution_state=_state(status.get("execution_state"), "execution"),
+        stop_count=_nonnegative(status.get("stop_count"), "stop_count"),
+        last_pc=_optional_address(status.get("pc")),
     )
-    _refresh_from_result(binding, result)
-    binding.max_command_sequence = _nonnegative(
-        status.get("command_sequence"), "command_sequence"
-    )
-    return binding
 
 
-def _refresh_binding(
-    binding: _Binding, envelope: Mapping[str, object]
-) -> None:
-    connection_state = _state(
-        envelope.get("connection_state"), "connection"
-    )
-    execution_state = _state(
-        envelope.get("execution_state"), "execution"
-    )
-    sequence = _nonnegative(
-        envelope.get("command_sequence"), "command_sequence"
-    )
-    result = _result_mapping(envelope)
-    if sequence < binding.max_command_sequence:
-        return
+def _refresh_binding(binding: _Binding, envelope: Mapping[str, object]) -> None:
+    connection_state = _state(envelope.get("connection_state"), "connection")
+    execution_state = _state(envelope.get("execution_state"), "execution")
     binding.connection_state = connection_state
     binding.execution_state = execution_state
-    binding.max_command_sequence = sequence
-    _refresh_from_result(binding, result)
-    binding.last_error = None
-
-
-def _refresh_from_result(
-    binding: _Binding, result: Mapping[str, object]
-) -> None:
-    observed_sequence: int | None = None
-    observed_pc: int | None = None
-    event_sequence = _optional_nonnegative(result.get("event_sequence"))
-    if event_sequence is not None:
-        observed_sequence = event_sequence
-    event = result.get("event")
-    if isinstance(event, Mapping):
-        sequence = _optional_nonnegative(event.get("sequence"))
-        if sequence is not None:
-            observed_sequence = max(observed_sequence or 0, sequence)
-        observed_pc = _optional_address(event.get("pc"))
-    direct_pc = _optional_address(result.get("pc"))
-    if direct_pc is not None:
-        observed_pc = direct_pc
-    if (
-        observed_sequence is not None
-        and observed_sequence >= binding.last_event_sequence
-    ):
-        binding.last_event_sequence = observed_sequence
-        if observed_pc is not None:
-            binding.last_pc = observed_pc
-
-
-def _public_state(binding: _Binding) -> str:
-    if binding.stale:
-        return "stale"
-    if not binding.valid or binding.connection_state != "connected":
-        return "disconnected"
-    if binding.execution_state in {"running", "stopped"}:
-        return binding.execution_state
-    return "connected"
-
-
-def _method_records(
-    discovery: Mapping[str, object],
-) -> list[Mapping[str, object]]:
-    raw = discovery.get("methods")
-    if not isinstance(raw, list):
-        raise ViceError(
-            "vice_connector_incompatible",
-            "target discovery methods must be an array",
-        )
-    return [
-        cast(Mapping[str, object], item)
-        for item in raw
-        if isinstance(item, Mapping)
-    ]
+    binding.stop_count = _nonnegative(envelope.get("stop_count"), "stop_count")
+    observed_pc = _optional_address(envelope.get("pc"))
+    if observed_pc is not None:
+        binding.last_pc = observed_pc
 
 
 def _result_mapping(envelope: Mapping[str, object]) -> Mapping[str, object]:
@@ -1220,38 +985,10 @@ def _string_list(value: object, field: str) -> list[str]:
     return result
 
 
-def _capture_ranges(
-    value: object,
-) -> tuple[list[int], list[str]]:
-    if not isinstance(value, list):
-        raise _invalid("ranges must be an array")
-    flat: list[int] = []
-    names: list[str] = []
-    total = 0
-    for index, item in enumerate(value):
-        if not isinstance(item, Mapping):
-            raise _invalid(f"ranges[{index}] must be an object")
-        name = item.get("name")
-        if not isinstance(name, str) or not name:
-            raise _invalid(f"ranges[{index}].name must not be blank")
-        if name in names:
-            raise _invalid("range names must not contain duplicates")
-        start, end = _address_range(item.get("start"), item.get("end"))
-        memspace = _nonnegative(
-            item.get("memspace", 0), f"ranges[{index}].memspace"
-        )
-        bank_id = _nonnegative(
-            item.get("bank_id"), f"ranges[{index}].bank_id"
-        )
-        total += end - start + 1
-        if total > MAX_STATE_CAPTURE_BYTES:
-            raise _invalid(
-                "ranges exceed the "
-                f"{MAX_STATE_CAPTURE_BYTES}-byte capture limit"
-            )
-        flat.extend((memspace, bank_id, start, end))
-        names.append(name)
-    return flat, names
+def _nonblank(value: object, field: str) -> str:
+    if not isinstance(value, str) or not value:
+        raise _invalid(f"{field} must be a nonblank string")
+    return value
 
 
 def _address_range(start: object, end: object) -> tuple[int, int]:
@@ -1304,30 +1041,8 @@ def _boolean(value: object, field: str) -> bool:
     return value
 
 
-def _snapshot_filename(value: object) -> str:
-    if not isinstance(value, str) or not value or "\0" in value:
-        raise _invalid("filename must be a nonblank NUL-free string")
-    try:
-        encoded = value.encode("utf-8")
-    except UnicodeEncodeError as error:
-        raise _invalid("filename must be valid UTF-8") from error
-    if len(encoded) > 255:
-        raise _invalid("filename must contain at most 255 UTF-8 bytes")
-    return value
-
-
-def _nonblank(value: object, field: str) -> str:
-    if not isinstance(value, str) or not value:
-        raise _invalid(f"{field} must not be blank")
-    return value
-
-
 def _optional_nonnegative(value: object) -> int | None:
-    if (
-        isinstance(value, int)
-        and not isinstance(value, bool)
-        and value >= 0
-    ):
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
         return value
     return None
 

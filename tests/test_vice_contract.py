@@ -1,297 +1,112 @@
-from __future__ import annotations
-
-import copy
 import json
 
 import pytest
 
 from c64_mcp.errors import ViceError
 from c64_mcp.vice_contract import (
-    load_contract,
+    REQUIRED_METHOD_ARGS,
     parse_connector_envelope,
     parse_handshake_envelope,
     validate_capabilities,
     validate_discovery,
 )
 
-INSTANCE = "12345678-1234-1234-1234-123456789abc"
+INSTANCE = "opaque-instance"
 
 
-def discovery() -> dict[str, object]:
-    methods: list[dict[str, object]] = []
-    contract = load_contract()
-    for source in contract["methods"]:  # type: ignore[index,union-attr]
-        method = copy.deepcopy(source)
-        for parameter in method["parameters"]:
-            required = parameter["required"]
-            parameter["default_available"] = not required
-            if required:
-                parameter["default"] = None
-            parameter["display"] = parameter["name"]
-            parameter["description"] = ""
-        method["action"] = None
-        method["display"] = method["name"]
-        method["description"] = ""
-        methods.append(method)
-    return {
-        "ok": True,
-        "target_token": "opaque-target",
-        "methods": list(reversed(methods)),
-    }
+def methods():
+    return [
+        {
+            "name": name,
+            "parameters": [{"name": argument} for argument in sorted(arguments)],
+        }
+        for name, arguments in REQUIRED_METHOD_ARGS.items()
+    ]
 
 
-def connector_envelope(
-    result: object,
-    *,
-    ok: bool = True,
-    instance_id: str = INSTANCE,
-) -> dict[str, object]:
-    value: dict[str, object] = {
+def envelope(result=None, *, ok=True, instance=INSTANCE):
+    value = {
         "api": "c64.vice/1",
         "ok": ok,
-        "command_sequence": 7,
-        "instance_id": instance_id,
+        "command_sequence": 4,
+        "instance_id": instance,
         "connection_state": "connected",
         "execution_state": "stopped",
+        "stop_count": 3,
+        "pc": 0xC000,
     }
-    value["result" if ok else "error"] = result
+    value["result" if ok else "error"] = {} if result is None else result
     return value
 
 
-def capability_envelope(
-    *,
-    minor: int = 1,
-    capabilities: list[str] | None = None,
-    surface_revision: int = 3,
-) -> dict[str, object]:
-    contract = load_contract()
-    result = {
-        "protocol": "c64.vice",
-        "api_major": 1,
-        "api_minor": minor,
-        "connector_name": "ghidra-vice-connector",
-        "connector_version": "1.0.0",
-        "instance_id": INSTANCE,
-        "machine": "c64",
-        "vice_version": "3.10.0",
-        "binary_monitor_api": 2,
-        "capabilities": (
-            contract["capabilities"]
-            if capabilities is None
-            else capabilities
-        ),
-        "method_namespace": "c64_vice_v1_",
-        "surface_revision": surface_revision,
-        "limits": contract["limits"],
-    }
-    return connector_envelope(result)
+def invocation(value):
+    return {"ok": True, "result": json.dumps(value)}
 
 
-def invocation(envelope: dict[str, object]) -> dict[str, object]:
-    return {
+def test_discovery_checks_only_methods_and_arguments_the_client_uses():
+    discovery = {
         "ok": True,
-        "result": json.dumps(envelope),
-        "before": {},
-        "after": {},
+        "target_token": "target",
+        "methods": methods(),
     }
+    assert validate_discovery(discovery) == "target"
+
+    discovery["methods"] = methods()[1:]
+    with pytest.raises(ViceError, match="required method"):
+        validate_discovery(discovery)
 
 
-def test_packaged_contract_validates_complete_discovery() -> None:
-    assert validate_discovery(discovery()) == "opaque-target"
+def test_discovery_rejects_a_missing_keyword_argument():
+    records = methods()
+    records[0]["parameters"] = []
+    with pytest.raises(ViceError, match="missing parameters"):
+        validate_discovery({"ok": True, "target_token": "target", "methods": records})
 
 
-def test_discovery_parameter_order_is_irrelevant() -> None:
-    value = discovery()
-    methods = value["methods"]
-    assert isinstance(methods, list)
-    for method in methods:
-        method["parameters"].reverse()
-
-    assert validate_discovery(value) == "opaque-target"
-
-
-@pytest.mark.parametrize(
-    ("mutation", "message"),
-    [
-        (
-            lambda value: value["methods"].pop(),  # type: ignore[union-attr]
-            "required method",
-        ),
-        (
-            lambda value: value["methods"][0].__setitem__(  # type: ignore[index,union-attr]
-                "return_type", "LONG"
-            ),
-            "return type",
-        ),
-        (
-            lambda value: value["methods"][0]["parameters"][0].__setitem__(  # type: ignore[index,union-attr]
-                "type", "STRING"
-            ),
-            "wrong type",
-        ),
-        (
-            lambda value: value["methods"][0]["parameters"][0].__setitem__(  # type: ignore[index,union-attr]
-                "default_available", True
-            ),
-            "default availability",
-        ),
-    ],
-)
-def test_discovery_rejects_every_schema_mismatch(
-    mutation: object,
-    message: str,
-) -> None:
-    value = discovery()
-    assert callable(mutation)
-    mutation(value)
-
-    with pytest.raises(ViceError, match=message) as captured:
-        validate_discovery(value)
-
-    assert captured.value.code == "vice_connector_incompatible"
-
-
-def test_discovery_maps_missing_active_target_to_install_guidance() -> None:
-    with pytest.raises(ViceError) as captured:
-        validate_discovery(
-            {
-                "ok": False,
-                "error": {
-                    "code": "no_active_trace",
-                    "message": "no active trace",
-                },
-            }
-        )
-
-    assert captured.value.code == "vice_connector_unavailable"
-    assert "VICE C64 Debugger" in str(captured.value.details["guidance"])
-
-
-def test_capabilities_validate_identity_versions_limits_and_exact_v1_set() -> None:
-    info = validate_capabilities(capability_envelope())
-
+def test_capabilities_validate_identity_machine_and_operational_limits():
+    value = envelope(
+        {
+            "protocol": "c64.vice",
+            "api_major": 1,
+            "machine": "c64",
+            "instance_id": INSTANCE,
+            "connector_name": "ghidra-vice-connector",
+            "connector_version": "1.0.0",
+            "vice_version": "3.11",
+            "limits": {
+                "keyboard_feed_bytes": 255,
+                "memory_chunk_bytes": 16_384,
+            },
+        }
+    )
+    info = validate_capabilities(value)
     assert info.instance_id == INSTANCE
-    assert info.connector_version == "1.0.0"
-    assert info.vice_version == "3.10.0"
-    assert info.limits["memory_read_bytes"] == 65_536
 
-
-def test_packaged_surface_revision_is_accepted_by_the_handshake() -> None:
-    contract = load_contract()
-    revision = contract["surface_revision"]
-
-    assert isinstance(revision, int)
-    assert validate_capabilities(
-        capability_envelope(surface_revision=revision)
-    ).instance_id == INSTANCE
-
-
-def test_bounded_capture_requires_surface_revision_three() -> None:
-    with pytest.raises(ViceError) as captured:
-        validate_capabilities(capability_envelope(surface_revision=2))
-
-    assert captured.value.code == "vice_connector_incompatible"
-    message = str(captured.value)
-    assert "surface revision" in message
-    assert "3" in message
-    assert "upgrade" in message.lower()
-
-
-def test_newer_minor_allows_only_capability_superset() -> None:
-    contract = load_contract()
-    required = list(contract["capabilities"])  # type: ignore[arg-type]
-
-    assert validate_capabilities(
-        capability_envelope(minor=2, capabilities=[*required, "future"])
-    ).api_minor == 2
-    with pytest.raises(ViceError, match="omits required"):
-        validate_capabilities(
-            capability_envelope(minor=2, capabilities=required[:-1])
-        )
-
-
-def test_current_api_rejects_extra_capability_and_changed_instance() -> None:
-    contract = load_contract()
-    required = list(contract["capabilities"])  # type: ignore[arg-type]
-    with pytest.raises(ViceError, match="exactly"):
-        validate_capabilities(
-            capability_envelope(capabilities=[*required, "future"])
-        )
-    value = capability_envelope()
-    result = value["result"]
-    assert isinstance(result, dict)
-    result["instance_id"] = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-    with pytest.raises(ViceError, match="disagree"):
+    value["result"]["limits"]["memory_chunk_bytes"] = 1024
+    with pytest.raises(ViceError, match="too small"):
         validate_capabilities(value)
 
 
-def test_older_minor_is_rejected_before_operations() -> None:
-    with pytest.raises(ViceError, match="require 1.1"):
-        validate_capabilities(capability_envelope(minor=0))
-
-
-def test_connector_envelope_parser_preserves_failure_and_detects_replacement() -> None:
-    failure = connector_envelope(
-        {
-            "code": "vice_timeout",
-            "message": "read timed out",
-            "outcome_unknown": True,
-            "command_sequence": 999,
-        },
-        ok=False,
+def test_connector_envelope_carries_stop_state_on_success_and_failure():
+    parsed = parse_connector_envelope(
+        invocation(envelope({"value": 1})),
+        expected_instance=INSTANCE,
     )
-    with pytest.raises(ViceError) as captured:
-        parse_connector_envelope(
-            invocation(failure), expected_instance=INSTANCE
-        )
-    assert captured.value.code == "vice_timeout"
-    assert captured.value.details["outcome_unknown"] is True
-    assert captured.value.details["command_sequence"] == 7
+    assert parsed["stop_count"] == 3
+    assert parsed["pc"] == 0xC000
 
-    replacement = connector_envelope(
-        {}, instance_id="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-    )
-    with pytest.raises(ViceError) as changed:
-        parse_connector_envelope(
-            invocation(replacement), expected_instance=INSTANCE
-        )
-    assert changed.value.code == "vice_connector_changed"
+    failed = envelope({"code": "vice_timeout", "message": "timed out"}, ok=False)
+    with pytest.raises(ViceError) as caught:
+        parse_connector_envelope(invocation(failed), expected_instance=INSTANCE)
+    assert caught.value.details["stop_count"] == 3
+    assert caught.value.details["pc"] == 0xC000
 
 
-def test_generic_timeout_is_distinct_from_connector_timeout() -> None:
-    with pytest.raises(ViceError) as captured:
+def test_changed_instance_is_rejected_and_handshake_decoder_is_unbound():
+    decoded = parse_handshake_envelope(invocation(envelope()))
+    assert decoded["instance_id"] == INSTANCE
+    with pytest.raises(ViceError, match="instance changed"):
         parse_connector_envelope(
-            {
-                "ok": False,
-                "error": {
-                    "code": "target_method_timeout",
-                    "message": "late",
-                },
-                "timeout_layer": "generic",
-                "outcome_unknown": True,
-            },
+            invocation(envelope(instance="replacement")),
             expected_instance=INSTANCE,
         )
-
-    assert captured.value.code == "vice_target_method_timeout"
-    assert captured.value.details["timeout_layer"] == "generic"
-
-
-def test_handshake_parser_rejects_non_string_result() -> None:
-    with pytest.raises(ViceError, match="JSON string"):
-        parse_handshake_envelope({"ok": True, "result": {}})
-
-
-def test_handshake_parser_reports_target_replacement() -> None:
-    with pytest.raises(ViceError) as captured:
-        parse_handshake_envelope(
-            {
-                "ok": False,
-                "error": {
-                    "code": "stale_target_token",
-                    "message": "owner changed",
-                },
-            }
-        )
-
-    assert captured.value.code == "vice_connector_changed"

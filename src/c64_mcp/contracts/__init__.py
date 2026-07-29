@@ -1,1 +1,0 @@
-"""Packaged connector capability contracts."""

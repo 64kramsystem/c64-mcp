@@ -25,15 +25,13 @@ _COMPRESSION_LEVEL = 9
 
 @dataclass(frozen=True, slots=True)
 class EncodedPng:
-    """One encoded indexed PNG and what its palette had to be told about."""
+    """One encoded indexed PNG."""
 
     data: bytes
     width: int
     height: int
     palette_size: int
     used_indices: tuple[int, ...]
-    unmapped_indices: tuple[int, ...]
-    unmapped_pixel_count: int
 
 
 def ensure_output_pixels(width: int, height: int) -> int:
@@ -55,8 +53,7 @@ def ensure_png_size(size: int) -> int:
 
     if size > MAX_PNG_BYTES:
         raise GraphicsLimitError(
-            f"encoded PNG of {size} bytes exceeds the {MAX_PNG_BYTES}-byte "
-            "hard maximum"
+            f"encoded PNG of {size} bytes exceeds the {MAX_PNG_BYTES}-byte hard maximum"
         )
     return size
 
@@ -67,9 +64,7 @@ def encode_indexed_png(
 ) -> EncodedPng:
     """Encode equal-length index rows as an indexed PNG.
 
-    Indices beyond the supplied palette are legal input but invalid PNG, so
-    `PLTE` is extended with black entries through the highest observed index
-    and the shortfall is reported rather than silently rendered.
+    Every pixel index must name an entry in the supplied palette.
     """
 
     if not rows:
@@ -94,21 +89,14 @@ def encode_indexed_png(
                 or index < 0
                 or index > 255
             ):
-                raise RequestError(
-                    "pixel indices must be integers from 0 to 255"
-                )
+                raise RequestError("pixel indices must be integers from 0 to 255")
             counts[index] = counts.get(index, 0) + 1
     used = tuple(sorted(counts))
-    unmapped = tuple(index for index in used if index >= len(palette))
-    unmapped_pixels = sum(counts[index] for index in unmapped)
-    entries = list(palette)
-    if unmapped:
-        entries.extend(
-            (0, 0, 0) for _ in range(unmapped[-1] + 1 - len(entries))
-        )
+    if used and used[-1] >= len(palette):
+        raise RequestError("pixel index exceeds the supplied palette")
 
     plte = bytearray()
-    for red, green, blue in entries:
+    for red, green, blue in palette:
         plte.extend((red & 0xFF, green & 0xFF, blue & 0xFF))
     raw = bytearray()
     for row in rows:
@@ -130,9 +118,7 @@ def encode_indexed_png(
             ),
         )
         + _chunk(b"PLTE", bytes(plte))
-        + _chunk(
-            b"IDAT", zlib.compress(bytes(raw), _COMPRESSION_LEVEL)
-        )
+        + _chunk(b"IDAT", zlib.compress(bytes(raw), _COMPRESSION_LEVEL))
         + _chunk(b"IEND", b"")
     )
     ensure_png_size(len(data))
@@ -140,10 +126,8 @@ def encode_indexed_png(
         data=data,
         width=width,
         height=height,
-        palette_size=len(entries),
+        palette_size=len(palette),
         used_indices=used,
-        unmapped_indices=unmapped,
-        unmapped_pixel_count=unmapped_pixels,
     )
 
 

@@ -19,7 +19,6 @@ import base64
 import io
 import os
 import time
-from typing import Any
 
 import pytest
 from mcp.types import CallToolResult, ImageContent
@@ -59,7 +58,6 @@ def live_session() -> ViceSession:
     return ViceSession(
         GhidraClient(
             settings.ghidra_mcp_url,
-            settings.ghidra_auth_token,
             settings.ghidra_timeout,
         )
     )
@@ -67,14 +65,6 @@ def live_session() -> ViceSession:
 
 class NoGhidra:
     def read_bytes(self, program: str, start: str, length: int) -> bytes:
-        raise AssertionError("the oracle decodes inline bytes only")
-
-
-class NoVice:
-    def status(self) -> dict[str, object]:
-        return {"ok": True, "state": "stopped"}
-
-    def read_memory(self, **kwargs: Any) -> dict[str, object]:
         raise AssertionError("the oracle decodes inline bytes only")
 
 
@@ -94,9 +84,7 @@ def pixels(result: CallToolResult) -> list[list[int]]:
 
 
 def poke(session: ViceSession, address: int, value: int) -> None:
-    written = session.write_memory(
-        bank_id=0, start=address, bytes=bytes([value]).hex()
-    )
+    written = session.write_memory(bank_id=0, start=address, bytes=bytes([value]).hex())
     assert written["ok"] is True, written
 
 
@@ -138,7 +126,6 @@ def test_live_capture_matches_the_static_decoder(multicolor: bool) -> None:
     if multicolor:
         expected = decode_c64_multicolor_bitmap(
             NoGhidra(),
-            NoVice(),
             bitmap=inline(BITMAP),
             screen=inline(SCREEN),
             color=inline(COLOR),
@@ -147,7 +134,6 @@ def test_live_capture_matches_the_static_decoder(multicolor: bool) -> None:
     else:
         expected = decode_c64_hires_bitmap(
             NoGhidra(),
-            NoVice(),
             bitmap=inline(BITMAP),
             screen=inline(SCREEN),
         )

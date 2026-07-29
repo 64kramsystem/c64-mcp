@@ -1,8 +1,8 @@
 """VIC-II graphics modes: the conventions that get re-derived and misremembered.
 
-Every renderer here produces a matrix of C64 colour indices (0-15 unless a
-caller palette says otherwise), never RGB, so the logical colour survives into
-the PNG palette. Sources are plain bytes; fetching them is `sources.py`'s job.
+Every renderer here produces a matrix of C64 colour indices (0-15), never RGB,
+so the logical colour survives into the PNG palette. Sources are plain bytes;
+fetching them is `sources.py`'s job.
 
 Shared C64 facts encoded below:
 
@@ -18,7 +18,7 @@ Shared C64 facts encoded below:
 from __future__ import annotations
 
 from collections.abc import Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from ..errors import GraphicsLimitError, RequestError
 
@@ -69,7 +69,6 @@ class Raster:
     width: int
     height: int
     rows: list[bytearray]
-    consumed: dict[str, int] = field(default_factory=dict)
     transparent_pixel_count: int = 0
     glyph_indices: tuple[int, ...] = ()
 
@@ -163,25 +162,19 @@ def render_hires_bitmap(
             cell = screen[cell_row * columns + cell_column]
             foreground = (cell >> 4) & 0x0F
             background = cell & 0x0F
-            base = (
-                cell_row * columns * GLYPH_BYTES
-                + cell_column * GLYPH_BYTES
-            )
+            base = cell_row * columns * GLYPH_BYTES + cell_column * GLYPH_BYTES
             for line in range(8):
                 pixels = bitmap[base + line]
                 target = raster[cell_row * 8 + line]
                 left = cell_column * 8
                 for bit in range(8):
                     target[left + bit] = (
-                        foreground
-                        if pixels & (0x80 >> bit)
-                        else background
+                        foreground if pixels & (0x80 >> bit) else background
                     )
     return Raster(
         width=width,
         height=height,
         rows=raster,
-        consumed={"bitmap": bitmap_required, "screen": screen_required},
     )
 
 
@@ -222,10 +215,7 @@ def render_multicolor_bitmap(
                 cell & 0x0F,
                 color[index] & 0x0F,
             )
-            base = (
-                cell_row * columns * GLYPH_BYTES
-                + cell_column * GLYPH_BYTES
-            )
+            base = cell_row * columns * GLYPH_BYTES + cell_column * GLYPH_BYTES
             for line in range(8):
                 pixels = bitmap[base + line]
                 target = raster[cell_row * 8 + line]
@@ -239,11 +229,6 @@ def render_multicolor_bitmap(
         width=width,
         height=height,
         rows=raster,
-        consumed={
-            "bitmap": bitmap_required,
-            "screen": cell_required,
-            "color": cell_required,
-        },
     )
 
 
@@ -265,9 +250,7 @@ def charset_layout(
     paper = colour_index(background, "background")
     if not isinstance(multicolor, bool):
         raise RequestError("multicolor must be a boolean")
-    pairs = _multicolor_pairs(
-        multicolor, paper, background_1, background_2, ink & 0x07
-    )
+    pairs = _multicolor_pairs(multicolor, paper, background_1, background_2, ink & 0x07)
     return CharsetLayout(
         glyph_count=count,
         sheet_columns=columns,
@@ -335,7 +318,6 @@ def render_charset(
         width=width,
         height=height,
         rows=raster,
-        consumed={"charset": required},
         glyph_indices=tuple(range(glyph_count)),
     )
 
@@ -398,9 +380,7 @@ def render_char_screen(
             pairs: tuple[int, int, int, int] | None = None
             if shared is not None and nybble & 0x08:
                 pairs = (background, shared[0], shared[1], nybble & 0x07)
-            cell_foreground = (
-                nybble & 0x07 if multicolor else nybble
-            )
+            cell_foreground = nybble & 0x07 if multicolor else nybble
             left = cell_column * 8
             for line in range(8):
                 pixels = charset[base + line]
@@ -408,18 +388,11 @@ def render_char_screen(
                 if pairs is None:
                     for bit in range(8):
                         target[left + bit] = (
-                            cell_foreground
-                            if pixels & (0x80 >> bit)
-                            else background
+                            cell_foreground if pixels & (0x80 >> bit) else background
                         )
                 else:
                     _paint_multicolor(target, left, pixels, pairs)
-    consumed = {"screen": cell_required, "charset": charset_required}
-    if color is not None:
-        consumed["color"] = cell_required
-    return Raster(
-        width=width, height=height, rows=raster, consumed=consumed
-    )
+    return Raster(width=width, height=height, rows=raster)
 
 
 def sprite_layout(
@@ -555,7 +528,6 @@ def render_sprites(
         width=width,
         height=height,
         rows=raster,
-        consumed={"sprites": required},
         transparent_pixel_count=transparent,
     )
 

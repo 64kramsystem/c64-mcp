@@ -23,11 +23,9 @@ class GhidraClient:
     def __init__(
         self,
         base_url: str,
-        auth_token: str | None = None,
         timeout: float = 30.0,
     ) -> None:
         self._base_url = base_url.rstrip("/")
-        self._auth_token = auth_token
         self._timeout = _positive_timeout(timeout)
 
     def call_get(
@@ -65,9 +63,7 @@ class GhidraClient:
                 body, separators=(",", ":"), ensure_ascii=False
             ).encode("utf-8")
         except (TypeError, ValueError) as error:
-            raise GhidraError(
-                f"request body for {path} is not JSON-safe"
-            ) from error
+            raise GhidraError(f"request body for {path} is not JSON-safe") from error
         request = urllib.request.Request(
             self._url(path, query),
             data=encoded,
@@ -110,9 +106,7 @@ class GhidraClient:
             or isinstance(connector_timeout_ms, bool)
             or not 1 <= connector_timeout_ms <= 55_000
         ):
-            raise ValueError(
-                "connector_timeout_ms must be from 1 to 55000"
-            )
+            raise ValueError("connector_timeout_ms must be from 1 to 55000")
         generic_timeout_ms = connector_timeout_ms + 5_000
         http_timeout = (generic_timeout_ms + 5_000) / 1000.0
         return self.call_post(
@@ -128,14 +122,10 @@ class GhidraClient:
             allow_error_response=True,
         )
 
-    def read_bytes(
-        self, program: str, start: str, length: int
-    ) -> bytes:
+    def read_bytes(self, program: str, start: str, length: int) -> bytes:
         _require_program(program)
         if length <= 0 or length > 1_048_576:
-            raise ValueError(
-                "length must be from 1 to 1048576 bytes"
-            )
+            raise ValueError("length must be from 1 to 1048576 bytes")
         result = self.call_get(
             "/inspect_memory_content",
             {
@@ -147,9 +137,7 @@ class GhidraClient:
         )
         bytes_read = result.get("bytes_read")
         if not isinstance(bytes_read, int) or isinstance(bytes_read, bool):
-            raise GhidraError(
-                "inspect_memory_content omitted integer bytes_read"
-            )
+            raise GhidraError("inspect_memory_content omitted integer bytes_read")
         if bytes_read != length:
             raise GhidraError(
                 f"inspect_memory_content returned {bytes_read} of "
@@ -157,152 +145,24 @@ class GhidraClient:
             )
         dump = result.get("hex_dump")
         if not isinstance(dump, str):
-            raise GhidraError(
-                "inspect_memory_content omitted string hex_dump"
-            )
+            raise GhidraError("inspect_memory_content omitted string hex_dump")
         # AnalysisService currently emits a literal backslash-n between
         # 16-byte rows rather than an actual newline. Accept that exact
         # documented wire shape as well as ordinary JSON whitespace.
         compact = "".join(dump.replace("\\n", "").split())
         if len(compact) != length * 2 or not _HEX.fullmatch(compact):
-            raise GhidraError(
-                "inspect_memory_content returned malformed hex_dump"
-            )
+            raise GhidraError("inspect_memory_content returned malformed hex_dump")
         return bytes.fromhex(compact)
 
-    def apply_profile(
-        self,
-        program: str,
-        profile: Mapping[str, object],
-        *,
-        dry_run: bool = True,
-        conflict_policy: str = "error",
-        replace_user_definitions: bool = False,
-        create_memory_blocks: bool = False,
+    def create_labels(
+        self, program: str, labels: list[dict[str, str]]
     ) -> dict[str, object]:
         _require_program(program)
         return self.call_post(
-            "/apply_symbol_profile",
-            {
-                "profile": profile,
-                "dry_run": dry_run,
-                "conflict_policy": conflict_policy,
-                "replace_user_definitions": replace_user_definitions,
-                "create_memory_blocks": create_memory_blocks,
-            },
+            "/batch_create_labels",
+            {"labels": labels},
             {"program": program},
-        )
-
-    def apply_data_regions(
-        self,
-        program: str,
-        regions: list[Mapping[str, object]],
-        *,
-        dry_run: bool = True,
-    ) -> dict[str, object]:
-        _require_program(program)
-        return self.call_post(
-            "/apply_data_regions",
-            {"regions": regions, "dry_run": dry_run},
-            {"program": program},
-        )
-
-    def apply_memory_image(
-        self,
-        program: str,
-        blocks: list[Mapping[str, object]],
-        metadata: Mapping[str, object],
-        *,
-        conflict_policy: str = "error",
-        dry_run: bool = True,
-        timeout_ms: int = 30_000,
-    ) -> dict[str, object]:
-        _require_program(program)
-        return self.call_post(
-            "/apply_memory_image",
-            {
-                "blocks": blocks,
-                "metadata": metadata,
-                "conflict_policy": conflict_policy,
-                "dry_run": dry_run,
-            },
-            {"program": program},
-            timeout=timeout_ms / 1000.0,
-        )
-
-    def search_6502_indexed_operands(
-        self,
-        program: str,
-        *,
-        target_start: str,
-        target_end: str,
-        source_start: str,
-        source_end: str,
-        limit: int = 1_000,
-        offset: int = 0,
-    ) -> dict[str, object]:
-        _require_program(program)
-        return self.call_get(
-            "/search_6502_indexed_operands",
-            {
-                "program": program,
-                "target_start": target_start,
-                "target_end": target_end,
-                "source_start": source_start,
-                "source_end": source_end,
-                "limit": limit,
-                "offset": offset,
-            },
-        )
-
-    def find_split_pointer_partners(
-        self,
-        program: str,
-        *,
-        first_start: str,
-        count: int,
-        partner_start: str,
-        partner_end: str,
-        target_start: str,
-        target_end: str,
-        limit: int = 100,
-        offset: int = 0,
-    ) -> dict[str, object]:
-        _require_program(program)
-        return self.call_get(
-            "/find_split_pointer_partners",
-            {
-                "program": program,
-                "first_start": first_start,
-                "count": count,
-                "partner_start": partner_start,
-                "partner_end": partner_end,
-                "target_start": target_start,
-                "target_end": target_end,
-                "limit": limit,
-                "offset": offset,
-            },
-        )
-
-    def write_memory_bytes(
-        self,
-        program: str,
-        start: str,
-        data: str,
-        *,
-        dry_run: bool = True,
-        conflict_policy: str = "error",
-    ) -> dict[str, object]:
-        _require_program(program)
-        return self.call_post(
-            "/write_memory_bytes",
-            {
-                "start": start,
-                "bytes": data,
-                "conflict_policy": conflict_policy,
-                "dry_run": dry_run,
-            },
-            {"program": program},
+            allow_error_response=True,
         )
 
     def write_memory_bytes_result(
@@ -339,14 +199,10 @@ class GhidraClient:
         request_committed: bool,
     ) -> dict[str, object]:
         effective_timeout = (
-            self._timeout
-            if timeout is None
-            else _positive_timeout(timeout)
+            self._timeout if timeout is None else _positive_timeout(timeout)
         )
         try:
-            with urllib.request.urlopen(
-                request, timeout=effective_timeout
-            ) as response:
+            with urllib.request.urlopen(request, timeout=effective_timeout) as response:
                 raw = _read_bounded(response)
         except urllib.error.HTTPError as error:
             try:
@@ -355,9 +211,7 @@ class GhidraClient:
             except Exception:
                 detail = f"HTTP {error.code}"
             raise GhidraError(
-                self._sanitize(
-                    f"Ghidra HTTP {error.code} calling {path}: {detail}"
-                )
+                f"Ghidra HTTP {error.code} calling {path}: {detail}"
             ) from None
         except (urllib.error.URLError, TimeoutError, OSError) as error:
             timed_out = _is_timeout(error)
@@ -368,9 +222,7 @@ class GhidraClient:
                     else f"Ghidra transport failure calling {path}"
                 ),
                 code=(
-                    "ghidra_http_timeout"
-                    if timed_out
-                    else "ghidra_transport_failure"
+                    "ghidra_http_timeout" if timed_out else "ghidra_transport_failure"
                 ),
                 timeout_layer="http" if timed_out else None,
                 outcome_unknown=request_committed,
@@ -384,20 +236,12 @@ class GhidraClient:
                 f"Ghidra response from {path} is not valid UTF-8 JSON"
             ) from error
         if not isinstance(decoded, dict):
-            raise GhidraError(
-                f"Ghidra response from {path} must be a JSON object"
-            )
+            raise GhidraError(f"Ghidra response from {path} must be a JSON object")
         if "error" in decoded and not allow_error_response:
-            raise GhidraError(
-                self._sanitize(
-                    f"Ghidra error from {path}: {decoded['error']}"
-                )
-            )
+            raise GhidraError(f"Ghidra error from {path}: {decoded['error']}")
         return decoded
 
-    def _url(
-        self, path: str, query: Mapping[str, object]
-    ) -> str:
+    def _url(self, path: str, query: Mapping[str, object]) -> str:
         if not path.startswith("/") or path.startswith("//"):
             raise ValueError("path must be an absolute local HTTP path")
         encoded_query = urllib.parse.urlencode(query, doseq=True)
@@ -408,14 +252,7 @@ class GhidraClient:
         headers = {"Accept": "application/json"}
         if content_type:
             headers["Content-Type"] = "application/json"
-        if self._auth_token is not None:
-            headers["Authorization"] = f"Bearer {self._auth_token}"
         return headers
-
-    def _sanitize(self, value: str) -> str:
-        if self._auth_token:
-            return value.replace(self._auth_token, "[redacted]")
-        return value
 
 
 def _read_bounded(response: Any) -> bytes:
@@ -423,9 +260,7 @@ def _read_bounded(response: Any) -> bytes:
     if not isinstance(raw, bytes):
         raise GhidraError("Ghidra transport returned a non-byte response")
     if len(raw) > MAX_RESPONSE_BYTES:
-        raise GhidraError(
-            f"Ghidra response exceeds {MAX_RESPONSE_BYTES} bytes"
-        )
+        raise GhidraError(f"Ghidra response exceeds {MAX_RESPONSE_BYTES} bytes")
     return raw
 
 

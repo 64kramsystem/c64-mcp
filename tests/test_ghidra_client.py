@@ -1,11 +1,6 @@
-from __future__ import annotations
-
 import io
 import json
 import urllib.error
-import urllib.parse
-from email.message import Message
-from typing import Any
 
 import pytest
 
@@ -14,435 +9,100 @@ from c64_mcp.ghidra_client import GhidraClient
 
 
 class FakeResponse:
-    def __init__(self, payload: bytes) -> None:
-        self._stream = io.BytesIO(payload)
+    def __init__(self, payload):
+        self.stream = io.BytesIO(payload)
 
-    def read(self, size: int = -1) -> bytes:
-        return self._stream.read(size)
+    def read(self, size=-1):
+        return self.stream.read(size)
 
-    def __enter__(self) -> FakeResponse:
+    def __enter__(self):
         return self
 
-    def __exit__(self, *_args: object) -> None:
+    def __exit__(self, *_args):
         return None
 
 
-def test_post_sends_explicit_program_and_bearer_token(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    observed: dict[str, Any] = {}
+def test_http_requests_name_program_and_decode_json(monkeypatch):
+    observed = {}
 
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        observed["request"] = request
-        observed["timeout"] = timeout
-        return FakeResponse(b'{"committed":false}')
+    def open_request(request, timeout):
+        observed.update(request=request, timeout=timeout)
+        return FakeResponse(b'{"bytes_read":1,"hex_dump":"AA"}')
 
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient(
-        "http://127.0.0.1:8089", "secret-token", timeout=30.0
-    )
+    monkeypatch.setattr("urllib.request.urlopen", open_request)
+    client = GhidraClient("http://127.0.0.1:8089", timeout=12)
 
-    result = client.call_post(
-        "/apply_symbol_profile",
-        {"profile": {}},
-        {"program": "snapshot name"},
-    )
-
+    assert client.read_bytes("game", "RAM:1000", 1) == b"\xaa"
     request = observed["request"]
-    assert request.full_url.endswith("program=snapshot+name")
-    assert request.method == "POST"
-    assert request.headers["Authorization"] == "Bearer secret-token"
-    assert json.loads(request.data) == {"profile": {}}
-    assert observed["timeout"] == 30.0
-    assert result == {"committed": False}
+    assert "program=game" in request.full_url
+    assert observed["timeout"] == 12
 
 
-def test_token_never_appears_in_transport_or_upstream_errors(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    def fake_open(_request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        raise urllib.error.URLError("secret-token network detail")
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient("http://127.0.0.1:8089", "secret-token")
-
-    with pytest.raises(GhidraError) as captured:
-        client.call_get("/mcp/schema", {})
-
-    assert "secret-token" not in str(captured.value)
-    assert "Authorization" not in str(captured.value)
-
-
-def test_http_and_json_error_shapes_are_stable(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    headers = Message()
-
-    def http_failure(_request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        raise urllib.error.HTTPError(
-            "http://127.0.0.1:8089/fail",
-            409,
-            "conflict",
-            headers,
-            io.BytesIO(b'{"error":"profile conflict"}'),
-        )
-
-    monkeypatch.setattr("urllib.request.urlopen", http_failure)
-    client = GhidraClient("http://127.0.0.1:8089")
-    with pytest.raises(GhidraError, match="profile conflict"):
-        client.call_get("/fail", {})
-
-    monkeypatch.setattr(
-        "urllib.request.urlopen",
-        lambda *_args, **_kwargs: FakeResponse(b'{"error":"bad profile"}'),
-    )
-    with pytest.raises(GhidraError, match="bad profile"):
-        client.call_get("/validate_symbol_profile", {})
-
+def test_response_must_be_a_bounded_json_object(monkeypatch):
     monkeypatch.setattr(
         "urllib.request.urlopen",
         lambda *_args, **_kwargs: FakeResponse(b"[]"),
     )
     with pytest.raises(GhidraError, match="JSON object"):
-        client.call_get("/mcp/schema", {})
+        GhidraClient("http://127.0.0.1:8089").call_get("/mcp/schema", {})
 
-
-def test_per_call_timeout_overrides_default(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    observed: list[float] = []
-
-    def fake_open(_request: Any, timeout: float) -> FakeResponse:
-        observed.append(timeout)
-        return FakeResponse(b"{}")
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient(
-        "http://127.0.0.1:8089", timeout=30.0
-    )
-
-    client.call_get("/mcp/schema", {}, timeout=65.0)
-    client.call_get("/mcp/schema", {})
-
-    assert observed == [65.0, 30.0]
-    with pytest.raises(ValueError, match="timeout"):
-        client.call_get("/mcp/schema", {}, timeout=0)
-
-
-def test_response_body_is_bounded(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setattr(
-        "c64_mcp.ghidra_client.MAX_RESPONSE_BYTES", 8
-    )
+    monkeypatch.setattr("c64_mcp.ghidra_client.MAX_RESPONSE_BYTES", 4)
     monkeypatch.setattr(
         "urllib.request.urlopen",
-        lambda *_args, **_kwargs: FakeResponse(b'{"long":1}'),
+        lambda *_args, **_kwargs: FakeResponse(b'{"ok":true}'),
     )
-
     with pytest.raises(GhidraError, match="response exceeds"):
         GhidraClient("http://127.0.0.1:8089").call_get("/large", {})
 
 
-def test_read_bytes_requires_exact_complete_lower_or_upper_hex(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    replies = iter(
-        [
-            b'{"bytes_read":3,"hex_dump":"AA bb\\n0C"}',
-            b'{"bytes_read":2,"hex_dump":"aa"}',
-            b'{"bytes_read":1,"hex_dump":"gg"}',
-        ]
-    )
-    monkeypatch.setattr(
-        "urllib.request.urlopen",
-        lambda *_args, **_kwargs: FakeResponse(next(replies)),
-    )
-    client = GhidraClient("http://127.0.0.1:8089")
+def test_target_invocation_uses_nested_timeout_budget(monkeypatch):
+    observed = {}
 
-    assert client.read_bytes("snapshot", "0x1000", 3) == b"\xaa\xbb\x0c"
-    with pytest.raises(GhidraError, match="returned 2 of 3"):
-        client.read_bytes("snapshot", "0x1000", 3)
-    with pytest.raises(GhidraError, match="hex_dump"):
-        client.read_bytes("snapshot", "0x1000", 1)
+    def open_request(request, timeout):
+        observed.update(request=request, timeout=timeout)
+        return FakeResponse(b'{"ok":true}')
 
-
-def test_read_bytes_accepts_literal_line_separators_from_generic_server(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    dump = " ".join(f"{value:02X}" for value in range(16))
-    dump += "\\n10 "
-    payload = json.dumps(
-        {"bytes_read": 17, "hex_dump": dump}
-    ).encode("utf-8")
-    monkeypatch.setattr(
-        "urllib.request.urlopen",
-        lambda *_args, **_kwargs: FakeResponse(payload),
+    monkeypatch.setattr("urllib.request.urlopen", open_request)
+    result = GhidraClient("http://127.0.0.1:8089").invoke_target_method(
+        "target",
+        "method",
+        {"value": 1},
+        connector_timeout_ms=10_000,
     )
 
-    result = GhidraClient("http://127.0.0.1:8089").read_bytes(
-        "snapshot", "0x1000", 17
-    )
-
-    assert result == bytes(range(17))
-
-
-def test_mutating_convenience_calls_always_name_the_program(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    requests: list[Any] = []
-
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        requests.append(request)
-        return FakeResponse(b"{}")
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient("http://127.0.0.1:8089")
-
-    client.apply_profile("snapshot", {"schema_version": 1}, dry_run=True)
-    client.apply_data_regions("snapshot", [], dry_run=True)
-    client.write_memory_bytes(
-        "snapshot", "0x1000", "aa", dry_run=True
-    )
-
-    assert all("program=snapshot" in request.full_url for request in requests)
-    assert [request.method for request in requests] == ["POST", "POST", "POST"]
-
-
-def test_memory_image_uses_one_atomic_endpoint_with_error_policy(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    observed: dict[str, Any] = {}
-
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        observed["request"] = request
-        observed["timeout"] = timeout
-        return FakeResponse(b'{"committed":false}')
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    blocks = [
-        {
-            "name": "INTRO_RAM",
-            "start": "RAM:0000",
-            "overlay": True,
-            "bytes": "aabb",
-        }
-    ]
-    metadata = {"phase": "INTRO"}
-
-    result = GhidraClient("http://127.0.0.1:8089").apply_memory_image(
-        "snapshot",
-        blocks,
-        metadata,
-        conflict_policy="replace_exact",
-        dry_run=True,
-        timeout_ms=45_000,
-    )
-
-    request = observed["request"]
-    assert request.full_url.endswith(
-        "/apply_memory_image?program=snapshot"
-    )
-    assert json.loads(request.data) == {
-        "blocks": blocks,
-        "metadata": metadata,
-        "conflict_policy": "replace_exact",
-        "dry_run": True,
-    }
-    assert result == {"committed": False}
-    assert observed["timeout"] == 45.0
-
-
-def test_reversing_search_queries(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    requests: list[Any] = []
-
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        requests.append(request)
-        return FakeResponse(b"{}")
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient("http://127.0.0.1:8089")
-    client.search_6502_indexed_operands(
-        "snapshot",
-        target_start="RAM:8000",
-        target_end="RAM:8FFF",
-        source_start="RAM:1000",
-        source_end="RAM:1FFF",
-        limit=20,
-        offset=4,
-    )
-    client.find_split_pointer_partners(
-        "snapshot",
-        first_start="RAM:2000",
-        count=16,
-        partner_start="RAM:2100",
-        partner_end="RAM:21FF",
-        target_start="RAM:8000",
-        target_end="RAM:8FFF",
-    )
-    first_query = urllib.parse.parse_qs(
-        urllib.parse.urlparse(requests[0].full_url).query
-    )
-    assert first_query == {
-        "program": ["snapshot"],
-        "target_start": ["RAM:8000"],
-        "target_end": ["RAM:8FFF"],
-        "source_start": ["RAM:1000"],
-        "source_end": ["RAM:1FFF"],
-        "limit": ["20"],
-        "offset": ["4"],
-    }
-    split_query = urllib.parse.parse_qs(
-        urllib.parse.urlparse(requests[1].full_url).query
-    )
-    assert split_query["first_start"] == ["RAM:2000"]
-    assert split_query["count"] == ["16"]
-
-
-@pytest.mark.parametrize("program", ["", " ", "\n"])
-def test_convenience_calls_reject_blank_programs(program: str) -> None:
-    client = GhidraClient("http://127.0.0.1:8089")
-
-    with pytest.raises(ValueError, match="program"):
-        client.apply_profile(program, {}, dry_run=True)
-
-
-def test_target_method_discovery_preserves_structured_error(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    observed: dict[str, Any] = {}
-
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        observed["request"] = request
-        observed["timeout"] = timeout
-        return FakeResponse(
-            b'{"ok":false,"error":{"code":"no_active_trace",'
-            b'"message":"open a trace"},"outcome_unknown":false}'
-        )
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    result = GhidraClient(
-        "http://127.0.0.1:8089", timeout=30
-    ).target_methods()
-
-    assert result["ok"] is False
-    assert result["error"] == {
-        "code": "no_active_trace",
-        "message": "open a trace",
-    }
-    assert observed["request"].full_url.endswith("/debugger/target_methods")
-    assert observed["timeout"] == 30
-
-
-def test_target_method_invocation_uses_three_layer_timeout_budget(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    observed: dict[str, Any] = {}
-
-    def fake_open(request: Any, timeout: float) -> FakeResponse:
-        observed["request"] = request
-        observed["timeout"] = timeout
-        return FakeResponse(
-            b'{"ok":true,"result":"{\\"ok\\":true}"}'
-        )
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    result = GhidraClient(
-        "http://127.0.0.1:8089", timeout=30
-    ).invoke_target_method(
-        "opaque-token",
-        "c64_vice_v1_step",
-        {
-            "process": {"object_path": "C64"},
-            "count": 1,
-            "timeout_ms": 55_000,
-        },
-        connector_timeout_ms=55_000,
-    )
-
-    request = observed["request"]
-    assert request.full_url.endswith("/debugger/invoke_target_method")
-    assert json.loads(request.data) == {
-        "target_token": "opaque-token",
-        "method": "c64_vice_v1_step",
-        "arguments": {
-            "process": {"object_path": "C64"},
-            "count": 1,
-            "timeout_ms": 55_000,
-        },
-        "timeout_ms": 60_000,
-    }
-    assert observed["timeout"] == 65.0
+    body = json.loads(observed["request"].data)
+    assert body["timeout_ms"] == 15_000
+    assert observed["timeout"] == 20
     assert result["ok"] is True
 
 
-def test_target_method_http_timeout_reports_committed_request(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    def fake_open(_request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        raise TimeoutError("timed out")
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-    client = GhidraClient("http://127.0.0.1:8089")
+def test_invocation_timeout_reports_unknown_committed_outcome(monkeypatch):
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            urllib.error.URLError(TimeoutError())
+        ),
+    )
 
     with pytest.raises(GhidraTransportError) as captured:
-        client.invoke_target_method(
-            "token",
-            "method",
-            {},
-            connector_timeout_ms=10_000,
+        GhidraClient("http://127.0.0.1:8089").invoke_target_method(
+            "target", "method", {}, connector_timeout_ms=1_000
         )
 
-    error = captured.value
-    assert error.code == "ghidra_http_timeout"
-    assert error.timeout_layer == "http"
-    assert error.outcome_unknown is True
-    assert error.request_committed is True
+    assert captured.value.outcome_unknown is True
+    assert captured.value.request_committed is True
 
 
-def test_target_discovery_timeout_is_not_a_committed_mutation(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    def fake_open(_request: Any, timeout: float) -> FakeResponse:
-        del timeout
-        raise urllib.error.URLError(TimeoutError("timed out"))
-
-    monkeypatch.setattr("urllib.request.urlopen", fake_open)
-
-    with pytest.raises(GhidraTransportError) as captured:
-        GhidraClient("http://127.0.0.1:8089").target_methods()
-
-    assert captured.value.code == "ghidra_http_timeout"
-    assert captured.value.request_committed is False
-
-
-def test_write_memory_result_preserves_upstream_error_envelope(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_memory_write_preserves_upstream_error_envelope(monkeypatch):
     monkeypatch.setattr(
         "urllib.request.urlopen",
         lambda *_args, **_kwargs: FakeResponse(
-            b'{"error":"destination conflict","committed":false}'
+            b'{"error":"conflict","committed":false}'
         ),
     )
-    client = GhidraClient("http://127.0.0.1:8089")
 
-    result = client.write_memory_bytes_result(
-        "snapshot",
-        "RAM:1000",
-        "aabb",
-        dry_run=False,
-        conflict_policy="error",
+    result = GhidraClient("http://127.0.0.1:8089").write_memory_bytes_result(
+        "game", "RAM:1000", "aa", dry_run=False
     )
 
-    assert result == {
-        "error": "destination conflict",
-        "committed": False,
-    }
+    assert result == {"error": "conflict", "committed": False}

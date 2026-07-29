@@ -12,14 +12,12 @@ from c64_mcp.vice import ViceSession
 def live_session() -> ViceSession:
     if os.environ.get("C64_MCP_VICE_LIVE") != "1":
         pytest.skip(
-            "set C64_MCP_VICE_LIVE=1 with a disposable active "
-            "VICE C64 Debugger trace"
+            "set C64_MCP_VICE_LIVE=1 with a disposable active VICE C64 Debugger trace"
         )
     settings = Settings.from_environ(os.environ)
     return ViceSession(
         GhidraClient(
             settings.ghidra_mcp_url,
-            settings.ghidra_auth_token,
             settings.ghidra_timeout,
         )
     )
@@ -65,18 +63,14 @@ def test_live_disposable_mutating_surface() -> None:
     original_a = record["value"]
     assert session.set_registers(values={"A": original_a})["ok"] is True
 
-    memory = session.read_memory(
-        bank_id=0, start=0x0200, end=0x0200, max_bytes=1
-    )
+    memory = session.read_memory(bank_id=0, start=0x0200, end=0x0200, max_bytes=1)
     assert memory["ok"] is True, memory
     original_byte = memory["result"]["bytes"]  # type: ignore[index]
-    assert session.write_memory(
-        bank_id=0, start=0x0200, bytes=original_byte
-    )["ok"] is True
-
-    created = session.set_checkpoint(
-        start=0x0200, end=0x0200, enabled=False
+    assert (
+        session.write_memory(bank_id=0, start=0x0200, bytes=original_byte)["ok"] is True
     )
+
+    created = session.set_checkpoint(start=0x0200, end=0x0200, enabled=False)
     assert created["ok"] is True, created
     number = created["result"]["checkpoint"]["number"]  # type: ignore[index]
     assert session.toggle_checkpoint(number=number, enabled=True)["ok"] is True
@@ -88,10 +82,10 @@ def test_live_disposable_mutating_surface() -> None:
     assert session.resume()["ok"] is True
     stopped = session.interrupt()
     assert stopped["ok"] is True, stopped
-    event = stopped["result"].get("event")  # type: ignore[union-attr]
-    if isinstance(event, dict) and isinstance(event.get("sequence"), int):
+    stop_count = stopped.get("stop_count")
+    if isinstance(stop_count, int):
         waited = session.wait_for_stop(
-            after_sequence=max(0, event["sequence"] - 1),
+            after_stop_count=max(0, stop_count - 1),
             timeout_ms=1_000,
         )
         assert waited["ok"] is True, waited

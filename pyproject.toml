@@ -19,8 +19,7 @@ packages = ["src/c64_mcp"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "src/c64_mcp/text/tables.json" = "c64_mcp/text/tables.json"
-"src/c64_mcp/profiles/c64.json" = "c64_mcp/profiles/c64.json"
-"src/c64_mcp/contracts/c64-vice-api-v1.json" = "c64_mcp/contracts/c64-vice-api-v1.json"
+"src/c64_mcp/data/c64_symbols.json" = "c64_mcp/data/c64_symbols.json"
 
 [dependency-groups]
 dev = [

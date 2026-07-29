@@ -36,7 +36,6 @@ class Codepoint:
     glyph: str | None
     name: str
     printable: bool
-    reverse_video: bool
 
 
 def table_for(encoding: Encoding) -> tuple[Codepoint, ...]:
@@ -50,11 +49,7 @@ def table_for(encoding: Encoding) -> tuple[Codepoint, ...]:
 @lru_cache(maxsize=1)
 def _all_tables() -> MappingProxyType[Encoding, tuple[Codepoint, ...]]:
     try:
-        raw = (
-            resources.files("c64_mcp.text")
-            .joinpath("tables.json")
-            .read_text("utf-8")
-        )
+        raw = resources.files("c64_mcp.text").joinpath("tables.json").read_text("utf-8")
         document = json.loads(raw)
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
         raise CodecDataError("cannot load bundled C64 text tables") from error
@@ -68,16 +63,14 @@ def _all_tables() -> MappingProxyType[Encoding, tuple[Codepoint, ...]]:
     for encoding in Encoding:
         raw_entries = tables.get(encoding.value)
         if not isinstance(raw_entries, list):
-            raise CodecDataError(
-                f"invalid {encoding.value} table: expected an array"
-            )
+            raise CodecDataError(f"invalid {encoding.value} table: expected an array")
         entries = tuple(
             _parse_entry(encoding, index, raw_entry)
             for index, raw_entry in enumerate(raw_entries)
         )
-        if len(entries) != 256 or tuple(
-            entry.byte for entry in entries
-        ) != tuple(range(256)):
+        if len(entries) != 256 or tuple(entry.byte for entry in entries) != tuple(
+            range(256)
+        ):
             raise CodecDataError(
                 f"invalid {encoding.value} table: expected bytes 0..255"
             )
@@ -99,7 +92,6 @@ def _parse_entry(
         "glyph",
         "name",
         "printable",
-        "reverse_video",
     }
     if set(raw) != expected:
         raise CodecDataError(
@@ -109,7 +101,6 @@ def _parse_entry(
     glyph = raw["glyph"]
     name = raw["name"]
     printable = raw["printable"]
-    reverse_video = raw["reverse_video"]
     if (
         not isinstance(byte, int)
         or isinstance(byte, bool)
@@ -118,15 +109,11 @@ def _parse_entry(
         or not isinstance(name, str)
         or not name
         or not isinstance(printable, bool)
-        or not isinstance(reverse_video, bool)
     ):
-        raise CodecDataError(
-            f"invalid {encoding.value} entry {index}: invalid value"
-        )
+        raise CodecDataError(f"invalid {encoding.value} entry {index}: invalid value")
     return Codepoint(
         byte=byte,
         glyph=glyph,
         name=name,
         printable=printable,
-        reverse_video=reverse_video,
     )

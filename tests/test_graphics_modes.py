@@ -28,9 +28,7 @@ def test_hires_cells_interleave_across_two_by_two_cells() -> None:
     bitmap[24] = 0x0F
     screen = bytes([0x12, 0x34, 0x56, 0x78])
 
-    raster = render_hires_bitmap(
-        bitmap=bytes(bitmap), screen=screen, columns=2, rows=2
-    )
+    raster = render_hires_bitmap(bitmap=bytes(bitmap), screen=screen, columns=2, rows=2)
 
     assert (raster.width, raster.height) == (16, 16)
     assert list(raster.rows[0]) == [
@@ -54,9 +52,7 @@ def test_hires_rows_within_a_cell_are_consecutive_bytes() -> None:
     bitmap[16 + 5] = 0xFF  # cell (1,0), pixel row 5
     screen = bytes([0x10, 0x10, 0x10, 0x10])
 
-    raster = render_hires_bitmap(
-        bitmap=bytes(bitmap), screen=screen, columns=2, rows=2
-    )
+    raster = render_hires_bitmap(bitmap=bytes(bitmap), screen=screen, columns=2, rows=2)
 
     assert list(raster.rows[3])[:8] == [1] * 8
     assert list(raster.rows[2])[:8] == [0] * 8
@@ -322,12 +318,12 @@ def test_sprite_rows_span_three_bytes_left_to_right() -> None:
         background=6,
     )
 
-    assert [
-        index for index, value in enumerate(raster.rows[0]) if value == 1
-    ] == [7, 8, 23]
-    assert [
-        index for index, value in enumerate(raster.rows[1]) if value == 1
-    ] == [0]
+    assert [index for index, value in enumerate(raster.rows[0]) if value == 1] == [
+        7,
+        8,
+        23,
+    ]
+    assert [index for index, value in enumerate(raster.rows[1]) if value == 1] == [0]
 
 
 def test_sprites_accept_packed_stride_63() -> None:
@@ -430,9 +426,7 @@ def test_only_strides_63_and_64_are_accepted(stride: int) -> None:
     ("columns", "rows"),
     [(64, 32), (1, 1), (32, 64)],
 )
-def test_cell_geometry_at_the_caps_is_accepted(
-    columns: int, rows: int
-) -> None:
+def test_cell_geometry_at_the_caps_is_accepted(columns: int, rows: int) -> None:
     raster = render_hires_bitmap(
         bitmap=bytes(columns * rows * 8),
         screen=bytes(columns * rows),
@@ -465,9 +459,7 @@ def test_cell_geometry_past_its_caps_is_rejected(
 
 
 def test_the_cell_budget_boundary_is_accepted_and_one_past_is_not() -> None:
-    render_hires_bitmap(
-        bitmap=bytes(2048 * 8), screen=bytes(2048), columns=64, rows=32
-    )
+    render_hires_bitmap(bitmap=bytes(2048 * 8), screen=bytes(2048), columns=64, rows=32)
 
     with pytest.raises(GraphicsLimitError, match="2048"):
         render_hires_bitmap(
@@ -584,6 +576,4 @@ def test_colour_indices_past_their_caps_are_rejected(colour: int) -> None:
 
 def test_short_sources_are_refused_by_the_renderers_too() -> None:
     with pytest.raises(RequestError, match="bitmap"):
-        render_hires_bitmap(
-            bitmap=bytes(7), screen=bytes(1), columns=1, rows=1
-        )
+        render_hires_bitmap(bitmap=bytes(7), screen=bytes(1), columns=1, rows=1)
