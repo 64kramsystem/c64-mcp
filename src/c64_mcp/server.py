@@ -27,6 +27,10 @@ from .profile_tools import (
 from .profile_tools import (
     get_c64_symbol_profile as get_profile,
 )
+from .reversing import ReversingGhidraClient, capture_transition
+from .reversing import find_split_pointer_partners as find_split_partners
+from .reversing import import_vice_phase as import_phase
+from .reversing import search_6502_indexed_operands as search_indexed
 from .text.tools import BytesInput, TextGhidraClient
 from .text.tools import decode_c64_text as decode_text
 from .text.tools import define_c64_text as define_text
@@ -73,6 +77,7 @@ def create_server(
     vice = ViceSession(cast(ViceGhidraClient, instance))
     graphics_vice = cast(GraphicsViceSession, vice)
     capture_vice = cast(CaptureViceSession, vice)
+    reversing_client = cast(ReversingGhidraClient, instance)
     server = FastMCP("c64-mcp")
     registry = ToolProfileRegistry(server, settings.tool_profile)
 
@@ -685,6 +690,211 @@ def create_server(
             dry_run=dry_run,
             memspace=memspace,
             timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_feed_keyboard(
+        data: BytesInput,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Queue raw PETSCII bytes in VICE's keyboard buffer."""
+
+        return await asyncio.to_thread(
+            vice.feed_keyboard,
+            data=data,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_set_joyport(
+        port: int,
+        value: int,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Set one raw active-low VICE joystick-port byte."""
+
+        return await asyncio.to_thread(
+            vice.set_joyport,
+            port=port,
+            value=value,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_save_snapshot(
+        filename: str,
+        save_roms: bool = False,
+        save_disks: bool = True,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Save one VICE snapshot at a path visible to the VICE host."""
+
+        return await asyncio.to_thread(
+            vice.save_snapshot,
+            filename=filename,
+            save_roms=save_roms,
+            save_disks=save_disks,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_load_snapshot(
+        filename: str,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Load one VICE snapshot from a path visible to the VICE host."""
+
+        return await asyncio.to_thread(
+            vice.load_snapshot,
+            filename=filename,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_list_events(
+        after_sequence: int,
+        limit: int = 128,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """List a bounded page of retained public VICE events."""
+
+        return await asyncio.to_thread(
+            vice.list_events,
+            after_sequence=after_sequence,
+            limit=limit,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("vice")
+    async def vice_capture_state(
+        expected_event_sequence: int,
+        expected_command_sequence: int,
+        ranges: list[dict[str, object]],
+        register_names: list[str] | None = None,
+        include_checkpoints: bool = True,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Atomically capture registers and at most 16 KiB of named ranges."""
+
+        return await asyncio.to_thread(
+            vice.capture_state,
+            expected_event_sequence=expected_event_sequence,
+            expected_command_sequence=expected_command_sequence,
+            ranges=ranges,
+            register_names=register_names,
+            include_checkpoints=include_checkpoints,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("reversing")
+    async def import_vice_phase(
+        program: str,
+        phase: str,
+        output_dir: str,
+        dry_run: bool = True,
+        overwrite: bool = False,
+        timeout_ms: int = 10_000,
+        ghidra_timeout_ms: int = 30_000,
+    ) -> dict[str, object]:
+        """Capture canonical CPU/RAM/ROM/I/O banks and import one phase."""
+
+        return await asyncio.to_thread(
+            import_phase,
+            vice,
+            reversing_client,
+            program=program,
+            phase=phase,
+            output_dir=output_dir,
+            dry_run=dry_run,
+            overwrite=overwrite,
+            timeout_ms=timeout_ms,
+            ghidra_timeout_ms=ghidra_timeout_ms,
+        )
+
+    @registry.tool("reversing")
+    async def vice_capture_transition(
+        ranges: list[dict[str, object]],
+        checkpoint_start: int,
+        checkpoint_end: int,
+        checkpoint_operations: int = 4,
+        checkpoint_memspace: int = 0,
+        petscii: BytesInput | None = None,
+        joyport_port: int | None = None,
+        joyport_value: int | None = None,
+        register_names: list[str] | None = None,
+        manifest_path: str | None = None,
+        overwrite: bool = False,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Capture and diff exact ranges around one stopping checkpoint."""
+
+        return await asyncio.to_thread(
+            capture_transition,
+            vice,
+            ranges=ranges,
+            checkpoint_start=checkpoint_start,
+            checkpoint_end=checkpoint_end,
+            checkpoint_operations=checkpoint_operations,
+            checkpoint_memspace=checkpoint_memspace,
+            petscii=petscii,
+            joyport_port=joyport_port,
+            joyport_value=joyport_value,
+            register_names=register_names,
+            manifest_path=manifest_path,
+            overwrite=overwrite,
+            timeout_ms=timeout_ms,
+        )
+
+    @registry.tool("reversing")
+    async def search_6502_indexed_operands(
+        program: str,
+        target_start: str,
+        target_end: str,
+        source_start: str,
+        source_end: str,
+        limit: int = 1_000,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        """Find 6502 absolute indexed operands without modifying Ghidra."""
+
+        return await asyncio.to_thread(
+            search_indexed,
+            reversing_client,
+            program=program,
+            target_start=target_start,
+            target_end=target_end,
+            source_start=source_start,
+            source_end=source_end,
+            limit=limit,
+            offset=offset,
+        )
+
+    @registry.tool("reversing")
+    async def find_split_pointer_partners(
+        program: str,
+        first_start: str,
+        count: int,
+        partner_start: str,
+        partner_end: str,
+        target_start: str,
+        target_end: str,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        """Find split pointer arrays without modifying Ghidra."""
+
+        return await asyncio.to_thread(
+            find_split_partners,
+            reversing_client,
+            program=program,
+            first_start=first_start,
+            count=count,
+            partner_start=partner_start,
+            partner_end=partner_end,
+            target_start=target_start,
+            target_end=target_end,
+            limit=limit,
+            offset=offset,
         )
 
     registry.install_management_tools()

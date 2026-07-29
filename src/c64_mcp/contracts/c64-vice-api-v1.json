@@ -1,7 +1,7 @@
 {
   "api": {
     "major": 1,
-    "minor": 0
+    "minor": 1
   },
   "capabilities": [
     "status",
@@ -20,8 +20,14 @@
     "execution.resume",
     "execution.interrupt",
     "execution.wait_for_stop",
+    "events.list",
+    "input.keyboard.feed",
+    "input.joyport.set",
+    "snapshot.save",
+    "snapshot.load",
+    "state.capture",
     "machine.reset",
-    "display.capture",
+    "display.capture.chunked",
     "trace.sync"
   ],
   "connector": {
@@ -30,10 +36,14 @@
   "limits": {
     "banks": 4096,
     "checkpoints": 4096,
+    "display_capture_chunk_bytes": 16384,
     "event_history": 1024,
+    "keyboard_feed_bytes": 255,
     "memory_read_bytes": 65536,
     "memory_write_bytes": 65536,
-    "response_body_bytes": 16777216
+    "response_body_bytes": 16777216,
+    "snapshot_filename_bytes": 255,
+    "state_capture_bytes": 16384
   },
   "machine": "c64",
   "method_namespace": "c64_vice_v1_",
@@ -474,6 +484,181 @@
       "return_type": "STRING"
     },
     {
+      "name": "c64_vice_v1_list_events",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "after_sequence",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": 128,
+          "name": "limit",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_feed_keyboard",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "data",
+          "required": true,
+          "type": "BYTE_ARR"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_set_joyport",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "port",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "value",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_save_snapshot",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "filename",
+          "required": true,
+          "type": "STRING"
+        },
+        {
+          "default": false,
+          "name": "save_roms",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": true,
+          "name": "save_disks",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_load_snapshot",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "filename",
+          "required": true,
+          "type": "STRING"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_capture_state",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "expected_event_sequence",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "expected_command_sequence",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "name": "ranges",
+          "required": true,
+          "type": "LONG_ARR"
+        },
+        {
+          "name": "names",
+          "required": true,
+          "type": "STRING_ARR"
+        },
+        {
+          "name": "register_names",
+          "required": true,
+          "type": "STRING_ARR"
+        },
+        {
+          "default": true,
+          "name": "include_checkpoints",
+          "required": false,
+          "type": "BOOL"
+        },
+        {
+          "default": 10000,
+          "name": "timeout_ms",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
       "name": "c64_vice_v1_reset",
       "parameters": [
         {
@@ -518,8 +703,51 @@
         }
       ],
       "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_read_display_capture",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "capture_id",
+          "required": true,
+          "type": "STRING"
+        },
+        {
+          "name": "offset",
+          "required": true,
+          "type": "LONG"
+        },
+        {
+          "default": 16384,
+          "name": "max_bytes",
+          "required": false,
+          "type": "LONG"
+        }
+      ],
+      "return_type": "STRING"
+    },
+    {
+      "name": "c64_vice_v1_discard_display_capture",
+      "parameters": [
+        {
+          "name": "process",
+          "required": true,
+          "type": "C64"
+        },
+        {
+          "name": "capture_id",
+          "required": true,
+          "type": "STRING"
+        }
+      ],
+      "return_type": "STRING"
     }
   ],
   "protocol": "c64.vice",
-  "surface_revision": 2
+  "surface_revision": 3
 }

@@ -30,9 +30,9 @@ checks the complete versioned `c64.vice/1` method schema, capability set,
 machine, limits, and immutable connector instance ID. Compatibility is based
 on that runtime contract rather than an assumed package-version pairing.
 
-The handshake also requires connector **surface revision 2**, which adds the
-`display.capture` capability; an older connector is refused there, naming the
-revision it needs, rather than failing later on a missing method.
+The handshake requires connector API 1.1 and **surface revision 3**, which add
+bounded state and display capture, event history, input, and snapshot
+operations. An older connector is refused during the handshake.
 
 The tool set covers cached status, dynamic registers and banks, bank-aware
 memory, checkpoints, execution control, stop-event waits, reset, and screen
@@ -43,15 +43,17 @@ cached and performs no discovery or network operation.
 `vice_capture_screen` returns the composited frame as an indexed PNG. It lives
 in the `vice` group rather than `graphics`, because it needs the live debugger.
 The connector returns the debug frame — border and blanking included — as one
-palette index per byte, together with the palette VICE is using; the capture is
-mapped through that palette rather than the static Pepto default, and the
-default `crop=true` keeps only the inner screen rectangle the connector
-reports, while `crop=false` returns the whole debug buffer. The summary carries
-`width`, `height`, `cropped`, `inner`, `palette_size`, `used_indices`,
-`distinct_index_count`, and `output_path`, which is written atomically and
-refuses an existing file unless `overwrite=true`. The envelope is validated
-before anything renders, and a mismatch is one `vice_connector_incompatible`
-error naming the field.
+palette index per byte, together with the palette VICE is using. C64 MCP reads
+the opaque capture in chunks no larger than 16 KiB, verifies every chunk and
+the complete SHA-256, and always discards the capture token. The default
+`crop=true` keeps only the inner screen rectangle; `crop=false` returns the
+whole debug buffer.
+
+The summary fields are `mode`, `width`, `height`, `cropped`, `inner`,
+`palette_size`, `used_indices`, `distinct_index_count`, and `output_path`.
+When supplied, `output_path` is expanded and its parent must already exist;
+the target is checked before capture, written atomically, and refused if it
+exists unless `overwrite=true`.
 
 Capture requires a stopped emulator, because any binary-monitor command traps
 VICE into the monitor: call `vice_interrupt`, capture, then `vice_resume`, so
@@ -60,8 +62,7 @@ also requires a VICE at r46020 or later; earlier builds, including the 3.10
 release, overrun their allocation while answering `display get`, and the
 connector refuses them by design.
 
-`copy_vice_memory_to_ghidra` is the only implicit bridge from live VICE memory
-to a static program. It performs one complete connector read, verifies the
+`copy_vice_memory_to_ghidra` performs one complete connector read, verifies the
 exact byte count, computes SHA-256, and calls the generic
 `write_memory_bytes` endpoint exactly once. It defaults to `dry_run=true` and
 never returns the complete payload. It does not create memory blocks or
@@ -186,6 +187,44 @@ These decoders render bytes, wherever they came from; `vice_capture_screen`,
 in the VICE group above, renders what the emulator is actually showing. Use the
 decoders for an off-screen buffer or a program's data, and capture for the
 composited result.
+
+## Reversing workflows
+
+The `vice` group includes low-level tools to feed raw PETSCII, set an active-low
+joyport byte, save or load snapshots, page retained events, and atomically
+capture registers, checkpoints, and up to 16 KiB of named bank ranges guarded
+by exact event and command sequences. State capture always uses
+non-side-effecting Binary Monitor peeks, including for I/O. The opt-in
+`reversing` group builds bounded evidence workflows and thin 6502 Ghidra
+searches on those primitives.
+
+`import_vice_phase` requires exact connector bank names: `default` or `cpu`
+for the CPU-visible bank, plus one each of `ram`, `rom`, and `io`. It never
+guesses missing or ambiguous roles. It captures the exact observed CPU view
+and complete RAM and ROM banks through `$0000-$FFFF`, plus I/O through
+`$D000-$DFFF`; retaining all four views preserves phase-specific banking and
+cartridge mappings that cannot safely be derived later. Captures are chained
+by returned sequences. Before contacting VICE, `output_dir` is expanded,
+created, checked for writes, and all final names are checked for conflicts.
+Four SHA-256-described `.bin` files and one final JSON manifest are written
+atomically; one generic `apply_memory_image` call previews or creates
+phase-qualified overlay blocks and stores capture metadata in the program.
+Phase names are upper-cased for artifact and block names. `overwrite` replaces
+local evidence files and exact same-name/same-range phase blocks; other Ghidra
+block conflicts remain errors.
+
+`vice_capture_transition` captures caller-named ranges, creates one
+workflow-owned stopping checkpoint, optionally feeds PETSCII or sets a joyport
+value, and accepts only a stop event naming that checkpoint. It returns
+register and range hashes, coalesced byte changes, event provenance, and
+joystick/checkpoint cleanup results; `manifest_path` persists the same
+inventory.
+Its parent directory must already exist, and the manifest is written
+atomically only after capture and cleanup; existing files are refused unless
+`overwrite=true`.
+
+`search_6502_indexed_operands` and `find_split_pointer_partners` expose the
+generic qualified-address searches without modifying the Ghidra program.
 
 ## Configuration
 

@@ -60,9 +60,9 @@ def connector_envelope(
 
 def capability_envelope(
     *,
-    minor: int = 0,
+    minor: int = 1,
     capabilities: list[str] | None = None,
-    surface_revision: int = 2,
+    surface_revision: int = 3,
 ) -> dict[str, object]:
     contract = load_contract()
     result = {
@@ -186,14 +186,14 @@ def test_packaged_surface_revision_is_accepted_by_the_handshake() -> None:
     ).instance_id == INSTANCE
 
 
-def test_capture_requires_surface_revision_two() -> None:
+def test_bounded_capture_requires_surface_revision_three() -> None:
     with pytest.raises(ViceError) as captured:
-        validate_capabilities(capability_envelope(surface_revision=1))
+        validate_capabilities(capability_envelope(surface_revision=2))
 
     assert captured.value.code == "vice_connector_incompatible"
     message = str(captured.value)
     assert "surface revision" in message
-    assert "2" in message
+    assert "3" in message
     assert "upgrade" in message.lower()
 
 
@@ -202,28 +202,32 @@ def test_newer_minor_allows_only_capability_superset() -> None:
     required = list(contract["capabilities"])  # type: ignore[arg-type]
 
     assert validate_capabilities(
-        capability_envelope(minor=1, capabilities=[*required, "future"])
-    ).api_minor == 1
+        capability_envelope(minor=2, capabilities=[*required, "future"])
+    ).api_minor == 2
     with pytest.raises(ViceError, match="omits required"):
         validate_capabilities(
-            capability_envelope(minor=1, capabilities=required[:-1])
+            capability_envelope(minor=2, capabilities=required[:-1])
         )
 
 
-def test_api_1_0_rejects_extra_capability_and_changed_instance() -> None:
+def test_current_api_rejects_extra_capability_and_changed_instance() -> None:
     contract = load_contract()
     required = list(contract["capabilities"])  # type: ignore[arg-type]
     with pytest.raises(ViceError, match="exactly"):
         validate_capabilities(
             capability_envelope(capabilities=[*required, "future"])
         )
-
     value = capability_envelope()
     result = value["result"]
     assert isinstance(result, dict)
     result["instance_id"] = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
     with pytest.raises(ViceError, match="disagree"):
         validate_capabilities(value)
+
+
+def test_older_minor_is_rejected_before_operations() -> None:
+    with pytest.raises(ViceError, match="require 1.1"):
+        validate_capabilities(capability_envelope(minor=0))
 
 
 def test_connector_envelope_parser_preserves_failure_and_detects_replacement() -> None:

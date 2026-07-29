@@ -1,11 +1,9 @@
-"""Turn one live VICE frame into an indexed PNG.
+"""Turn one chunked live VICE frame into an indexed PNG.
 
 The connector owns the emulator: it traps VICE into the monitor, reads the
-composited display buffer and the palette that goes with it, and returns one
-byte per pixel plus the RGB table those bytes index. Nothing is rendered there,
-so everything below happens here — envelope validation, cropping to the inner
-screen rectangle, and encoding with the same indexed-PNG writer the static
-decoders use.
+composited display buffer and the palette that goes with it. Nothing is
+rendered there, so everything below happens here — bounded retrieval, envelope
+validation, cropping to the inner screen rectangle, and indexed-PNG encoding.
 
 Two properties of the connector contract shape this module:
 
@@ -24,8 +22,9 @@ never appears twice and never lands in structured output.
 from __future__ import annotations
 
 import base64
-import binascii
+import hashlib
 import json
+import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Protocol, cast
@@ -33,6 +32,7 @@ from typing import Any, Protocol, cast
 from mcp.types import CallToolResult, ImageContent, TextContent
 
 from ..errors import RequestError, ViceError
+from ..vice import MAX_DISPLAY_CAPTURE_CHUNK_BYTES
 from .palette import MAX_PALETTE_ENTRIES, Rgb
 from .png import encode_indexed_png
 from .tools import output_target, write_atomically
@@ -52,10 +52,11 @@ CAPTURE_MODE = "vice_capture"
 BITS_PER_PIXEL = 8
 DEFAULT_TIMEOUT_MS = 10_000
 _INNER_FIELDS = ("x_offset", "y_offset", "width", "height")
+_LOWER_HEX = re.compile(r"^[0-9a-f]*$")
 
 
 class CaptureViceSession(Protocol):
-    """The single connector call a screen capture needs."""
+    """The bounded connector calls a screen capture needs."""
 
     def capture_display(
         self,
@@ -64,6 +65,24 @@ class CaptureViceSession(Protocol):
         timeout_ms: int = DEFAULT_TIMEOUT_MS,
     ) -> dict[str, object]:
         """Capture one composited frame and its palette."""
+
+    def read_display_capture(
+        self,
+        *,
+        capture_id: str,
+        offset: int,
+        max_bytes: int = MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        """Read one bounded part of an opaque display capture."""
+
+    def discard_display_capture(
+        self,
+        *,
+        capture_id: str,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        """Discard one opaque display capture."""
 
 
 def vice_capture_screen(
@@ -77,7 +96,7 @@ def vice_capture_screen(
 ) -> CallToolResult:
     """Capture the current VICE frame and return it as an indexed PNG.
 
-    Requires a connector at surface revision 2 and, because capture traps the
+    Requires a connector at surface revision 3 and, because capture traps the
     emulator into the monitor, a stopped target; the connector enforces both.
     """
 
@@ -89,7 +108,23 @@ def vice_capture_screen(
     target = output_target(output_path, overwrite)
 
     envelope = vice.capture_display(use_vic=use_vic, timeout_ms=timeout_ms)
-    frame = _frame(envelope)
+    capture_id = _available_capture_id(envelope)
+    if capture_id is None:
+        capture_id = _metadata(envelope).capture_id
+    primary: ViceError | None = None
+    try:
+        metadata = _metadata(envelope)
+        frame = _frame(metadata, _read_buffer(vice, metadata, timeout_ms))
+    except ViceError as error:
+        primary = error
+    try:
+        _discard(vice, capture_id, timeout_ms)
+    except ViceError as error:
+        if primary is None:
+            raise
+        primary.details["discard_error"] = error.as_result()["error"]
+    if primary is not None:
+        raise primary
 
     rows: Sequence[Sequence[int]]
     if crop:
@@ -157,8 +192,32 @@ class _Frame:
     palette: list[Rgb]
 
 
-def _frame(envelope: Mapping[str, object]) -> _Frame:
-    """Validate the connector envelope completely before anything renders."""
+@dataclass(frozen=True, slots=True)
+class _Metadata:
+    capture_id: str
+    width: int
+    height: int
+    inner_x: int
+    inner_y: int
+    inner_width: int
+    inner_height: int
+    buffer_length: int
+    buffer_sha256: str
+    palette_records: object
+
+
+def _available_capture_id(
+    envelope: Mapping[str, object],
+) -> str | None:
+    result = envelope.get("result")
+    if not isinstance(result, Mapping):
+        return None
+    capture_id = result.get("capture_id")
+    return capture_id if isinstance(capture_id, str) and capture_id else None
+
+
+def _metadata(envelope: Mapping[str, object]) -> _Metadata:
+    """Validate capture metadata before requesting any buffer chunks."""
 
     if envelope.get("ok") is False:
         error = envelope.get("error")
@@ -175,7 +234,9 @@ def _frame(envelope: Mapping[str, object]) -> _Frame:
     if not isinstance(result, Mapping):
         raise _incompatible("the capture returned no result object")
     record = cast(Mapping[str, object], result)
-
+    capture_id = record.get("capture_id")
+    if not isinstance(capture_id, str) or not capture_id:
+        raise _incompatible("capture_id must be a nonblank string")
     width = _positive(record.get("width"), "width")
     height = _positive(record.get("height"), "height")
     inner_x, inner_y, inner_width, inner_height = _inner(
@@ -193,18 +254,152 @@ def _frame(envelope: Mapping[str, object]) -> _Frame:
             f"buffer_length {buffer_length} does not equal width * height "
             f"({width} * {height} = {width * height})"
         )
-    buffer = _buffer(record.get("buffer_base64"), buffer_length)
-    palette = _palette(record.get("palette"), buffer)
-    return _Frame(
+    buffer_sha256 = record.get("buffer_sha256")
+    if (
+        not isinstance(buffer_sha256, str)
+        or len(buffer_sha256) != 64
+        or any(
+            character not in "0123456789abcdef"
+            for character in buffer_sha256
+        )
+    ):
+        raise _incompatible(
+            "buffer_sha256 must be a lowercase SHA-256 digest"
+        )
+    return _Metadata(
+        capture_id=capture_id,
         width=width,
         height=height,
         inner_x=inner_x,
         inner_y=inner_y,
         inner_width=inner_width,
         inner_height=inner_height,
+        buffer_length=buffer_length,
+        buffer_sha256=buffer_sha256,
+        palette_records=record.get("palette"),
+    )
+
+
+def _read_buffer(
+    vice: CaptureViceSession,
+    metadata: _Metadata,
+    timeout_ms: int,
+) -> bytes:
+    parts: list[bytes] = []
+    offset = 0
+    while offset < metadata.buffer_length:
+        requested = min(
+            MAX_DISPLAY_CAPTURE_CHUNK_BYTES,
+            metadata.buffer_length - offset,
+        )
+        envelope = vice.read_display_capture(
+            capture_id=metadata.capture_id,
+            offset=offset,
+            max_bytes=requested,
+            timeout_ms=timeout_ms,
+        )
+        result = _success_result(envelope, "display capture read")
+        raw = result.get("bytes")
+        byte_count = result.get("byte_count")
+        if (
+            result.get("capture_id") != metadata.capture_id
+            or result.get("offset") != offset
+            or result.get("buffer_length") != metadata.buffer_length
+            or result.get("buffer_sha256") != metadata.buffer_sha256
+            or not isinstance(byte_count, int)
+            or isinstance(byte_count, bool)
+            or not 1 <= byte_count <= requested
+            or not isinstance(raw, str)
+            or len(raw) != byte_count * 2
+            or _LOWER_HEX.fullmatch(raw) is None
+        ):
+            raise _incompatible(
+                f"display capture chunk at offset {offset} is inconsistent"
+            )
+        expected_next = offset + byte_count
+        complete = result.get("complete")
+        next_offset = result.get("next_offset")
+        if (
+            not isinstance(complete, bool)
+            or (
+                complete is True
+                and (
+                    expected_next != metadata.buffer_length
+                    or next_offset is not None
+                )
+            )
+            or (
+                complete is False
+                and (
+                    expected_next >= metadata.buffer_length
+                    or next_offset != expected_next
+                )
+            )
+        ):
+            raise _incompatible(
+                f"display capture continuation at offset {offset} is "
+                "inconsistent"
+            )
+        parts.append(bytes.fromhex(raw))
+        offset = expected_next
+    buffer = b"".join(parts)
+    if hashlib.sha256(buffer).hexdigest() != metadata.buffer_sha256:
+        raise _incompatible(
+            "assembled display buffer does not match buffer_sha256"
+        )
+    return buffer
+
+
+def _discard(
+    vice: CaptureViceSession,
+    capture_id: str,
+    timeout_ms: int,
+) -> None:
+    result = _success_result(
+        vice.discard_display_capture(
+            capture_id=capture_id, timeout_ms=timeout_ms
+        ),
+        "display capture discard",
+    )
+    if (
+        result.get("capture_id") != capture_id
+        or result.get("discarded") is not True
+    ):
+        raise _incompatible("display capture discard result is inconsistent")
+
+
+def _frame(metadata: _Metadata, buffer: bytes) -> _Frame:
+    palette = _palette(metadata.palette_records, buffer)
+    return _Frame(
+        width=metadata.width,
+        height=metadata.height,
+        inner_x=metadata.inner_x,
+        inner_y=metadata.inner_y,
+        inner_width=metadata.inner_width,
+        inner_height=metadata.inner_height,
         buffer=buffer,
         palette=palette,
     )
+
+
+def _success_result(
+    envelope: Mapping[str, object], operation: str
+) -> Mapping[str, object]:
+    if envelope.get("ok") is False:
+        error = envelope.get("error")
+        if isinstance(error, Mapping):
+            raise ViceError.from_mapping(
+                error,
+                fallback_code="vice_capture_failed",
+                fallback_message=f"the VICE {operation} failed",
+            )
+        raise ViceError(
+            "vice_capture_failed", f"the VICE {operation} failed"
+        )
+    result = envelope.get("result")
+    if not isinstance(result, Mapping):
+        raise _incompatible(f"the {operation} returned no result object")
+    return cast(Mapping[str, object], result)
 
 
 def _inner(
@@ -227,23 +422,6 @@ def _inner(
             "debug buffer"
         )
     return x_offset, y_offset, inner_width, inner_height
-
-
-def _buffer(value: object, buffer_length: int) -> bytes:
-    if not isinstance(value, str):
-        raise _incompatible("buffer_base64 must be a string")
-    try:
-        data = base64.b64decode(value, validate=True)
-    except (binascii.Error, ValueError) as error:
-        raise _incompatible(
-            "buffer_base64 is not valid base64"
-        ) from error
-    if len(data) != buffer_length:
-        raise _incompatible(
-            f"buffer_base64 decodes to {len(data)} bytes but buffer_length "
-            f"declares {buffer_length}"
-        )
-    return data
 
 
 def _palette(value: object, buffer: bytes) -> list[Rgb]:

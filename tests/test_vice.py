@@ -63,7 +63,7 @@ def capabilities(
         {
             "protocol": "c64.vice",
             "api_major": 1,
-            "api_minor": 0,
+            "api_minor": 1,
             "connector_name": "ghidra-vice-connector",
             "connector_version": "1.0.0",
             "instance_id": instance,
@@ -101,7 +101,7 @@ class FakeGhidra:
     def __init__(self) -> None:
         self.token = "target-1"
         self.instance = INSTANCE
-        self.surface_revision = 2
+        self.surface_revision = 3
         self.calls: list[tuple[str, dict[str, object], int]] = []
         self.writes: list[dict[str, object]] = []
         self.replies: dict[str, dict[str, object]] = {}
@@ -431,6 +431,53 @@ def test_old_generation_response_cannot_update_reconnected_binding() -> None:
             lambda value: value.capture_display(),
             "c64_vice_v1_capture_display",
         ),
+        (
+            lambda value: value.read_display_capture(
+                capture_id="frame", offset=0
+            ),
+            "c64_vice_v1_read_display_capture",
+        ),
+        (
+            lambda value: value.discard_display_capture(
+                capture_id="frame"
+            ),
+            "c64_vice_v1_discard_display_capture",
+        ),
+        (
+            lambda value: value.list_events(after_sequence=0),
+            "c64_vice_v1_list_events",
+        ),
+        (
+            lambda value: value.feed_keyboard(data="0d"),
+            "c64_vice_v1_feed_keyboard",
+        ),
+        (
+            lambda value: value.set_joyport(port=2, value=0x7F),
+            "c64_vice_v1_set_joyport",
+        ),
+        (
+            lambda value: value.save_snapshot(filename="/tmp/a.vsf"),
+            "c64_vice_v1_save_snapshot",
+        ),
+        (
+            lambda value: value.load_snapshot(filename="/tmp/a.vsf"),
+            "c64_vice_v1_load_snapshot",
+        ),
+        (
+            lambda value: value.capture_state(
+                expected_event_sequence=3,
+                expected_command_sequence=0,
+                ranges=[
+                    {
+                        "name": "zp",
+                        "bank_id": 0,
+                        "start": 0,
+                        "end": 255,
+                    }
+                ],
+            ),
+            "c64_vice_v1_capture_state",
+        ),
     ],
 )
 def test_public_tools_map_to_exactly_one_versioned_connector_method(
@@ -443,7 +490,14 @@ def test_public_tools_map_to_exactly_one_versioned_connector_method(
     assert result["ok"] is True
     assert [item[0] for item in fake.calls] == [method]
     assert fake.calls[0][1]["process"] == {"object_path": "C64"}
-    assert fake.calls[0][1]["timeout_ms"] == fake.calls[0][2]
+    if method in {
+        "c64_vice_v1_list_events",
+        "c64_vice_v1_read_display_capture",
+        "c64_vice_v1_discard_display_capture",
+    }:
+        assert "timeout_ms" not in fake.calls[0][1]
+    else:
+        assert fake.calls[0][1]["timeout_ms"] == fake.calls[0][2]
 
 
 def test_capture_display_sends_only_the_declared_arguments() -> None:
@@ -470,9 +524,107 @@ def test_capture_display_rejects_a_non_boolean_use_vic() -> None:
     assert fake.calls == []
 
 
-def test_a_revision_one_connector_is_rejected_during_the_handshake() -> None:
+def test_capture_state_flattens_named_ranges_for_the_connector() -> None:
+    fake, session = connected()
+
+    result = session.capture_state(
+        expected_event_sequence=3,
+        expected_command_sequence=0,
+        ranges=[
+            {
+                "name": "zp",
+                "bank_id": 1,
+                "start": 0,
+                "end": 255,
+            },
+            {
+                "name": "screen",
+                "memspace": 2,
+                "bank_id": 3,
+                "start": 0x0400,
+                "end": 0x07E7,
+            },
+        ],
+        register_names=["A", "PC"],
+        include_checkpoints=False,
+        timeout_ms=2_500,
+    )
+
+    assert result["ok"] is True
+    assert fake.calls[0][1] == {
+        "process": {"object_path": "C64"},
+        "expected_event_sequence": 3,
+        "expected_command_sequence": 0,
+        "ranges": [0, 1, 0, 255, 2, 3, 0x0400, 0x07E7],
+        "names": ["zp", "screen"],
+        "register_names": ["A", "PC"],
+        "include_checkpoints": False,
+        "timeout_ms": 2_500,
+    }
+
+
+def test_capture_state_rejects_more_than_16_kib_before_calling_connector() -> None:
+    fake, session = connected()
+
+    result = session.capture_state(
+        expected_event_sequence=3,
+        expected_command_sequence=0,
+        ranges=[
+            {
+                "name": "too_much",
+                "bank_id": 0,
+                "start": 0,
+                "end": 16_384,
+            }
+        ],
+    )
+
+    assert result["error"]["code"] == "vice_invalid_argument"  # type: ignore[index]
+    assert fake.calls == []
+
+
+def test_keyboard_joyport_snapshot_and_event_arguments_are_exact() -> None:
+    fake, session = connected()
+
+    assert session.feed_keyboard(data=[0x41, 0x0D])["ok"] is True
+    assert session.set_joyport(port=2, value=0xEF)["ok"] is True
+    assert session.save_snapshot(
+        filename="/tmp/state.vsf", save_roms=True, save_disks=False
+    )["ok"] is True
+    assert session.load_snapshot(filename="/tmp/state.vsf")["ok"] is True
+    assert session.list_events(after_sequence=7, limit=12)["ok"] is True
+
+    assert fake.calls[0][1]["data"] == {
+        "encoding": "hex",
+        "data": "410d",
+    }
+    assert fake.calls[1][1]["port"] == 2
+    assert fake.calls[1][1]["value"] == 0xEF
+    assert fake.calls[2][1]["filename"] == "/tmp/state.vsf"
+    assert fake.calls[2][1]["save_roms"] is True
+    assert fake.calls[2][1]["save_disks"] is False
+    assert fake.calls[3][1]["filename"] == "/tmp/state.vsf"
+    assert fake.calls[4][1] == {
+        "process": {"object_path": "C64"},
+        "after_sequence": 7,
+        "limit": 12,
+    }
+
+
+def test_keyboard_and_snapshot_bounds_fail_without_remote_calls() -> None:
+    fake, session = connected()
+
+    keyboard = session.feed_keyboard(data=[0] * 256)
+    snapshot = session.load_snapshot(filename="x" * 256)
+
+    assert keyboard["error"]["code"] == "vice_invalid_argument"  # type: ignore[index]
+    assert snapshot["error"]["code"] == "vice_invalid_argument"  # type: ignore[index]
+    assert fake.calls == []
+
+
+def test_a_revision_two_connector_is_rejected_during_the_handshake() -> None:
     fake = FakeGhidra()
-    fake.surface_revision = 1
+    fake.surface_revision = 2
 
     result = ViceSession(fake).connect()
 
@@ -480,7 +632,7 @@ def test_a_revision_one_connector_is_rejected_during_the_handshake() -> None:
     assert error["code"] == "vice_connector_incompatible"  # type: ignore[index]
     message = error["message"]  # type: ignore[index]
     assert "surface revision" in message
-    assert "2" in message
+    assert "3" in message
 
 
 def test_a_connector_without_the_capture_method_names_it() -> None:
