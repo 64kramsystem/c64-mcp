@@ -39,6 +39,8 @@ Binary-monitor reads require VICE to be stopped. A normal sequence is `vice_inte
 
 `vice_set_joyport` injects one raw active-low joystick-line byte on public port 1 or 2. The value remains in effect until another input, reset, or emulator shutdown changes it.
 
+`vice_set_keyboard_matrix` presses or releases one physical matrix position (row and column 0–7). A press remains held until explicitly released or the keyboard is cleared. It requires a VICE build containing binary-monitor command `0xa3` from the companion patch; stock builds reject it cleanly.
+
 ## Limits and behavior
 
 - Text and graphics sources are capped at 64 KiB.

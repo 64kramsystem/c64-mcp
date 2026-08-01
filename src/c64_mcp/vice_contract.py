@@ -76,6 +76,13 @@ REQUIRED_METHOD_ARGS = {
         "value",
         "timeout_ms",
     },
+    "c64_vice_v1_set_keyboard_matrix": {
+        "process",
+        "row",
+        "column",
+        "pressed",
+        "timeout_ms",
+    },
     "c64_vice_v1_save_snapshot": {
         "process",
         "filename",

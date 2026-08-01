@@ -487,6 +487,23 @@ def create_server(
         )
 
     @server.tool()
+    async def vice_set_keyboard_matrix(
+        row: int,
+        column: int,
+        pressed: bool,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Press or release one physical C64 matrix position (row/column 0..7)."""
+
+        return await asyncio.to_thread(
+            vice.set_keyboard_matrix,
+            row=row,
+            column=column,
+            pressed=pressed,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
     async def vice_save_snapshot(
         filename: str,
         save_roms: bool = False,

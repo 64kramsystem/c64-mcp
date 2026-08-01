@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added physical C64 keyboard-matrix press/release through the VICE connector.
+
 ## 0.101.0
 ### Changed
 

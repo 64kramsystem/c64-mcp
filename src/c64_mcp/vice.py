@@ -516,6 +516,30 @@ class ViceSession:
         except ViceError as error:
             return error.as_result()
 
+    def set_keyboard_matrix(
+        self,
+        *,
+        row: int,
+        column: int,
+        pressed: bool,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_set_keyboard_matrix",
+                {
+                    "row": _bounded(row, "row", minimum=0, maximum=7),
+                    "column": _bounded(
+                        column, "column", minimum=0, maximum=7
+                    ),
+                    "pressed": _boolean(pressed, "pressed"),
+                },
+                timeout_ms=timeout_ms,
+                mutation_flag="vice_input_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def save_snapshot(
         self,
         *,
