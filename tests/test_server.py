@@ -42,6 +42,7 @@ async def test_server_exposes_only_the_retained_c64_surface():
         "vice_wait_for_stop",
         "vice_feed_keyboard",
         "vice_set_joyport",
+        "vice_set_keyboard_matrix",
         "vice_save_snapshot",
         "vice_load_snapshot",
         "vice_reset",

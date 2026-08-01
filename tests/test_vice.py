@@ -164,6 +164,12 @@ def test_connect_is_idempotent_and_disconnect_is_local():
             "c64_vice_v1_set_joyport",
         ),
         (
+            lambda value: value.set_keyboard_matrix(
+                row=7, column=4, pressed=True
+            ),
+            "c64_vice_v1_set_keyboard_matrix",
+        ),
+        (
             lambda value: value.save_snapshot(filename="/tmp/test.vsf"),
             "c64_vice_v1_save_snapshot",
         ),
@@ -185,6 +191,16 @@ def test_memory_transfer_caps_are_enforced_before_invocation():
     fake, session = connected()
     before = len(fake.calls)
     result = session.write_memory(bank_id=0, start=0, bytes=[0] * 16_385)
+    assert result["ok"] is False
+    assert len(fake.calls) == before
+
+
+def test_keyboard_matrix_rejects_non_c64_rows_before_invocation():
+    fake, session = connected()
+    before = len(fake.calls)
+
+    result = session.set_keyboard_matrix(row=8, column=0, pressed=True)
+
     assert result["ok"] is False
     assert len(fake.calls) == before
 
