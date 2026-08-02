@@ -1,6 +1,6 @@
 [project]
 name = "c64-mcp"
-version = "0.101.0"
+version = "0.102.0"
 description = "C64-specific MCP tools for Ghidra and the Ghidra VICE connector"
 readme = "README.md"
 requires-python = ">=3.10"
