@@ -112,7 +112,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except ReleaseError as error:
         print(f"release refused: {error}", file=sys.stderr)
         return 2
-    print(version)
+    print(f"released {version}")
     return 0
 
 
