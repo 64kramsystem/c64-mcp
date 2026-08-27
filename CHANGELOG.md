@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Release tooling reports the released version consistently with the other Ghidra tools.
+
 ## 0.102.0
 ### Added
 
