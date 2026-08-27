@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.102.1
 ### Changed
 
 - Release tooling reports the released version consistently with the other Ghidra tools.
