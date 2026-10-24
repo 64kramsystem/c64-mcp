@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
+from mcp.server.mcpserver.exceptions import ToolError
 
-class C64McpError(RuntimeError):
+
+class C64McpError(ToolError, RuntimeError):
     """Base error for caller-visible C64 MCP failures."""
 
 

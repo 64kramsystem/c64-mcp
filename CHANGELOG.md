@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Changed
+
+- **Breaking:** pin the MCP Python SDK to 2.3.0 and migrate the stdio server to `MCPServer`.
+- Keep expected request and backend error details visible to MCP clients.
+
+### Tests
+
+- Cover current-protocol tool listing, image responses, invalid requests, and unavailable Ghidra backends.
+
 ## 0.103.0
 ### Changed
 

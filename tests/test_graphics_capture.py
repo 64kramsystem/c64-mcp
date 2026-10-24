@@ -1,7 +1,7 @@
 import base64
 
 import pytest
-from mcp.types import ImageContent
+from mcp_types import ImageContent
 
 from c64_mcp.errors import ViceError
 from c64_mcp.graphics.capture import vice_capture_screen
@@ -63,7 +63,9 @@ def test_capture_streams_chunks_crops_and_discards():
     image = result.content[0]
     assert isinstance(image, ImageContent)
     assert base64.b64decode(image.data).startswith(PNG_SIGNATURE)
-    assert (result.structuredContent["width"], result.structuredContent["height"]) == (
+    assert (
+        result.structured_content["width"], result.structured_content["height"]
+    ) == (
         2,
         2,
     )

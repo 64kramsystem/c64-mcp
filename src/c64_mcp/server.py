@@ -5,8 +5,8 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Literal, cast
 
-from mcp.server.fastmcp import FastMCP
-from mcp.types import CallToolResult
+from mcp.server.mcpserver import MCPServer
+from mcp_types import CallToolResult
 
 from .config import Settings
 from .ghidra_client import GhidraClient
@@ -38,7 +38,7 @@ ResetKindArgument = Literal["soft", "hard"]
 def create_server(
     settings: Settings,
     ghidra: Any | None = None,
-) -> FastMCP:
+) -> MCPServer:
     """Create the stdio server without opening external connections.
 
     Accepting the explicit Ghidra boundary keeps construction testable and
@@ -58,7 +58,7 @@ def create_server(
     graphics_client = cast(GraphicsGhidraClient, instance)
     vice = ViceSession(cast(ViceGhidraClient, instance))
     capture_vice = cast(CaptureViceSession, vice)
-    server = FastMCP("c64-mcp")
+    server = MCPServer("c64-mcp")
 
     @server.tool()
     async def apply_c64_symbols(program: str) -> dict[str, object]:

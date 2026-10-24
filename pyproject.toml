@@ -5,7 +5,7 @@ description = "C64-specific MCP tools for Ghidra and the Ghidra VICE connector"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
-dependencies = ["mcp==1.28.1"]
+dependencies = ["mcp==2.3.0"]
 
 [project.scripts]
 c64-mcp = "c64_mcp.__main__:main"

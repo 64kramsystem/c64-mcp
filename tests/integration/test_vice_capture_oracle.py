@@ -21,7 +21,7 @@ import os
 import time
 
 import pytest
-from mcp.types import CallToolResult, ImageContent
+from mcp_types import CallToolResult, ImageContent
 from PIL import Image
 
 from c64_mcp.config import Settings
@@ -138,7 +138,7 @@ def test_live_capture_matches_the_static_decoder(multicolor: bool) -> None:
             screen=inline(SCREEN),
         )
 
-    summary = captured.structuredContent
+    summary = captured.structured_content
     assert summary is not None
     assert (summary["width"], summary["height"]) == (320, 200)
     assert summary["cropped"] is True

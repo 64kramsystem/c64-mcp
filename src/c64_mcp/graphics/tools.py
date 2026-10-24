@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from mcp.types import CallToolResult, ImageContent, TextContent
+from mcp_types import CallToolResult, ImageContent, TextContent
 
 from ..errors import RequestError
 from .modes import (
@@ -346,12 +346,12 @@ def _emit(
             ImageContent(
                 type="image",
                 data=base64.b64encode(encoded.data).decode("ascii"),
-                mimeType="image/png",
+                mime_type="image/png",
             ),
             TextContent(
                 type="text",
                 text=json.dumps(summary, indent=2, sort_keys=True),
             ),
         ],
-        structuredContent=summary,
+        structured_content=summary,
     )

@@ -2,7 +2,7 @@ import base64
 import json
 
 import pytest
-from mcp.types import ImageContent, TextContent
+from mcp_types import ImageContent, TextContent
 
 from c64_mcp.errors import RequestError
 from c64_mcp.graphics.png import PNG_SIGNATURE
@@ -40,8 +40,8 @@ def test_decoder_returns_one_png_and_one_matching_summary():
     assert isinstance(image, ImageContent)
     assert isinstance(text, TextContent)
     assert base64.b64decode(image.data).startswith(PNG_SIGNATURE)
-    assert json.loads(text.text) == result.structuredContent
-    assert result.structuredContent["mode"] == "hires_bitmap"
+    assert json.loads(text.text) == result.structured_content
+    assert result.structured_content["mode"] == "hires_bitmap"
 
 
 def test_character_screen_reads_only_the_needed_remote_glyphs():
@@ -58,7 +58,7 @@ def test_character_screen_reads_only_the_needed_remote_glyphs():
         rows=1,
     )
 
-    assert result.structuredContent["mode"] == "char_screen"
+    assert result.structured_content["mode"] == "char_screen"
     assert ghidra.calls == [("game", "RAM:2000", 16)]
 
 

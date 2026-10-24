@@ -29,7 +29,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Protocol, cast
 
-from mcp.types import CallToolResult, ImageContent, TextContent
+from mcp_types import CallToolResult, ImageContent, TextContent
 
 from ..errors import RequestError, ViceError
 from ..vice import MAX_DISPLAY_CAPTURE_CHUNK_BYTES
@@ -137,14 +137,14 @@ def vice_capture_screen(
             ImageContent(
                 type="image",
                 data=base64.b64encode(encoded.data).decode("ascii"),
-                mimeType="image/png",
+                mime_type="image/png",
             ),
             TextContent(
                 type="text",
                 text=json.dumps(summary, indent=2, sort_keys=True),
             ),
         ],
-        structuredContent=summary,
+        structured_content=summary,
     )
 
 
