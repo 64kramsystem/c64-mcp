@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.15' and sys_platform == 'win32'",
@@ -55,7 +55,7 @@ wheels = [
 
 [[package]]
 name = "c64-mcp"
-version = "0.102.1"
+version = "0.103.0"
 source = { editable = "." }
 dependencies = [
     { name = "mcp" },

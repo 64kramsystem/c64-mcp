@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.103.0
 ### Changed
 
 - **Breaking:** target the current Ghidra 12.2 stack and accept only its contiguous memory hex response, removing old formatted-dump compatibility.
