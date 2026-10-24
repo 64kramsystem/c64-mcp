@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.104.0
 ### Changed
 
 - **Breaking:** pin the MCP Python SDK to 2.3.0 and migrate the stdio server to `MCPServer`.
