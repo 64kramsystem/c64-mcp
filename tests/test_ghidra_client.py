@@ -55,6 +55,17 @@ def test_response_must_be_a_bounded_json_object(monkeypatch):
         GhidraClient("http://127.0.0.1:8089").call_get("/large", {})
 
 
+def test_memory_read_rejects_old_formatted_hex_dumps(monkeypatch):
+    monkeypatch.setattr(
+        "urllib.request.urlopen",
+        lambda *_args, **_kwargs: FakeResponse(
+            json.dumps({"bytes_read": 2, "hex_dump": "AA\\nBB"}).encode()
+        ),
+    )
+    with pytest.raises(GhidraError, match="malformed hex_dump"):
+        GhidraClient("http://127.0.0.1:8089").read_bytes("game", "RAM:1000", 2)
+
+
 def test_target_invocation_uses_nested_timeout_budget(monkeypatch):
     observed = {}
 

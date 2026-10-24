@@ -81,7 +81,9 @@ def release(root: Path, bump: str) -> str:
         f"HEAD:{DEFAULT_BRANCH}",
         f"v{version}",
     )
-    run(root, "uv", "publish")
+    run(root, "uv", "publish",
+        f"dist/c64_mcp-{version}-py3-none-any.whl",
+        f"dist/c64_mcp-{version}.tar.gz")
     return version
 
 

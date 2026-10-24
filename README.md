@@ -62,3 +62,11 @@ uv run c64-mcp
 ```
 
 The package contains the immutable text tables and C64 symbol data used by the tools.
+
+## Ghidra integration baseline
+
+The companion extensions target Ghidra 12.2 and JDK 25. Older Ghidra releases and
+older trace databases are not supported. c64-mcp remains a separate MCP process.
+
+With sibling checkouts, run the disposable integration test using
+`python ../ghidra-mcp-next/tools/test_debugger_stacks.py --stack vice --ghidra "$GHIDRA_INSTALL_DIR"`.

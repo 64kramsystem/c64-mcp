@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed
+
+- **Breaking:** target the current Ghidra 12.2 stack and accept only its contiguous memory hex response, removing old formatted-dump compatibility.
+- Document the real TraceRMI integration runner shared with GhidraMCP-next.
+
+
 ## 0.102.1
 ### Changed
 

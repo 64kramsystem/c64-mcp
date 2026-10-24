@@ -132,7 +132,6 @@ class GhidraClient:
                 "program": program,
                 "address": start,
                 "length": length,
-                "detect_strings": False,
             },
         )
         bytes_read = result.get("bytes_read")
@@ -146,13 +145,9 @@ class GhidraClient:
         dump = result.get("hex_dump")
         if not isinstance(dump, str):
             raise GhidraError("inspect_memory_content omitted string hex_dump")
-        # AnalysisService currently emits a literal backslash-n between
-        # 16-byte rows rather than an actual newline. Accept that exact
-        # documented wire shape as well as ordinary JSON whitespace.
-        compact = "".join(dump.replace("\\n", "").split())
-        if len(compact) != length * 2 or not _HEX.fullmatch(compact):
+        if len(dump) != length * 2 or not _HEX.fullmatch(dump):
             raise GhidraError("inspect_memory_content returned malformed hex_dump")
-        return bytes.fromhex(compact)
+        return bytes.fromhex(dump)
 
     def create_labels(
         self, program: str, labels: list[dict[str, str]]
