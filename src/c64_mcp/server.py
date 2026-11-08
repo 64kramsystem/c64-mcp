@@ -49,8 +49,8 @@ def create_server(
         ghidra
         if ghidra is not None
         else GhidraClient(
-            settings.ghidra_mcp_url,
-            settings.ghidra_timeout,
+            timeout=settings.ghidra_timeout,
+            socket_path=settings.ghidra_mcp_socket,
         )
     )
     text_client = cast(TextGhidraClient, instance)

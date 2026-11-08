@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed
+
+- **Breaking:** discover the sole reachable GhidraMCP-next Unix socket lazily by default, replacing the implicit TCP endpoint. Use `GHIDRA_MCP_SOCKET` to select a socket; ambiguous discovery lists candidates. Remove `GHIDRA_MCP_URL` and TCP transport support.
+- Keep the selected socket for the server lifetime without retrying failed operations. Include the endpoint and underlying cause in transport errors.
+
 ## 0.104.0
 ### Changed
 

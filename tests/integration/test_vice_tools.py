@@ -17,8 +17,8 @@ def live_session() -> ViceSession:
     settings = Settings.from_environ(os.environ)
     return ViceSession(
         GhidraClient(
-            settings.ghidra_mcp_url,
-            settings.ghidra_timeout,
+            timeout=settings.ghidra_timeout,
+            socket_path=settings.ghidra_mcp_socket,
         )
     )
 

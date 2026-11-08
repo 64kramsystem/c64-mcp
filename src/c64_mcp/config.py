@@ -5,27 +5,24 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass
-from urllib.parse import urlsplit
 
 
 @dataclass(frozen=True)
 class Settings:
     """Validated process settings.
 
-    The generic Ghidra server is a trusted loopback service.
+    The generic Ghidra server is a trusted local Unix socket service.
     """
 
-    ghidra_mcp_url: str
     ghidra_timeout: float
+
+    ghidra_mcp_socket: str | None = None
 
     @classmethod
     def from_environ(cls, environ: Mapping[str, str]) -> Settings:
-        url = environ.get("GHIDRA_MCP_URL", "http://127.0.0.1:8089").rstrip("/")
-        parsed = urlsplit(url)
-        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-            raise ValueError("GHIDRA_MCP_URL must be an absolute http or https URL")
-        if parsed.query or parsed.fragment:
-            raise ValueError("GHIDRA_MCP_URL must not contain a query or fragment")
+        socket_path = environ.get("GHIDRA_MCP_SOCKET")
+        if socket_path is not None and not socket_path.strip():
+            raise ValueError("GHIDRA_MCP_SOCKET must not be blank")
 
         timeout_text = environ.get("GHIDRA_MCP_TIMEOUT", "30")
         try:
@@ -38,6 +35,6 @@ class Settings:
             raise ValueError("GHIDRA_MCP_TIMEOUT must be a finite positive number")
 
         return cls(
-            ghidra_mcp_url=url,
             ghidra_timeout=timeout,
+            ghidra_mcp_socket=socket_path,
         )

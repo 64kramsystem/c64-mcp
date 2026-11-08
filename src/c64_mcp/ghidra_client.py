@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import http.client
 import json
 import math
 import re
+import socket
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -12,20 +15,23 @@ from collections.abc import Mapping
 from typing import Any
 
 from .errors import GhidraError, GhidraTransportError
+from .ghidra_transport import socket_dirs
 
 MAX_RESPONSE_BYTES = 67_108_864
 _HEX = re.compile(r"^[0-9a-fA-F]*$")
 
 
 class GhidraClient:
-    """Small synchronous client for the public local Ghidra HTTP API."""
+    """Synchronous client for the Ghidra HTTP API over a local Unix socket."""
 
     def __init__(
         self,
-        base_url: str,
         timeout: float = 30.0,
+        *,
+        socket_path: str | None = None,
     ) -> None:
-        self._base_url = base_url.rstrip("/")
+        self._socket_path = socket_path
+        self._selection_lock = threading.Lock()
         self._timeout = _positive_timeout(timeout)
 
     def call_get(
@@ -196,8 +202,18 @@ class GhidraClient:
         effective_timeout = (
             self._timeout if timeout is None else _positive_timeout(timeout)
         )
+        with self._selection_lock:
+            if self._socket_path is None:
+                self._socket_path = _discover_socket()
+        endpoint = self._socket_path
         try:
-            with urllib.request.urlopen(request, timeout=effective_timeout) as response:
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({}),
+                _NoRedirectHandler(),
+                _UnixHTTPHandler(self._socket_path),
+            )
+            response_context = opener.open(request, timeout=effective_timeout)
+            with response_context as response:
                 raw = _read_bounded(response)
         except urllib.error.HTTPError as error:
             try:
@@ -206,15 +222,23 @@ class GhidraClient:
             except Exception:
                 detail = f"HTTP {error.code}"
             raise GhidraError(
-                f"Ghidra HTTP {error.code} calling {path}: {detail}"
+                f"Ghidra HTTP {error.code} at {endpoint} calling {path}: {detail}"
             ) from None
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
+        except (
+            urllib.error.URLError,
+            TimeoutError,
+            OSError,
+            http.client.HTTPException,
+        ) as error:
             timed_out = _is_timeout(error)
             raise GhidraTransportError(
                 (
-                    f"Ghidra HTTP timeout calling {path}"
+                    f"Ghidra HTTP timeout at {endpoint} calling {path}: {error}"
                     if timed_out
-                    else f"Ghidra transport failure calling {path}"
+                    else (
+                        f"Ghidra transport failure at {endpoint} "
+                        f"calling {path}: {error}"
+                    )
                 ),
                 code=(
                     "ghidra_http_timeout" if timed_out else "ghidra_transport_failure"
@@ -241,7 +265,7 @@ class GhidraClient:
             raise ValueError("path must be an absolute local HTTP path")
         encoded_query = urllib.parse.urlencode(query, doseq=True)
         suffix = f"?{encoded_query}" if encoded_query else ""
-        return f"{self._base_url}{path}{suffix}"
+        return f"http://localhost{path}{suffix}"
 
     def _headers(self, *, content_type: bool = False) -> dict[str, str]:
         headers = {"Accept": "application/json"}
@@ -295,3 +319,100 @@ def _is_timeout(error: BaseException) -> bool:
 def _require_program(program: str) -> None:
     if not isinstance(program, str) or not program.strip():
         raise ValueError("program must not be blank")
+
+
+class _UnixHTTPConnection(http.client.HTTPConnection):
+    def __init__(self, socket_path: str, **kwargs: Any) -> None:
+        super().__init__("localhost", **kwargs)
+        self._socket_path = socket_path
+
+    def connect(self) -> None:
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        try:
+            sock.settimeout(self.timeout)
+            sock.connect(self._socket_path)
+        except BaseException:
+            sock.close()
+            raise
+        self.sock = sock
+
+
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, request, response, code, message, headers, new_url):
+        return None
+
+
+class _UnixHTTPHandler(urllib.request.HTTPHandler):
+    def __init__(self, socket_path: str) -> None:
+        super().__init__()
+        self._socket_path = socket_path
+
+    def http_open(self, request: urllib.request.Request) -> Any:
+        return self.do_open(
+            lambda _host, **kwargs: _UnixHTTPConnection(self._socket_path, **kwargs),
+            request,
+        )
+
+
+def _discover_socket() -> str:
+    instances: list[str] = []
+    seen: set[str] = set()
+    seen_pids: set[str] = set()
+    directories = socket_dirs()
+    failures: list[str] = []
+    for directory in directories:
+        try:
+            paths = sorted(directory.glob("*.sock"))
+        except OSError as error:
+            failures.append(f"{directory}: {error}")
+            continue
+        for path in paths:
+            try:
+                identity = str(path.resolve())
+                if identity in seen:
+                    continue
+                opener = urllib.request.build_opener(
+                    urllib.request.ProxyHandler({}),
+                    _NoRedirectHandler(),
+                    _UnixHTTPHandler(str(path)),
+                )
+                with opener.open(
+                    "http://localhost/mcp/instance_info", timeout=2
+                ) as response:
+                    info = json.loads(_read_bounded(response).decode("utf-8"))
+                    if response.status != 200:
+                        raise ValueError(f"HTTP {response.status}")
+                if isinstance(info, dict) and "data" in info:
+                    info = info["data"]
+                if not isinstance(info, dict):
+                    raise ValueError("instance_info must be a JSON object")
+            except (
+                ValueError,
+                urllib.error.URLError,
+                OSError,
+                http.client.HTTPException,
+                GhidraError,
+            ) as error:
+                failures.append(f"{path}: {error}")
+                continue
+            pid = str(info.get("pid", ""))
+            if pid and pid in seen_pids:
+                continue
+            seen.add(identity)
+            if pid:
+                seen_pids.add(pid)
+            instances.append(str(path))
+    if len(instances) != 1:
+        detail = ", ".join(instances) if instances else "none"
+        searched = ", ".join(str(directory) for directory in directories)
+        diagnostics = "; ".join(failures) if failures else "none"
+        raise GhidraTransportError(
+            f"Expected one reachable Ghidra Unix socket; candidates: {detail}. "
+            f"Searched: {searched}. Probe failures: {diagnostics}. "
+            "Set GHIDRA_MCP_SOCKET to select an instance.",
+            code="ghidra_transport_failure",
+            timeout_layer=None,
+            outcome_unknown=False,
+            request_committed=False,
+        )
+    return instances[0]

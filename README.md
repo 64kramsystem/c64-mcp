@@ -52,7 +52,9 @@ Binary-monitor reads require VICE to be stopped. A normal sequence is `vice_inte
 
 ## Configuration
 
-- `GHIDRA_MCP_URL` defaults to `http://127.0.0.1:8089`.
+- By default, the first Ghidra operation discovers local GhidraMCP-next Unix sockets and selects the sole reachable instance. No instance or multiple instances produces an error listing candidates.
+- Set `GHIDRA_MCP_SOCKET` to select a Unix socket explicitly. TCP endpoints are not supported.
+- A selected socket stays fixed for the server lifetime. Failed operations are never retried or replayed automatically; restart the client to discover another instance.
 - `GHIDRA_MCP_TIMEOUT` defaults to 30 seconds.
 
 Run with:
