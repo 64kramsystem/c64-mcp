@@ -56,7 +56,7 @@ wheels = [
 
 [[package]]
 name = "c64-mcp"
-version = "0.104.0"
+version = "0.105.0"
 source = { editable = "." }
 dependencies = [
     { name = "mcp" },
