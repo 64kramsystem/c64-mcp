@@ -4,6 +4,8 @@ Small C64-specific MCP tools layered over GhidraMCP-next and the separately inst
 
 ## Tools
 
+`vice_start_trace` records load (1), store (2), and execute (4) operations for inclusive `{"start": ..., "end": ...}` ranges to a new absolute output filename. Combine operation bits as needed. `vice_stop_trace` takes the returned trace ID, flushes the log, and removes its checkpoints. VICE monitor output and other checkpoint messages may also appear in the log.
+
 ### Static analysis
 
 - `apply_c64_symbols` creates the bundled C64 hardware and KERNAL labels in one idempotent Ghidra batch. Symbols use nested `C64::...` namespaces, and the result reports `labels_created`, `labels_skipped`, and `labels_failed`.

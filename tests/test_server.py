@@ -35,6 +35,8 @@ async def test_server_exposes_only_the_retained_c64_surface():
         "vice_read_memory",
         "vice_write_memory",
         "vice_list_checkpoints",
+        "vice_start_trace",
+        "vice_stop_trace",
         "vice_set_checkpoint",
         "vice_delete_checkpoint",
         "vice_toggle_checkpoint",

@@ -252,3 +252,25 @@ def test_display_chunk_methods_do_not_invent_timeout_arguments():
     assert "timeout_ms" not in fake.calls[-1][1]
     session.discard_display_capture(capture_id="capture")
     assert "timeout_ms" not in fake.calls[-1][1]
+
+
+def test_trace_ranges_are_flattened_for_connector():
+    ghidra = FakeGhidra()
+    session = ViceSession(ghidra)
+    session.connect()
+    result = session.start_trace([{'start': 1, 'end': 2}, {'start': 10, 'end': 12}], 7, '/tmp/trace.log')
+    assert result['ok']
+    method, arguments, _ = ghidra.calls[-1]
+    assert method == 'c64_vice_v1_start_trace'
+    assert arguments['starts'] == [1, 10]
+    assert arguments['ends'] == [2, 12]
+    session.stop_trace('trace-id')
+    assert ghidra.calls[-1][0] == 'c64_vice_v1_stop_trace'
+    assert ghidra.calls[-1][1]['trace_id'] == 'trace-id'
+
+
+def test_partial_trace_error_reports_mutation_risk():
+    from c64_mcp.errors import ViceError
+    from c64_mcp.vice import _risk_error
+    error = ViceError('vice_error', 'failed', partial=True, outcome_unknown=False)
+    assert _risk_error(error, 'vice_trace_may_have_changed').details['vice_trace_may_have_changed'] is True

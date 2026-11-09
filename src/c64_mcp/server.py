@@ -353,6 +353,21 @@ def create_server(
         return await asyncio.to_thread(vice.list_checkpoints, timeout_ms=timeout_ms)
 
     @server.tool()
+    async def vice_start_trace(
+        ranges: list[dict[str, int]], operations: int, output_file: str,
+        timeout_ms: int = 10_000,
+    ) -> dict[str, object]:
+        """Trace inclusive address ranges to a new VICE monitor log."""
+        return await asyncio.to_thread(
+            vice.start_trace, ranges, operations, output_file, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_stop_trace(trace_id: str, timeout_ms: int = 10_000) -> dict[str, object]:
+        """Stop a trace and flush its monitor log."""
+        return await asyncio.to_thread(vice.stop_trace, trace_id, timeout_ms=timeout_ms)
+
+    @server.tool()
     async def vice_set_checkpoint(
         start: int,
         end: int,

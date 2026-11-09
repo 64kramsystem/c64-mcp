@@ -275,6 +275,37 @@ class ViceSession:
             "c64_vice_v1_list_checkpoints", {}, timeout_ms=timeout_ms
         )
 
+    def start_trace(
+        self, ranges: list[dict[str, int]], operations: int, output_file: str,
+        *, timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            if not isinstance(ranges, list) or not ranges:
+                raise _invalid("ranges must be a nonempty list")
+            pairs = []
+            for item in ranges:
+                if not isinstance(item, dict) or set(item) != {"start", "end"}:
+                    raise _invalid("each range must contain start and end")
+                pairs.append(_address_range(item["start"], item["end"]))
+            return self._operation_result(
+                "c64_vice_v1_start_trace",
+                {"starts": [p[0] for p in pairs], "ends": [p[1] for p in pairs],
+                 "operations": _bounded(operations, "operations", minimum=1, maximum=7),
+                 "output_file": _nonblank(output_file, "output_file")},
+                timeout_ms=timeout_ms, mutation_flag="vice_trace_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def stop_trace(self, trace_id: str, *, timeout_ms: int = DEFAULT_TIMEOUT_MS) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_stop_trace", {"trace_id": _nonblank(trace_id, "trace_id")},
+                timeout_ms=timeout_ms, mutation_flag="vice_trace_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def set_checkpoint(
         self,
         *,
@@ -917,6 +948,8 @@ def _risk_error(error: ViceError, mutation_flag: str | None) -> ViceError:
     details = dict(error.details)
     if mutation_flag is not None:
         risk = details.get("state_may_have_changed")
+        if mutation_flag == "vice_trace_may_have_changed" and details.get("partial"):
+            risk = True
         if mutation_flag == "vice_memory_may_be_modified":
             risk = details.get("memory_may_be_modified", risk)
         if risk is None:

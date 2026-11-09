@@ -41,6 +41,8 @@ REQUIRED_METHOD_ARGS = {
         "timeout_ms",
     },
     "c64_vice_v1_list_checkpoints": {"process", "timeout_ms"},
+    "c64_vice_v1_start_trace": {"process", "starts", "ends", "operations", "output_file", "timeout_ms"},
+    "c64_vice_v1_stop_trace": {"process", "trace_id", "timeout_ms"},
     "c64_vice_v1_set_checkpoint": {
         "process",
         "start",
