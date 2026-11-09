@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.106.0
 ### Added
 
 - Start and stop native VICE monitor traces over inclusive address ranges.
