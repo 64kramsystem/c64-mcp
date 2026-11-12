@@ -61,6 +61,8 @@ REQUIRED_METHOD_ARGS = {
         "enabled",
         "timeout_ms",
     },
+    "c64_vice_v1_advance_frames": {"process", "frame_count", "timeout_ms"},
+    "c64_vice_v1_run_until": {"process", "address", "max_frames", "timeout_ms"},
     "c64_vice_v1_step": {"process", "count", "timeout_ms"},
     "c64_vice_v1_next": {"process", "count", "timeout_ms"},
     "c64_vice_v1_finish": {"process", "timeout_ms"},

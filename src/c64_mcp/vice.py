@@ -378,6 +378,41 @@ class ViceSession:
         except ViceError as error:
             return error.as_result()
 
+    def advance_frames(
+        self, frame_count: int, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
+    ) -> dict[str, object]:
+        try:
+            if (
+                isinstance(frame_count, bool)
+                or not isinstance(frame_count, int)
+                or frame_count < 1
+            ):
+                raise _invalid("frame_count must be positive")
+            return self._operation_result(
+                "c64_vice_v1_advance_frames", {"frame_count": frame_count},
+                timeout_ms=timeout_ms, mutation_flag="vice_state_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def run_until(
+        self, address: int, max_frames: int, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
+    ) -> dict[str, object]:
+        try:
+            address = _bounded(address, "address", minimum=0, maximum=65535)
+            if (
+                isinstance(max_frames, bool)
+                or not isinstance(max_frames, int)
+                or max_frames < 1
+            ):
+                raise _invalid("max_frames must be positive")
+            return self._operation_result(
+                "c64_vice_v1_run_until", {"address": address, "max_frames": max_frames},
+                timeout_ms=timeout_ms, mutation_flag="vice_state_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def step(
         self, *, count: int = 1, timeout_ms: int = DEFAULT_TIMEOUT_MS
     ) -> dict[str, object]:

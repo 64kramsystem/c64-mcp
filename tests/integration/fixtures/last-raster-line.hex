@@ -1,0 +1,2 @@
+# Poll high raster bit and the low byte at offset 9, then jump to $c000.
+ad 11 d0 10 fb ad 12 d0 c9 00 d0 f4 4c 00 c0

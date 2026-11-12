@@ -40,6 +40,8 @@ async def test_server_exposes_only_the_retained_c64_surface():
         "vice_set_checkpoint",
         "vice_delete_checkpoint",
         "vice_toggle_checkpoint",
+        "vice_advance_frames",
+        "vice_run_until",
         "vice_step",
         "vice_next",
         "vice_finish",

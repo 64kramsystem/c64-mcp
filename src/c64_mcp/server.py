@@ -421,6 +421,24 @@ def create_server(
         )
 
     @server.tool()
+    async def vice_advance_frames(
+        frame_count: int, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Advance to the requested observed frame boundary."""
+        return await asyncio.to_thread(
+            vice.advance_frames, frame_count, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_run_until(
+        address: int, max_frames: int, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Run until an address or the frame limit is reached."""
+        return await asyncio.to_thread(
+            vice.run_until, address, max_frames, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
     async def vice_step(
         count: int = 1,
         timeout_ms: int = 10_000,

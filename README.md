@@ -35,6 +35,8 @@ Call `vice_connect` after the VICE connector has established its TraceRMI sessio
 
 `vice_disconnect` drops only this process's binding. It does not close VICE, the connector, or the trace.
 
+`vice_advance_frames(frame_count, timeout_ms=10000)` and `vice_run_until(address, max_frames, timeout_ms=10000)` start stopped. A frame is the first observed CPU instruction boundary on raster line 0 after a nonzero line; long REU DMA can skip an observation. Counts must be positive, addresses are 0–65535, and timeouts are 1–55000 ms. Results include `reason` and `frames_completed`: advance reasons are `frames`, `checkpoint`, `stopped`, and `timeout`; run-until reasons are `target`, `checkpoint`, `frame_limit`, `stopped`, and `timeout`. If stops coincide, target takes precedence over another checkpoint, which takes precedence over the frame limit. An already-current target returns immediately with zero frames and no new stop. Other operations publish one final stop after removing their helper checkpoints. Timeout recovery can take up to two additional seconds; recovery or cleanup failure returns an error and may leave checkpoint state uncertain.
+
 Binary-monitor reads require VICE to be stopped. A normal sequence is `vice_interrupt`, read or capture, then `vice_resume`. Display capture is optional: other VICE tools remain usable when the connector lacks it. Capture requires the display methods and a VICE build with the safe display-command fix.
 
 `copy_vice_memory_to_ghidra` reads the complete range once, verifies its length and SHA-256, then makes one Ghidra write request. It defaults to `dry_run=true`.

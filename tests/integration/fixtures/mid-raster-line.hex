@@ -1,0 +1,2 @@
+# Poll raster line 100, then jump to $c000.
+ad 12 d0 c9 64 d0 f9 4c 00 c0

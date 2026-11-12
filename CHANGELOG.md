@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Advance observed frames or run to an address with a frame limit using stock VICE.
+
 ## 0.106.0
 ### Added
 

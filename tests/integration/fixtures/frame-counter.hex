@@ -1,0 +1,2 @@
+# Poll raster line zero, increment $c100, then wait to leave line zero.
+ad 12 d0 d0 fb ad 11 d0 30 f6 ee 00 c1 ad 12 d0 f0 fb 4c 00 c0
