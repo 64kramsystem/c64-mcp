@@ -12,6 +12,7 @@ from .errors import ViceError
 REQUIRED_METHOD_ARGS = {
     "c64_vice_v1_capabilities": {"process"},
     "c64_vice_v1_status": {"process"},
+    "c64_vice_v1_cpu_history": {"process", "count", "timeout_ms"},
     "c64_vice_v1_get_registers": {"process", "names", "memspace", "timeout_ms"},
     "c64_vice_v1_set_registers": {
         "process",

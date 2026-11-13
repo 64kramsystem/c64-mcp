@@ -4,6 +4,8 @@
 
 ### Added
 
+- Read bounded main-CPU instruction history while VICE is stopped.
+
 - Advance observed frames or run to an address with a frame limit using stock VICE.
 
 ## 0.106.0

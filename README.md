@@ -37,6 +37,8 @@ Call `vice_connect` after the VICE connector has established its TraceRMI sessio
 
 `vice_advance_frames(frame_count, timeout_ms=10000)` and `vice_run_until(address, max_frames, timeout_ms=10000)` start stopped. A frame is the first observed CPU instruction boundary on raster line 0 after a nonzero line; long REU DMA can skip an observation. Counts must be positive, addresses are 0–65535, and timeouts are 1–55000 ms. Results include `reason` and `frames_completed`: advance reasons are `frames`, `checkpoint`, `stopped`, and `timeout`; run-until reasons are `target`, `checkpoint`, `frame_limit`, `stopped`, and `timeout`. If stops coincide, target takes precedence over another checkpoint, which takes precedence over the frame limit. An already-current target returns immediately with zero frames and no new stop. Other operations publish one final stop after removing their helper checkpoints. Timeout recovery can take up to two additional seconds; recovery or cleanup failure returns an error and may leave checkpoint state uncertain.
 
+`vice_cpu_history(count=64)` reads up to 4096 recent main-CPU entries while stopped. Each entry has pre-instruction registers, a fetch-start cycle and three saved instruction-prefix bytes; unused operand slots may be zero or neighboring bytes. Entries are oldest to newest, but cycles can decrease after reset or snapshot restore. VICE must be built with `--enable-cpuhistory`.
+
 Binary-monitor reads require VICE to be stopped. A normal sequence is `vice_interrupt`, read or capture, then `vice_resume`. Display capture is optional: other VICE tools remain usable when the connector lacks it. Capture requires the display methods and a VICE build with the safe display-command fix.
 
 `copy_vice_memory_to_ghidra` reads the complete range once, verifies its length and SHA-256, then makes one Ghidra write request. It defaults to `dry_run=true`.
@@ -76,3 +78,9 @@ older trace databases are not supported. c64-mcp remains a separate MCP process.
 
 With sibling checkouts, run the disposable integration test using
 `python ../ghidra-mcp-next/tools/test_debugger_stacks.py --stack vice --ghidra "$GHIDRA_INSTALL_DIR"`.
+
+### Execution map assessment
+
+VICE maintains cumulative per-address access bits beyond history overwrite. The map starts empty and `memmapzap` clears it; reset and snapshot restore do not clear it, so separate runs require explicit capture and clear boundaries. The binary monitor currently offers no map read or clear command; the text-monitor orchestration in `codemap.py` can execute the CPU just to query or clear it. A future explicit capture/read operation and read-only Ghidra comparison could identify observed opcode starts and possible indirect-target candidates missed by static analysis, not sequenced edges. Adjacent history entries can supply evidence with interrupt and capture-boundary caveats.
+
+The map has no versioned bytes, timestamps, or bank identity; VICE’s main-CPU ROM/RAM/IO classification has a FIXME and cartridge banks merge. Current $00/$01 values cannot resolve earlier mappings. Current-memory decoding infers operand spans under self-modifying code; only the marked start is directly observed. An observed start in defined DATA should be reported separately from an uncertain inferred operand span or undefined bytes; explicit undefined 1–8 byte units remain undefined in `analyze_coverage`.

@@ -146,6 +146,23 @@ class ViceSession:
         with self._lock:
             return self._status_locked(idempotent=None)
 
+    def cpu_history(
+        self, count: int = 64, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
+    ) -> dict[str, object]:
+        try:
+            if (
+                isinstance(count, bool)
+                or not isinstance(count, int)
+                or not 1 <= count <= 4096
+            ):
+                raise _invalid("count must be in 1..4096")
+            return self._operation_result(
+                "c64_vice_v1_cpu_history", {"count": count},
+                timeout_ms=timeout_ms, mutation_flag=None,
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def get_registers(
         self,
         *,

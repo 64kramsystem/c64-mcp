@@ -29,6 +29,7 @@ async def test_server_exposes_only_the_retained_c64_surface():
         "vice_connect",
         "vice_disconnect",
         "vice_status",
+        "vice_cpu_history",
         "vice_get_registers",
         "vice_set_registers",
         "vice_list_banks",
@@ -134,3 +135,20 @@ async def test_current_protocol_explains_backend_failure():
 
     assert result.is_error
     assert "Ghidra connection refused" in result.content[0].text
+
+
+@pytest.mark.asyncio
+async def test_cpu_history_public_count_is_strict(monkeypatch):
+    calls = []
+    def history(_self, count, *, timeout_ms):
+        calls.append((count, timeout_ms))
+        return {"ok": True}
+    monkeypatch.setattr("c64_mcp.vice.ViceSession.cpu_history", history)
+    server = create_server(Settings.from_environ({}), ghidra=object())
+    async with Client(server, mode="2026-07-28") as client:
+        for invalid in (True, "2"):
+            result = await client.call_tool("vice_cpu_history", {"count": invalid})
+            assert result.is_error
+        result = await client.call_tool("vice_cpu_history", {"count": 2})
+        assert not result.is_error
+    assert calls == [(2, 10_000)]

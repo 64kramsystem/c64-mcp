@@ -130,6 +130,7 @@ def test_connect_is_idempotent_and_disconnect_is_local():
 @pytest.mark.parametrize(
     ("call", "method"),
     [
+        (lambda value: value.cpu_history(), "c64_vice_v1_cpu_history"),
         (lambda value: value.get_registers(), "c64_vice_v1_get_registers"),
         (
             lambda value: value.set_registers(values={"A": 1}),
@@ -274,3 +275,11 @@ def test_partial_trace_error_reports_mutation_risk():
     from c64_mcp.vice import _risk_error
     error = ViceError('vice_error', 'failed', partial=True, outcome_unknown=False)
     assert _risk_error(error, 'vice_trace_may_have_changed').details['vice_trace_may_have_changed'] is True
+
+
+def test_cpu_history_count_validation():
+    fake, session = connected()
+    before = len(fake.calls)
+    for count in (True, 0, 4097, 1.5):
+        assert session.cpu_history(count)["ok"] is False
+    assert len(fake.calls) == before

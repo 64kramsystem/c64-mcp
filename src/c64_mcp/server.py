@@ -7,6 +7,7 @@ from typing import Any, Literal, cast
 
 from mcp.server.mcpserver import MCPServer
 from mcp_types import CallToolResult
+from pydantic import StrictInt
 
 from .config import Settings
 from .ghidra_client import GhidraClient
@@ -261,6 +262,13 @@ def create_server(
         """Return cached binding state without launching or contacting VICE."""
 
         return await asyncio.to_thread(vice.status)
+
+    @server.tool()
+    async def vice_cpu_history(
+        count: StrictInt = 64, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Read recent pre-instruction CPU history while VICE is stopped."""
+        return await asyncio.to_thread(vice.cpu_history, count, timeout_ms=timeout_ms)
 
     @server.tool()
     async def vice_get_registers(
