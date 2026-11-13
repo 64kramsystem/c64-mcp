@@ -283,3 +283,68 @@ def test_cpu_history_count_validation():
     for count in (True, 0, 4097, 1.5):
         assert session.cpu_history(count)["ok"] is False
     assert len(fake.calls) == before
+
+
+def test_condition_resource_and_autostart_arguments_are_forwarded():
+    fake, session = connected()
+    result = session.set_checkpoint(
+        start=1, end=2, stop_on_hit=False, enabled=False, operations=3,
+        temporary=True, memspace=1, condition="A == $02", timeout_ms=500,
+    )
+    assert result["ok"] is True
+    assert fake.calls[-1] == (
+        "c64_vice_v1_set_checkpoint",
+        {"process": {"object_path": "C64"}, "start": 1, "end": 2,
+         "stop_on_hit": False, "enabled": False, "operations": 3,
+         "temporary": True, "memspace": 1, "condition": "A == $02",
+         "timeout_ms": 500},
+        500,
+    )
+    assert session.get_resource(name="WarpMode")["ok"] is True
+    assert fake.calls[-1][1]["name"] == "WarpMode"
+    assert session.set_resource(name="WarpMode", value="1")["ok"] is True
+    assert fake.calls[-1][1]["value"] == "1"
+    assert session.set_resource(name="Name", value="")["ok"] is True
+    assert fake.calls[-1][1]["value"] == ""
+    result = session.autostart(filename="/tmp/test.prg", file_index=2, run=False)
+    assert result["ok"] is True
+    assert fake.calls[-1][1] == {
+        "process": {"object_path": "C64"}, "filename": "/tmp/test.prg",
+        "file_index": 2, "run": False, "timeout_ms": 10000,
+    }
+
+
+@pytest.mark.parametrize("call", [
+    lambda s: s.set_checkpoint(start=0, end=0, condition="A; x"),
+    lambda s: s.set_checkpoint(start=0, end=0, condition="é" * 128),
+    lambda s: s.get_resource(name="x\0y"),
+    lambda s: s.set_resource(name="WarpMode", value="é" * 128),
+    lambda s: s.autostart(filename="relative.prg"),
+    lambda s: s.autostart(filename="/tmp/file", file_index=65536),
+])
+def test_new_tools_reject_invalid_arguments_before_invocation(call):
+    fake, session = connected()
+    before = len(fake.calls)
+    assert call(session)["ok"] is False
+    assert len(fake.calls) == before
+
+
+def test_autostart_failure_preserves_execution_change_details():
+    class FailedAutostart(FakeGhidra):
+        def invoke_target_method(self, target_token, method, arguments, **kwargs):
+            if method == "c64_vice_v1_autostart":
+                result = envelope()
+                result["ok"] = False
+                result.pop("result")
+                result["error"] = {
+                    "code": "vice_command_failed", "message": "not detected",
+                    "state_may_have_changed": True,
+                }
+                return {"ok": True, "result": json.dumps(result)}
+            return super().invoke_target_method(target_token, method, arguments, **kwargs)
+
+    session = ViceSession(FailedAutostart())
+    assert session.connect()["ok"] is True
+    result = session.autostart(filename="/tmp/missing.prg")
+    assert result["ok"] is False
+    assert result["error"]["vice_state_may_have_changed"] is True

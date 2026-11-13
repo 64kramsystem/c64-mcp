@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 import threading
 from collections.abc import Mapping
@@ -285,6 +286,51 @@ class ViceSession:
         except ViceError as error:
             return error.as_result()
 
+    def get_resource(
+        self, *, name: str, timeout_ms: int = DEFAULT_TIMEOUT_MS
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_get_resource", {"name": _wire_string(name, "name")},
+                timeout_ms=timeout_ms, mutation_flag=None,
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def set_resource(
+        self, *, name: str, value: str, timeout_ms: int = DEFAULT_TIMEOUT_MS
+    ) -> dict[str, object]:
+        try:
+            return self._operation_result(
+                "c64_vice_v1_set_resource",
+                {
+                    "name": _wire_string(name, "name"),
+                    "value": _wire_string(value, "value", empty=True),
+                },
+                timeout_ms=timeout_ms, mutation_flag="vice_state_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
+    def autostart(
+        self, *, filename: str, file_index: int = 0, run: bool = True,
+        timeout_ms: int = DEFAULT_TIMEOUT_MS,
+    ) -> dict[str, object]:
+        try:
+            if not isinstance(filename, str) or not os.path.isabs(filename):
+                raise _invalid("filename must be an absolute path")
+            return self._operation_result(
+                "c64_vice_v1_autostart",
+                {"filename": _wire_string(filename, "filename"),
+                 "file_index": _bounded(
+                     file_index, "file_index", minimum=0, maximum=65535
+                 ),
+                 "run": _boolean(run, "run")},
+                timeout_ms=timeout_ms, mutation_flag="vice_state_may_have_changed",
+            )
+        except ViceError as error:
+            return error.as_result()
+
     def list_checkpoints(
         self, *, timeout_ms: int = DEFAULT_TIMEOUT_MS
     ) -> dict[str, object]:
@@ -333,6 +379,7 @@ class ViceSession:
         operations: int = 4,
         temporary: bool = False,
         memspace: int = 0,
+        condition: str = "",
         timeout_ms: int = DEFAULT_TIMEOUT_MS,
     ) -> dict[str, object]:
         try:
@@ -352,6 +399,7 @@ class ViceSession:
                     ),
                     "temporary": _boolean(temporary, "temporary"),
                     "memspace": _nonnegative(memspace, "memspace"),
+                    "condition": _condition(condition),
                 },
                 timeout_ms=timeout_ms,
                 mutation_flag="vice_checkpoints_may_have_changed",
@@ -1091,6 +1139,25 @@ def _string_list(value: object, field: str) -> list[str]:
         if item in result:
             raise _invalid(f"{field} must not contain duplicates")
         result.append(item)
+    return result
+
+
+def _wire_string(value: object, field: str, *, empty: bool = False) -> str:
+    if not isinstance(value, str) or (not value and not empty) or "\0" in value:
+        raise _invalid(f"{field} must be a valid string")
+    try:
+        size = len(value.encode("utf-8"))
+    except UnicodeEncodeError as error:
+        raise _invalid(f"{field} must be valid UTF-8") from error
+    if size > 255:
+        raise _invalid(f"{field} must be at most 255 UTF-8 bytes")
+    return value
+
+
+def _condition(value: object) -> str:
+    result = _wire_string(value, "condition", empty=True)
+    if any(char in result for char in ";\r\n"):
+        raise _invalid("condition must be one VICE expression")
     return result
 
 
