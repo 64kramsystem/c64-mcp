@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.107.0
 ### Added
 
 - Read bounded main-CPU instruction history while VICE is stopped.
