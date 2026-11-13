@@ -90,3 +90,49 @@ def test_live_disposable_mutating_surface() -> None:
         )
         assert waited["ok"] is True, waited
     assert session.reset(kind="soft")["ok"] is True
+
+
+def test_live_conditions_resources_and_autostart(tmp_path) -> None:
+    if os.environ.get("C64_MCP_VICE_MUTATE") != "1":
+        pytest.skip("requires a disposable VICE process")
+    session = live_session()
+
+    def checked(label, result):
+        print(label, result, flush=True)
+        assert result["ok"] is True, result
+        return result["result"]
+
+    assert session.connect()["ok"] is True
+    if session.status()["state"] == "running":
+        checked("interrupt", session.interrupt())
+    before = checked("get AutostartWarp", session.get_resource(name="AutostartWarp"))["value"]
+    try:
+        changed = 0 if before else 1
+        checked("set AutostartWarp", session.set_resource(name="AutostartWarp", value=str(changed)))
+        assert checked("get changed AutostartWarp", session.get_resource(name="AutostartWarp"))["value"] == changed
+    finally:
+        checked("restore AutostartWarp", session.set_resource(name="AutostartWarp", value=str(before)))
+
+    checked("write loop", session.write_memory(bank_id=0, start=0xC000, bytes="ee00c1ad00c14c00c0"))
+    checked("zero counter", session.write_memory(bank_id=0, start=0xC100, bytes="00"))
+    checked("set PC", session.set_registers(values={"PC": 0xC000}))
+    checkpoint = checked("set conditional checkpoint", session.set_checkpoint(
+        start=0xC006, end=0xC006, condition="A == $02"
+    ))["checkpoint"]
+    assert checkpoint["has_condition"] is True
+    try:
+        count = session.status()["stop_count"]
+        checked("resume", session.resume())
+        stopped = session.wait_for_stop(after_stop_count=count, timeout_ms=5000)
+        print("conditional stop", stopped, flush=True)
+        assert stopped["ok"] is True, stopped
+        assert stopped["pc"] == 0xC006
+        registers = checked("registers at conditional stop", session.get_registers(names=["A"]))
+        assert registers["registers"][0]["value"] == 2
+    finally:
+        checked("delete conditional checkpoint", session.delete_checkpoint(number=checkpoint["number"]))
+
+    prg = tmp_path / "test.prg"
+    prg.write_bytes(bytes.fromhex("01080000"))
+    checked("autostart scheduled", session.autostart(filename=str(prg), run=False))
+    checked("interrupt after autostart", session.interrupt())

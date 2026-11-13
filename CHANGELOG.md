@@ -2,11 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Add native checkpoint conditions, VICE resource access, and autostart of VICE-local files.
+
 ## 0.107.0
 ### Added
 
 - Read bounded main-CPU instruction history while VICE is stopped.
-
 - Advance observed frames or run to an address with a frame limit using stock VICE.
 
 ## 0.106.0

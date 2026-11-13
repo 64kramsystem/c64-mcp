@@ -353,6 +353,34 @@ def create_server(
         )
 
     @server.tool()
+    async def vice_get_resource(
+        name: str, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Read a VICE resource while stopped."""
+        return await asyncio.to_thread(
+            vice.get_resource, name=name, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_set_resource(
+        name: str, value: str, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Set a VICE resource from its text value while stopped."""
+        return await asyncio.to_thread(
+            vice.set_resource, name=name, value=value, timeout_ms=timeout_ms
+        )
+
+    @server.tool()
+    async def vice_autostart(
+        filename: str, file_index: int = 0, run: bool = True, timeout_ms: int = 10_000
+    ) -> dict[str, object]:
+        """Schedule an absolute VICE-local file and resume; run controls BASIC RUN."""
+        return await asyncio.to_thread(
+            vice.autostart, filename=filename, file_index=file_index, run=run,
+            timeout_ms=timeout_ms,
+        )
+
+    @server.tool()
     async def vice_list_checkpoints(
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
@@ -384,9 +412,10 @@ def create_server(
         operations: int = 4,
         temporary: bool = False,
         memspace: int = 0,
+        condition: str = "",
         timeout_ms: int = 10_000,
     ) -> dict[str, object]:
-        """Create one inclusive VICE checkpoint."""
+        """Create one inclusive VICE checkpoint with an optional VICE expression."""
 
         return await asyncio.to_thread(
             vice.set_checkpoint,
@@ -397,6 +426,7 @@ def create_server(
             operations=operations,
             temporary=temporary,
             memspace=memspace,
+            condition=condition,
             timeout_ms=timeout_ms,
         )
 

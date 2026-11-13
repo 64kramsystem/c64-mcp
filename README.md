@@ -27,11 +27,14 @@ Renderers return an indexed PNG and a compact summary. `output_path` is optional
 Call `vice_connect` after the VICE connector has established its TraceRMI session. The remaining `vice_*` tools cover:
 
 - status, registers, banks, and bank-aware memory;
-- checkpoints, step/next/finish, resume, interrupt, and stop waits;
+- checkpoints with optional native VICE conditions, step/next/finish, resume, interrupt, and stop waits;
+- resource reads/writes and autostart of VICE-local files;
 - deterministic keyboard and joystick input;
 - reset and snapshot save/load;
 - capture of VICE's composited display;
 - copying one verified VICE memory range into Ghidra.
+
+`vice_get_resource` and `vice_set_resource` require stopped VICE. Set values as text, for example `AutostartWarp="1"`. Autostart also requires stopped VICE and resumes it when scheduled; `run` controls BASIC RUN, and the response does not mean loading is complete. `file_index=0` selects the default; positive indexes are directory positions starting at 1. Use a checkpoint or stop wait for readiness.
 
 `vice_disconnect` drops only this process's binding. It does not close VICE, the connector, or the trace.
 
