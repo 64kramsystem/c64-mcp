@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+## 0.108.0
 ### Added
 
 - Add native checkpoint conditions, VICE resource access, and autostart of VICE-local files.
